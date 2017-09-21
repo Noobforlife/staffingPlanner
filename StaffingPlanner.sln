@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.26430.13
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agile", "Agile\Agile.csproj", "{BA218487-5F7A-4D88-9A4E-DD776891DBA9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaffingPlanner", "Agile\StaffingPlanner.csproj", "{BA218487-5F7A-4D88-9A4E-DD776891DBA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agile.Tests", "Agile.Tests\Agile.Tests.csproj", "{FDCD2C4C-E5DF-49AA-A789-43D1A74A85E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaffingPlanner.Tests", "Agile.Tests\StaffingPlanner.Tests.csproj", "{FDCD2C4C-E5DF-49AA-A789-43D1A74A85E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
