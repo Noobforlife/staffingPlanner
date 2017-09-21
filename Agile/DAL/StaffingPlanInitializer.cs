@@ -3,20 +3,17 @@ using Agile.Models;
 
 namespace Agile.DAL
 {
-	public class StaffingPlanInitializer
+	public class StaffingPlanInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<StaffingPlanContext>
 	{
-		public class SchoolInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<StaffingPlanContext>
+		protected override void Seed(StaffingPlanContext context)
 		{
-			protected override void Seed(StaffingPlanContext context)
+			var courses = new List<Course>
 			{
-				var courses = new List<Course>
-				{
-					new Course{Id=0, Name="Agile"}
-				};
+				new Course{Id=0, Name="Agile"}
+			};
 
-				courses.ForEach(s => context.Courses.Add(s));
-				context.SaveChanges();
-			}
+			courses.ForEach(s => context.Courses.Add(s));
+			context.SaveChanges();
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Web.Mvc;
 using Agile.DAL;
 
 namespace Agile.Controllers
@@ -14,11 +15,9 @@ namespace Agile.Controllers
 
 		public ActionResult About()
 		{
-			var students = db.Courses.ToString();
-			//ViewBag.Message = "Your application description page is here.";
-			ViewBag.Message = students;
+			var students = db.Courses.ToList();
 
-			return View();
+			return View(students);
 		}
 
 		public ActionResult Contact()
