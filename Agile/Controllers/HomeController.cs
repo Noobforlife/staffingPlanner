@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
-using Agile.DAL;
+using StaffingPlanner.DAL;
 
-namespace Agile.Controllers
+namespace StaffingPlanner.Controllers
 {
 	public class HomeController : Controller
 	{

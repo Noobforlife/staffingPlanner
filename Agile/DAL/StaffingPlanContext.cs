@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity;
-using Agile.Models;
+using StaffingPlanner.Models;
 
-namespace Agile.DAL
+namespace StaffingPlanner.DAL
 {
 	public class StaffingPlanContext : DbContext
 	{

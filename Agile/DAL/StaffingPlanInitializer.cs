@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Agile.Models;
+using StaffingPlanner.Models;
 
-namespace Agile.DAL
+namespace StaffingPlanner.DAL
 {
 	public class StaffingPlanInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<StaffingPlanContext>
 	{

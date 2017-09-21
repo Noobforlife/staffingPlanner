@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Agile;
-using Agile.Controllers;
+using StaffingPlanner;
+using StaffingPlanner.Controllers;
 
-namespace Agile.Tests.Controllers
+namespace StaffingPlanner.Tests.Controllers
 {
 	[TestClass]
 	public class HomeControllerTest

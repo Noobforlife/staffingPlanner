@@ -1,4 +1,5 @@
-﻿namespace Agile.Models
+﻿
+namespace StaffingPlanner.Models
 {
 	public class Course
 	{

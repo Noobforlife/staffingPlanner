@@ -47,9 +47,6 @@ D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\bin\roslyn\vbc.exe.con
 D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\bin\roslyn\vbc.rsp
 D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\bin\roslyn\VBCSCompiler.exe
 D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\bin\roslyn\VBCSCompiler.exe.config
-D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\bin\Agile.dll.config
-D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\bin\Agile.dll
-D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\bin\Agile.pdb
 D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\bin\Antlr3.Runtime.dll
 D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\bin\EntityFramework.dll
 D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\bin\EntityFramework.SqlServer.dll
@@ -88,6 +85,8 @@ D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\bin\Microsoft.AI.Depen
 D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\bin\Microsoft.AI.ServerTelemetryChannel.xml
 D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\bin\Microsoft.AI.WindowsServer.xml
 D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\bin\Microsoft.AI.Web.xml
-D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\obj\Debug\StaffingPlanner.csprojResolveAssemblyReference.cache
-D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\obj\Debug\Agile.dll
-D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\obj\Debug\Agile.pdb
+D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\bin\StaffingPlanner.dll.config
+D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\bin\StaffingPlanner.dll
+D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\bin\StaffingPlanner.pdb
+D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\obj\Debug\StaffingPlanner.dll
+D:\school\agile methods\AgileProject\UUStaffingPlan\Agile\obj\Debug\StaffingPlanner.pdb
