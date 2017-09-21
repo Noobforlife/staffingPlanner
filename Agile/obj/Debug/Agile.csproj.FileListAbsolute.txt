@@ -88,3 +88,7 @@ C:\Source\Agile\Agile\obj\Debug\Agile.csprojResolveAssemblyReference.cache
 C:\Source\Agile\Agile\obj\Debug\Agile.csproj.CoreCompileInputs.cache
 C:\Source\Agile\Agile\obj\Debug\Agile.dll
 C:\Source\Agile\Agile\obj\Debug\Agile.pdb
+C:\Source\Agile\Agile\bin\EntityFramework.dll
+C:\Source\Agile\Agile\bin\EntityFramework.SqlServer.dll
+C:\Source\Agile\Agile\bin\EntityFramework.xml
+C:\Source\Agile\Agile\bin\EntityFramework.SqlServer.xml

@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using Agile.DAL;
 
 namespace Agile.Controllers
 {
 	public class HomeController : Controller
 	{
+		private StaffingPlanContext db = new StaffingPlanContext();
+
 		public ActionResult Index()
 		{
 			return View();
@@ -15,7 +14,9 @@ namespace Agile.Controllers
 
 		public ActionResult About()
 		{
-			ViewBag.Message = "Your application description page is here.";
+			var students = db.Courses.ToString();
+			//ViewBag.Message = "Your application description page is here.";
+			ViewBag.Message = students;
 
 			return View();
 		}
