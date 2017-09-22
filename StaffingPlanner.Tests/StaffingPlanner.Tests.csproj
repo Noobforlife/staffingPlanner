@@ -109,7 +109,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Agile\StaffingPlanner.csproj">
+    <ProjectReference Include="..\StaffingPlanner\StaffingPlanner.csproj">
       <Project>{BA218487-5F7A-4D88-9A4E-DD776891DBA9}</Project>
       <Name>StaffingPlanner</Name>
     </ProjectReference>

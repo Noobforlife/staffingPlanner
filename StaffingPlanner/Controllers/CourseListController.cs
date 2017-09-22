@@ -4,7 +4,7 @@ using StaffingPlanner.DAL;
 
 namespace StaffingPlanner.Controllers
 {
-	public class CourseController : Controller
+	public class CourseListController : Controller
 	{
 		//public ActionResult Index()
 		//{
