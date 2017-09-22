@@ -1,0 +1,7 @@
+StaffingPlanner/bin/
+StaffingPlanner/obj/
+
+StaffingPlanner.Tests/bin/
+StaffingPlanner.Tests/obj/
+
+.vs/
