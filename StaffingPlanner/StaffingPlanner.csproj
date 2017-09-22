@@ -156,7 +156,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AcademicTitle.cs" />
     <Compile Include="Models\Course.cs" />
+    <Compile Include="Models\CourseEdition.cs" />
+    <Compile Include="Models\Period.cs" />
+    <Compile Include="Models\Teacher.cs" />
+    <Compile Include="Models\Term.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

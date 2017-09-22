@@ -9,10 +9,18 @@ namespace StaffingPlanner.DAL
 		{
 			var courses = new List<Course>
 			{
-				new Course{Id=0, Name="Agile"}
+				
 			};
 
-			courses.ForEach(s => context.Courses.Add(s));
+			courses.ForEach(c => context.Courses.Add(c));
+			context.SaveChanges();
+
+			var teachers = new List<Teacher>
+			{
+
+			};
+
+			teachers.ForEach(t => context.Teachers.Add(t));
 			context.SaveChanges();
 		}
 	}
