@@ -5,3 +5,4 @@ StaffingPlanner.Tests/bin/
 StaffingPlanner.Tests/obj/
 
 .vs/
+*.suo
