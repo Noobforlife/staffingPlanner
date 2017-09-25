@@ -3,8 +3,10 @@
 	public enum AcademicTitle
 	{
 		Professor,
-		SeniorLecturer,
-		JuniorLecturer,
-		Assisstant
-	}
+        Lektor,
+        Adjunkt,
+        Doktorand,
+        Amanuens,
+        Assistent
+    }
 }
