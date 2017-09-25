@@ -206,6 +206,11 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Dashboard\Index.cshtml" />
+    <Content Include="Views\CourseDetails\Course.cshtml" />
+    <Content Include="Views\CourseList\Courses.cshtml" />
+    <Content Include="Views\TeacherDetails\Teacher.cshtml" />
+    <Content Include="Views\Login\Login.cshtml" />
+    <Content Include="Views\TeacherList\Teachers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

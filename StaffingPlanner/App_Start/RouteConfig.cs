@@ -18,6 +18,7 @@ namespace StaffingPlanner
 				url: "{controller}/{action}/{id}",
 				defaults: new { controller = "Dashboard", action = "Index", id = UrlParameter.Optional }
 			);
+
 		}
 	}
 }
