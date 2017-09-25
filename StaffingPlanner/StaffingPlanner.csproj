@@ -177,6 +177,8 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\img\uppsala.png" />
+    <Content Include="Content\styles.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -214,6 +216,9 @@
     <Content Include="Views\TeacherDetails\Teacher.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\TeacherList\Teachers.cshtml" />
+    <Content Include="Views\Shared\_CourseModal.cshtml" />
+    <Content Include="Views\Shared\_TeacherModal.cshtml" />
+    <Content Include="Views\Shared\_Navigation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
