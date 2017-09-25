@@ -1,0 +1,23 @@
+﻿<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand navbar-link" href="#">Staffing Planner <img src="~/Content/img/uppsala.png"></a>
+            <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+        </div>
+        <div class="collapse navbar-collapse" id="navcol-1">
+            <ul class="nav navbar-nav pull-right">
+                <li class="active" role="presentation">@Html.ActionLink("Dashboard", "Index", "Dashboard")</li>
+                <li role="presentation">@Html.ActionLink("teachers", "Teachers", "TeacherList")</li>
+                <li role="presentation">@Html.ActionLink("courses", "Courses", "CourseList")</li>
+                <li role="presentation"><a href="teachers.html"><i class="fa fa-envelope-o" style="font-size:22px;"></i> <span class="badge">15 </span></a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#">Thomas Eklund<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="presentation"><a href="#">Profile</a></li>
+                        <li role="presentation">@Html.ActionLink("logout", "Login", "Login")</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

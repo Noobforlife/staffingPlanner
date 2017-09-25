@@ -211,6 +211,9 @@
     <Content Include="Views\TeacherDetails\Teacher.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\TeacherList\Teachers.cshtml" />
+    <Content Include="Views\Shared\_CourseModal.cshtml" />
+    <Content Include="Views\Shared\_TeacherModal.cshtml" />
+    <Content Include="Views\Shared\_Navigation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
