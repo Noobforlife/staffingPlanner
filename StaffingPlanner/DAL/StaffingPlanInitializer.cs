@@ -17,7 +17,6 @@ namespace StaffingPlanner.DAL
 
 			var teachers = new List<Teacher>
 			{
-
 			};
 
 			teachers.ForEach(t => context.Teachers.Add(t));
