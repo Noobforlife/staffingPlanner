@@ -4,15 +4,23 @@ using System;
 
 namespace StaffingPlanner.DAL
 {
-	public class StaffingPlanInitializer : System.Data.Entity.DropCreateDatabaseAlways<StaffingPlanContext>
+	public class StaffingPlanInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<StaffingPlanContext>
 	{
 		protected override void Seed(StaffingPlanContext context)
 		{
-			var courses = new List<Course> {};
+			var courses = new List<Course>
+			{
+				
+			};
 
 			courses.ForEach(c => context.Courses.Add(c));
 			context.SaveChanges();
 
+<<<<<<< HEAD
+			var teachers = new List<Teacher>
+			{
+			};
+=======
             var teachers = new List<Teacher>
             {
                 new Teacher()
@@ -21,7 +29,7 @@ namespace StaffingPlanner.DAL
                     AcademicTitle = AcademicTitle.Professor,
                     PersonalNumber = "610427-1541",
                     Email = "",
-                    Id = Guid.NewGuid(),
+                    Id = new Guid(),
                     DirectorOfStudies = false
                 },
 
@@ -31,7 +39,7 @@ namespace StaffingPlanner.DAL
                     AcademicTitle = AcademicTitle.Professor,
                     PersonalNumber = "610427-1541",
                     Email = "",
-                    Id = Guid.NewGuid(),
+                    Id = new Guid(),
                     DirectorOfStudies = false
                 },
 
@@ -41,7 +49,7 @@ namespace StaffingPlanner.DAL
                     AcademicTitle = AcademicTitle.Professor,
                     PersonalNumber = "740905-2886",
                     Email = "",
-                    Id = Guid.NewGuid(),
+                    Id = new Guid(),
                     DirectorOfStudies = false
                 },
 
@@ -51,7 +59,7 @@ namespace StaffingPlanner.DAL
                     AcademicTitle = AcademicTitle.Adjunkt,
                     PersonalNumber = "560129-7352",
                     Email = "",
-                    Id = Guid.NewGuid(),
+                    Id = new Guid(),
                     DirectorOfStudies = false
                 },
 
@@ -61,7 +69,7 @@ namespace StaffingPlanner.DAL
                     AcademicTitle = AcademicTitle.Adjunkt,
                     PersonalNumber = "560129-7352",
                     Email = "",
-                    Id = Guid.NewGuid(),
+                    Id = new Guid(),
                     DirectorOfStudies = false
                 },
 
@@ -71,7 +79,7 @@ namespace StaffingPlanner.DAL
                     AcademicTitle = AcademicTitle.Adjunkt,
                     PersonalNumber = "821111-8352",
                     Email = "",
-                    Id = Guid.NewGuid(),
+                    Id = new Guid(),
                     DirectorOfStudies = false
                 },
 
@@ -81,7 +89,7 @@ namespace StaffingPlanner.DAL
                     AcademicTitle = AcademicTitle.Adjunkt,
                     PersonalNumber = "821111-8352",
                     Email = "",
-                    Id = Guid.NewGuid(),
+                    Id = new Guid(),
                     DirectorOfStudies = false
                 },
 
@@ -91,7 +99,7 @@ namespace StaffingPlanner.DAL
                     AcademicTitle = AcademicTitle.Lektor,
                     PersonalNumber = "920610-8361",
                     Email = "",
-                    Id = Guid.NewGuid(),
+                    Id = new Guid(),
                     DirectorOfStudies = false
                 },
 
@@ -101,7 +109,7 @@ namespace StaffingPlanner.DAL
                     AcademicTitle = AcademicTitle.Lektor,
                     PersonalNumber = "821111-8352",
                     Email = "",
-                    Id = Guid.NewGuid(),
+                    Id = new Guid(),
                     DirectorOfStudies = false
                 },
 
@@ -111,7 +119,7 @@ namespace StaffingPlanner.DAL
                     AcademicTitle = AcademicTitle.Lektor,
                     PersonalNumber = "821111-8352",
                     Email = "",
-                    Id = Guid.NewGuid(),
+                    Id = new Guid(),
                     DirectorOfStudies = false
                 },
 
@@ -121,7 +129,7 @@ namespace StaffingPlanner.DAL
                     AcademicTitle = AcademicTitle.Doktorand,
                     PersonalNumber = "740905-2886",
                     Email = "",
-                    Id = Guid.NewGuid(),
+                    Id = new Guid(),
                     DirectorOfStudies = false
                 },
 
@@ -131,7 +139,7 @@ namespace StaffingPlanner.DAL
                     AcademicTitle = AcademicTitle.Doktorand,
                     PersonalNumber = "821111-8352",
                     Email = "",
-                    Id = Guid.NewGuid(),
+                    Id = new Guid(),
                     DirectorOfStudies = false
                 },
 
@@ -141,7 +149,7 @@ namespace StaffingPlanner.DAL
                     AcademicTitle = AcademicTitle.Doktorand,
                     PersonalNumber = "821111-8352",
                     Email = "",
-                    Id = Guid.NewGuid(),
+                    Id = new Guid(),
                     DirectorOfStudies = false
                 },
 
@@ -151,7 +159,7 @@ namespace StaffingPlanner.DAL
                     AcademicTitle = AcademicTitle.Amanuens,
                     PersonalNumber = "920610-8361",
                     Email = "",
-                    Id = Guid.NewGuid(),
+                    Id = new Guid(),
                     DirectorOfStudies = false
                 },
 
@@ -161,19 +169,15 @@ namespace StaffingPlanner.DAL
                     AcademicTitle = AcademicTitle.Amanuens,
                     PersonalNumber = "920610-8361",
                     Email = "",
-                    Id = Guid.NewGuid(),
+                    Id = new Guid(),
                     DirectorOfStudies = false
                 },
 
 
             };
+>>>>>>> origin/Login
 
 			teachers.ForEach(t => context.Teachers.Add(t));
-			context.SaveChanges();
-
-			var workloads = new List<TeacherCourseWorkload> { };
-
-			workloads.ForEach(w => context.Workloads.Add(w));
 			context.SaveChanges();
 		}
 	}
