@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
 using StaffingPlanner.DAL;
 using StaffingPlanner.ViewModels;
@@ -20,7 +19,7 @@ namespace StaffingPlanner.Controllers
 				Code = c.Code,
 				Credits = c.GetEdition(schoolYear).Credits,
 				Term = c.GetEdition(schoolYear).Term,
-				Period = c.GetEdition(schoolYear).Period,
+				Periods = c.GetEdition(schoolYear).Periods,
 				AllocatedHours = c.GetEdition(schoolYear).GetAllocatedHours(),
 				RemainingHours = c.GetEdition(schoolYear).GetRemainingHours()
 			});

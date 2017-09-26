@@ -6,10 +6,9 @@ namespace StaffingPlanner.Controllers
 {
 	public class CourseDetailsController : Controller
 	{
-		//public ActionResult Index()
-		//{
-		//	return View();
-		//}
-
+		public ActionResult Course()
+		{
+			return View();
+		}
 	}
 }

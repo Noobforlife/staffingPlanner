@@ -13,7 +13,7 @@ namespace StaffingPlanner.Models
 		public string SchoolYear { get; set; }
 		public Credits Credits { get; set; }
 		public Term Term { get; set; }
-		public Period Period { get; set; }
+		public List<Period> Periods { get; set; }
 		public int Budget { get; set; }
 		public ICollection<Teacher> Teachers { get; set; }
 		public Teacher CourseResponsible { get; set; }
