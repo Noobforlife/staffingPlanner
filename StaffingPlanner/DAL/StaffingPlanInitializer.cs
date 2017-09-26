@@ -17,6 +17,16 @@ namespace StaffingPlanner.DAL
             {
                 new Teacher()
                 {
+                    Name = "Tomas Eklund",
+                    AcademicTitle = AcademicTitle.Lektor,
+                    PersonalNumber = "740905-2886",
+                    Email = "",
+                    Id = Guid.NewGuid(),
+                    DirectorOfStudies = true
+                },
+
+                new Teacher()
+                {
                     Name = "Andreas Hamfeldt",
                     AcademicTitle = AcademicTitle.Professor,
                     PersonalNumber = "610427-1541",
