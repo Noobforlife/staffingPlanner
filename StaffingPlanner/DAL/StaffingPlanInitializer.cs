@@ -185,6 +185,11 @@ namespace StaffingPlanner.DAL
 
 			workloads.ForEach(w => context.Workloads.Add(w));
 			context.SaveChanges();
+
+			var contracts = new List<Contract> { };
+
+			contracts.ForEach(c => context.Contracts.Add(c));
+			context.SaveChanges();
 		}
 	}
 }

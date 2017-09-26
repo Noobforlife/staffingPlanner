@@ -14,15 +14,15 @@ namespace StaffingPlanner.Controllers
 
 			var db = StaffingPlanContext.GetContext();
 			var courses = db.Courses.Select(c => new CourseViewModels
-				{
-					Id = c.Id,
-					Name = c.Name,
-					Code = c.Code,
-					Credits = c.GetEdition(schoolYear).Credits,
-					Term = c.GetEdition(schoolYear).Term,
-					Period = c.GetEdition(schoolYear).Period,
-					AllocatedHours = c.GetEdition(schoolYear).GetAllocatedHours(),
-					RemainingHours = c.GetEdition(schoolYear).GetRemainingHours()
+			{
+				Id = c.Id,
+				Name = c.Name,
+				Code = c.Code,
+				Credits = c.GetEdition(schoolYear).Credits,
+				Term = c.GetEdition(schoolYear).Term,
+				Period = c.GetEdition(schoolYear).Period,
+				AllocatedHours = c.GetEdition(schoolYear).GetAllocatedHours(),
+				RemainingHours = c.GetEdition(schoolYear).GetRemainingHours()
 			});
 
 			return View(courses);
