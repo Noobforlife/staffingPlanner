@@ -156,6 +156,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\TeacherListController.cs" />
     <Compile Include="Controllers\TeacherDetailsController.cs" />
+    <Compile Include="DAL\DataGen.cs" />
     <Compile Include="DAL\Globals.cs" />
     <Compile Include="DAL\StaffingPlanContext.cs" />
     <Compile Include="DAL\StaffingPlanInitializer.cs" />
@@ -166,7 +167,7 @@
     <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="Models\AcademicTitle.cs" />
     <Compile Include="Models\Course.cs" />
-    <Compile Include="Models\CourseEdition.cs" />
+    <Compile Include="Models\CourseOffering.cs" />
     <Compile Include="Models\Credits.cs" />
     <Compile Include="Models\Period.cs" />
     <Compile Include="Models\Teacher.cs" />

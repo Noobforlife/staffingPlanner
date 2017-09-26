@@ -8,30 +8,33 @@ namespace StaffingPlanner.Controllers
 {
 	public class CourseDetailsController : Controller
 	{
-		public ActionResult Course()
+		public ActionResult Course(Guid offeringId)
 		{
-			var schoolYear = "17/18";
-			var courseID = Guid.NewGuid();
+			//var schoolYear = "17/18";
 
 			var db = StaffingPlanContext.GetContext();
-			var c = db.Courses.First(course => course.Id == courseID);
-			var ce = c.GetEdition(schoolYear);
+
+            //Temporary (and silly) solution
+            var course = db.Courses.Where(c => c.Offerings.Select(o => o.Id).Contains(offeringId)).First();
+            var offering = course.GetOffering(offeringId);
+            //var course = db.Courses.First(cc => cc.Id == courseID);
+			//var offering = course.GetOffering(schoolYear);
 
 			var courseDetails = new DetailedCourseViewModel
 			{
-				Id = c.Id,
-				Name = c.Name,
-				Code = c.Code,
-				Credits = ce.Credits,
-				Term = ce.Term,
-				Periods = ce.Periods,
-				TotalHours = ce.Budget,
-				AllocatedHours = ce.GetAllocatedHours(),
-				RemainingHours = ce.GetRemainingHours(),
-				NumStudents = ce.NumStudents,
-				CourseResponsible = ce.CourseResponsible,
-				HST = ce.HST,
-				Teachers = ce.Teachers.ToList()
+				Name = course.Name,
+				Code = course.Code,
+
+				Credits = offering.Credits,
+				Term = offering.Term,
+				Periods = offering.Periods,
+				TotalHours = offering.Budget,
+				AllocatedHours = offering.GetAllocatedHours(),
+				RemainingHours = offering.GetRemainingHours(),
+				NumStudents = offering.NumStudents,
+				CourseResponsible = offering.CourseResponsible,
+				HST = offering.HST,
+				Teachers = offering.Teachers.ToList()
 			};
 
 			return View(courseDetails);

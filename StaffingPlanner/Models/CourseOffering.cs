@@ -7,7 +7,7 @@ using StaffingPlanner.DAL;
 
 namespace StaffingPlanner.Models
 {
-	public class CourseEdition
+	public class CourseOffering
 	{
 		public Guid Id { get; set; }
 		public string SchoolYear { get; set; }
@@ -33,7 +33,7 @@ namespace StaffingPlanner.Models
 
 		public override bool Equals(object obj)
 		{
-			var ce = obj as CourseEdition;
+			var ce = obj as CourseOffering;
 			return ce != null && ce.Id == Id;
 		}
 	}
