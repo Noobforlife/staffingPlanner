@@ -11,7 +11,7 @@
                 <li role="presentation">@Html.ActionLink("courses", "Courses", "CourseList")</li>
                 <li role="presentation"><a href="teachers.html"><i class="fa fa-envelope-o" style="font-size:22px;"></i> <span class="badge">15 </span></a></li>
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#">Thomas Eklund<span class="caret"></span></a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#">@Globals.user<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li role="presentation"><a href="#">Profile</a></li>
                         <li role="presentation">@Html.ActionLink("Logout", "Login", "Account")</li>
