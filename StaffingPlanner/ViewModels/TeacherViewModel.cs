@@ -1,9 +1,11 @@
-﻿using StaffingPlanner.Models;
+﻿using System;
+using StaffingPlanner.Models;
 
 namespace StaffingPlanner.ViewModels
 {
 	public class TeacherViewModel
 	{
+		public Guid Id { get; set; }
 		public string Name { get; set; }
 		public AcademicTitle Title { get; set; }
 		public int TotalHours { get; set; }
