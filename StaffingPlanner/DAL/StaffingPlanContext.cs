@@ -19,5 +19,6 @@ namespace StaffingPlanner.DAL
 		public DbSet<Course> Courses { get; set; }
 		public DbSet<Teacher> Teachers { get; set; }
 		public DbSet<TeacherCourseWorkload> Workloads { get; set; }
+		public DbSet<Contract> Contracts { get; set; }
 	}
 }

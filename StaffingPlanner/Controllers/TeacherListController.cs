@@ -2,7 +2,6 @@
 using System.Web.Mvc;
 using StaffingPlanner.DAL;
 using StaffingPlanner.ViewModels;
-using WebGrease.Css.Extensions;
 
 namespace StaffingPlanner.Controllers
 {
