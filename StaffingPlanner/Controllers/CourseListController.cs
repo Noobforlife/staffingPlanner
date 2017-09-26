@@ -12,16 +12,16 @@ namespace StaffingPlanner.Controllers
 			var schoolYear = "17/18";
 
 			var db = StaffingPlanContext.GetContext();
-			var courses = db.Courses.Select(c => new CourseViewModels
+			var courses = db.Courses.Select(c => new CourseViewModel
 			{
-				Id = c.Id,
-				Name = c.Name,
+				Id = c.GetOffering(schoolYear).Id,
+                Name = c.Name,
 				Code = c.Code,
-				Credits = c.GetEdition(schoolYear).Credits,
-				Term = c.GetEdition(schoolYear).Term,
-				Periods = c.GetEdition(schoolYear).Periods,
-				AllocatedHours = c.GetEdition(schoolYear).GetAllocatedHours(),
-				RemainingHours = c.GetEdition(schoolYear).GetRemainingHours()
+				Credits = c.GetOffering(schoolYear).Credits,
+				Term = c.GetOffering(schoolYear).Term,
+				Periods = c.GetOffering(schoolYear).Periods,
+				AllocatedHours = c.GetOffering(schoolYear).GetAllocatedHours(),
+				RemainingHours = c.GetOffering(schoolYear).GetRemainingHours()
 			});
 
 			return View(courses);
