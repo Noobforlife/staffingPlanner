@@ -17,6 +17,8 @@ namespace StaffingPlanner.Models
 		public int Budget { get; set; }
 		public ICollection<Teacher> Teachers { get; set; }
 		public Teacher CourseResponsible { get; set; }
+		public float HST { get; set; }
+		public int NumStudents { get; set; }
 
 		public int GetAllocatedHours()
 		{

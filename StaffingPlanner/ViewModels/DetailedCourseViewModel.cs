@@ -16,5 +16,8 @@ namespace StaffingPlanner.ViewModels
 		public int AllocatedHours { get; set; }
 		public int RemainingHours { get; set; }
 		public int NumStudents { get; set; }
+		public Teacher CourseResponsible { get; set; }
+		public float HST { get; set; }
+		public List<Teacher> Teachers { get; set; } 
 	}
 }
