@@ -174,6 +174,7 @@
     <Compile Include="Models\Term.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\CourseViewModels.cs" />
+    <Compile Include="ViewModels\DetailedCourseViewModel.cs" />
     <Compile Include="ViewModels\TeacherViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
