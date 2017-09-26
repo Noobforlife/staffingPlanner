@@ -1,15 +1,18 @@
-﻿namespace StaffingPlanner
+﻿using StaffingPlanner.Models;
+
+namespace StaffingPlanner
 {
     public static class Globals
     {
-        public static bool isUserAuthorized = false;
         public static Role userRole;
+        public static string user;
     }
 
     public enum Role
     {
-        DirectorOfStudies = 0,
+        Unauthorized = 0,
         Teacher = 1,
+        DirectorOfStudies = 2,
     }
     
 
