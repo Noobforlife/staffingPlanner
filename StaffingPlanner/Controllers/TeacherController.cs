@@ -1,11 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using StaffingPlanner.DAL;
 using StaffingPlanner.ViewModels;
 
+
 namespace StaffingPlanner.Controllers
 {
-	public class TeacherListController : Controller
+	public class TeacherController : Controller
 	{
         public ActionResult Teachers()
         {
@@ -24,6 +26,11 @@ namespace StaffingPlanner.Controllers
 	        });
 
 			return View(teachers);
+        }
+
+        public ActionResult TeacherDetails(Guid id)
+        {
+            return View();
         }
     }
 }
