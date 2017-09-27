@@ -3,15 +3,14 @@ using System.Linq;
 using System.Web.Mvc;
 using StaffingPlanner.DAL;
 using StaffingPlanner.ViewModels;
+using StaffingPlanner.Models;
 
 namespace StaffingPlanner.Controllers
 {
 	public class CourseController : Controller
 	{
-		public ActionResult Courses()
+		public ActionResult Courses(SchoolYear schoolYear)
 		{
-			var schoolYear = "17/18";
-
 			var db = StaffingPlanContext.GetContext();
 			var courses = db.Courses.Select(c => new SimpleCourseViewModel
 			{
@@ -19,7 +18,7 @@ namespace StaffingPlanner.Controllers
                 Name = c.Name,
 				Code = c.Code,
 				Credits = c.GetOffering(schoolYear).Credits,
-				Term = c.GetOffering(schoolYear).Term,
+				TermYear = c.GetOffering(schoolYear).TermYear,
 				Periods = c.GetOffering(schoolYear).Periods,
 				AllocatedHours = c.GetOffering(schoolYear).GetAllocatedHours(),
 				RemainingHours = c.GetOffering(schoolYear).GetRemainingHours()
@@ -28,17 +27,12 @@ namespace StaffingPlanner.Controllers
 			return View(courses);
         }
 
-        public ActionResult CourseDetails(Guid offeringId)
+        public ActionResult CourseDetails(string code, TermYear termYear)
         {
-            //var schoolYear = "17/18";
-
             var db = StaffingPlanContext.GetContext();
 
-            //Temporary (and silly) solution
-            var course = db.Courses.Where(c => c.Offerings.Select(o => o.Id).Contains(offeringId)).First();
-            var offering = course.GetOffering(offeringId);
-            //var course = db.Courses.First(cc => cc.Id == courseID);
-            //var offering = course.GetOffering(schoolYear);
+            var course = db.Courses.Where(c => c.Code == code).First();
+            var offering = course.GetOffering(termYear);
 
             var courseDetails = new DetailedCourseViewModel
             {
@@ -46,7 +40,7 @@ namespace StaffingPlanner.Controllers
                 Code = course.Code,
 
                 Credits = offering.Credits,
-                Term = offering.Term,
+                TermYear = offering.TermYear,
                 Periods = offering.Periods,
                 TotalHours = offering.Budget,
                 AllocatedHours = offering.GetAllocatedHours(),

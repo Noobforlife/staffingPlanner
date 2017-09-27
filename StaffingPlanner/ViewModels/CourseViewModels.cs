@@ -7,7 +7,7 @@ namespace StaffingPlanner.ViewModels
 	public class SimpleCourseViewModel
 	{
 		public Guid Id { get; set; }
-        public string Term { get; set; }
+        public TermYear TermYear { get; set; }
 		public string Name { get; set; }
 		public string Code { get; set; }
 		public Credits Credits { get; set; }
@@ -19,7 +19,7 @@ namespace StaffingPlanner.ViewModels
     public class DetailedCourseViewModel
     {
         public Guid Id { get; set; }
-        public string Term { get; set; }
+        public TermYear TermYear { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public Credits Credits { get; set; }

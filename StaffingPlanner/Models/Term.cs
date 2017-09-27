@@ -10,6 +10,11 @@ namespace StaffingPlanner.Models
         Fall,
         Spring
     }
+
+    /// <summary>
+    /// Represents a term in a specific year,
+    /// for example HT17 (the fall term 2017).
+    /// </summary>
     public class TermYear
 	{
         private int _year;
@@ -25,46 +30,33 @@ namespace StaffingPlanner.Models
             get { return _year; }
         }
 
-        public TermYear(Term term, int yy)
+        public TermYear(Term term, int year)
         {
-            _term = term;
-
-            if (yy >= 0 && yy < 100)
-            {
-                _year = yy;
-            }
-            if (yy >= 100)
-            {
-                _year = yy % 100;
-            }
-            else
+            if (year < 1000 || year > 9999)
             {
                 throw new ArgumentOutOfRangeException();
             }
+
+            _term = term;
+
+        }
+
+        private int GetTwoDigitYear()
+        {
+            return _year % 100;
         }
 
         public override string ToString()
         {
             if (_term == Term.Fall)
             {
-                return "HT" + _year.ToString();
+                return "HT" + GetTwoDigitYear().ToString();
             }
             else
             {
-                return "VT" + _year.ToString();
+                return "VT" + GetTwoDigitYear().ToString();
             }
         }
 
-        public static TermYear GetNextTerm(TermYear termyear)
-        {
-            if (termyear.Term == Term.Fall)
-            {
-                return new TermYear(Term.Spring, termyear.Year + 1);
-            }
-            else
-            {
-                return new TermYear(Term.Fall, termyear.Year);
-            }
-        }
     }
 }
