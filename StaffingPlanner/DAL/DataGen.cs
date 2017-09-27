@@ -11,9 +11,9 @@ namespace StaffingPlanner.DAL
     {
         public static Random rnd = new Random();
 
-        private static List<string> schoolYear = new List<string>()
+        private static List<string> termList = new List<string>()
         {
-            "17/18"
+            "VT17", "HT17"
         };
 
         private static List<float> hst = new List<float>()
@@ -26,14 +26,13 @@ namespace StaffingPlanner.DAL
             return new CourseOffering()
             {
                 Id = Guid.NewGuid(),
-                SchoolYear = schoolYear[rnd.Next(0, schoolYear.Count)],
+                Term = termList[rnd.Next(0, termList.Count)],
                 Credits = GetRandomCredit(),
                 CourseResponsible = courseResponsible,
                 NumStudents = rnd.Next(10, 80),
                 HST = hst[rnd.Next(0, hst.Count)],
-                Term = GetRandomTerm(),
                 Periods = new List<Period>() { Period.P1, Period.P2 },
-                Budget = rnd.Next(20, 200)
+                Budget = rnd.Next(20, 200),
 
             };
         }
@@ -55,13 +54,6 @@ namespace StaffingPlanner.DAL
             Array values = Enum.GetValues(typeof(Credits));
             Credits randomCredit = (Credits)values.GetValue(rnd.Next(values.Length));
             return randomCredit;
-        }
-
-        private static Term GetRandomTerm()
-        {
-            Array values = Enum.GetValues(typeof(Term));
-            Term randomTerm = (Term)values.GetValue(rnd.Next(values.Length));
-            return randomTerm;
         }
 
     }

@@ -13,7 +13,7 @@ namespace StaffingPlanner.Controllers
 			var schoolYear = "17/18";
 
 			var db = StaffingPlanContext.GetContext();
-			var courses = db.Courses.Select(c => new CourseViewModel
+			var courses = db.Courses.Select(c => new SimpleCourseViewModel
 			{
 				Id = c.GetOffering(schoolYear).Id,
                 Name = c.Name,

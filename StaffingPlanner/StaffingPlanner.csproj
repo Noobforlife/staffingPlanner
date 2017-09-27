@@ -170,7 +170,6 @@
     <Compile Include="Models\Period.cs" />
     <Compile Include="Models\Teacher.cs" />
     <Compile Include="Models\TeacherCourseWorkload.cs" />
-    <Compile Include="Models\Term.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\CourseViewModels.cs" />
     <Compile Include="ViewModels\TeacherViewModel.cs" />
