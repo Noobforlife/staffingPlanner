@@ -11,7 +11,7 @@ namespace StaffingPlanner.Models
 	{
 		public Guid Id { get; set; }
         public string CourseCode { get; set; }
-        public string Term { get; set; }
+        public TermYear TermYear { get; set; }
 		public Credits Credits { get; set; }
 		public List<Period> Periods { get; set; }
 		public int Budget { get; set; }
