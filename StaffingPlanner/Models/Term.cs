@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
+//using System.Linq;
 
 namespace StaffingPlanner.Models
 {
@@ -55,6 +55,31 @@ namespace StaffingPlanner.Models
             {
                 return "VT" + GetTwoDigitYear().ToString();
             }
+        }
+
+        public static TermYear StringToTermYear(string termYearString)
+        {
+            if (termYearString.Length != 4)
+            {
+                throw new ArgumentException("Has to be in format HT17, VT18 etc.");
+            }
+            string termString = termYearString.Substring(0, 2);
+            string yearString = termYearString.Substring(2, 2);
+            int year = int.Parse(yearString) + 2000;
+
+            if (termString == "HT")
+            {
+                return new TermYear(Term.Fall, year);
+            }
+            else if (termString == "VT")
+            {
+                return new TermYear(Term.Spring, year);
+            }
+            else
+            {
+                throw new ArgumentException("Has to be in format HT17, VT18 etc.");
+            }
+
         }
 
     }

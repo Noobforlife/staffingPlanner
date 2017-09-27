@@ -11,10 +11,18 @@ namespace StaffingPlanner.DAL
     {
         public static Random rnd = new Random();
 
-        private static List<TermYear> termList = new List<TermYear>()
+
+        public static Dictionary<TermYear, EmploymentLevel> GetEmploymentDictionary(int HT17, int VT18)
         {
-            new TermYear(Term.Fall, 2017),
-            new TermYear(Term.Spring, 2018)
+            Dictionary<TermYear, EmploymentLevel> TermEmployment = new Dictionary<TermYear, EmploymentLevel>();
+            TermEmployment.Add(new TermYear(Term.Fall, 2017), new EmploymentLevel(HT17));
+            TermEmployment.Add(new TermYear(Term.Spring, 2018), new EmploymentLevel(VT18));
+            return TermEmployment;
+        }
+
+        private static List<string> termList = new List<string>()
+        {
+            "HT17", "VT18"
         };
 
         private static List<float> hst = new List<float>()
@@ -27,7 +35,7 @@ namespace StaffingPlanner.DAL
             return new CourseOffering()
             {
                 Id = Guid.NewGuid(),
-                TermYear = termList[rnd.Next(0, termList.Count)],
+                Term = termList[rnd.Next(0, termList.Count)],
                 Credits = GetRandomCredit(),
                 CourseResponsible = courseResponsible,
                 NumStudents = rnd.Next(10, 80),
