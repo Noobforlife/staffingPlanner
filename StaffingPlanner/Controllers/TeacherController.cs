@@ -11,7 +11,7 @@ namespace StaffingPlanner.Controllers
 	{
         public ActionResult Teachers()
         {
-	        var schoolYear = 17;
+	        var year = 17;
 
 	        var db = StaffingPlanContext.GetContext();
 			var teachers = db.Teachers.Select(t => new TeacherViewModel
@@ -20,8 +20,8 @@ namespace StaffingPlanner.Controllers
 				Name = t.Name,
 				Title = t.AcademicTitle,
 				TotalHours = t.GetTotalHours(),
-				FallWork = t.TermEmployment[new TermYear(Term.Fall, schoolYear)],
-				SpringWork = t.TermEmployment[new TermYear(Term.Spring, schoolYear)],
+				FallWork = t.TermEmployment[new TermYear(Term.Fall, year)],
+				SpringWork = t.TermEmployment[new TermYear(Term.Spring, year + 1)],
 				RemainingHours = t.GetRemainingHours()
 	        });
 

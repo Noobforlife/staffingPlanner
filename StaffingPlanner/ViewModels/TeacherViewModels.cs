@@ -3,6 +3,7 @@ using StaffingPlanner.Models;
 
 namespace StaffingPlanner.ViewModels
 {
+
 	public class TeacherViewModel
 	{
 		public Guid Id { get; set; }

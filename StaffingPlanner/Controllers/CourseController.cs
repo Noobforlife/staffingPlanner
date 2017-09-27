@@ -9,8 +9,10 @@ namespace StaffingPlanner.Controllers
 {
 	public class CourseController : Controller
 	{
-		public ActionResult Courses(SchoolYear schoolYear)
+		public ActionResult Courses()
 		{
+            SchoolYear schoolYear = new SchoolYear(DateTime.Today.Year);
+
 			var db = StaffingPlanContext.GetContext();
 			var courses = db.Courses.Select(c => new SimpleCourseViewModel
 			{
