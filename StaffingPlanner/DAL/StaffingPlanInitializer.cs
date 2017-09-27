@@ -17,7 +17,7 @@ namespace StaffingPlanner.DAL
                     PersonalNumber = "740905-2886",
                     Email = "",
                     Id = Guid.NewGuid(),
-                    DirectorOfStudies = true
+                    DirectorOfStudies = true,
                 },
 
                 new Teacher()
