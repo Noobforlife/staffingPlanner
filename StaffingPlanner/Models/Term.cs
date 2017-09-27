@@ -36,9 +36,8 @@ namespace StaffingPlanner.Models
             {
                 throw new ArgumentOutOfRangeException();
             }
-
+            _year = year;
             _term = term;
-
         }
 
         private int GetTwoDigitYear()
