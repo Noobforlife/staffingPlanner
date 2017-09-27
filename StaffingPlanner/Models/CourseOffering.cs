@@ -11,7 +11,7 @@ namespace StaffingPlanner.Models
 	{
 		public Guid Id { get; set; }
         public string CourseCode { get; set; }
-        public TermYear TermYear { get; set; }
+        public string Term { get; set; }
 		public Credits Credits { get; set; }
 		public List<Period> Periods { get; set; }
 		public int Budget { get; set; }
@@ -19,6 +19,11 @@ namespace StaffingPlanner.Models
 		public Teacher CourseResponsible { get; set; }
 		public float HST { get; set; }
 		public int NumStudents { get; set; }
+
+        public TermYear GetTermYear()
+        {
+            return TermYear.StringToTermYear(Term);
+        }
 
 		public int GetAllocatedHours()
 		{

@@ -23,7 +23,7 @@ namespace StaffingPlanner.Controllers
 				FallWork = t.TermEmployment[new TermYear(Term.Fall, year)],
 				SpringWork = t.TermEmployment[new TermYear(Term.Spring, year + 1)],
 				RemainingHours = t.GetRemainingHours()
-	        });
+	        }).ToList();
 
 			return View(teachers);
         }

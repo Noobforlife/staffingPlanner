@@ -20,7 +20,7 @@ namespace StaffingPlanner.Controllers
                 Name = c.Name,
 				Code = c.Code,
 				Credits = c.GetOffering(schoolYear).Credits,
-				TermYear = c.GetOffering(schoolYear).TermYear,
+				TermYear = c.GetOffering(schoolYear).GetTermYear(),
 				Periods = c.GetOffering(schoolYear).Periods,
 				AllocatedHours = c.GetOffering(schoolYear).GetAllocatedHours(),
 				RemainingHours = c.GetOffering(schoolYear).GetRemainingHours()
@@ -42,7 +42,7 @@ namespace StaffingPlanner.Controllers
                 Code = course.Code,
 
                 Credits = offering.Credits,
-                TermYear = offering.TermYear,
+                TermYear = offering.GetTermYear(),
                 Periods = offering.Periods,
                 TotalHours = offering.Budget,
                 AllocatedHours = offering.GetAllocatedHours(),

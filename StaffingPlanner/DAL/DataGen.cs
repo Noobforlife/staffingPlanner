@@ -20,10 +20,9 @@ namespace StaffingPlanner.DAL
             return TermEmployment;
         }
 
-        private static List<TermYear> termList = new List<TermYear>()
+        private static List<string> termList = new List<string>()
         {
-            new TermYear(Term.Fall, 2017),
-            new TermYear(Term.Spring, 2018)
+            "HT17", "VT18"
         };
 
         private static List<float> hst = new List<float>()
@@ -36,7 +35,7 @@ namespace StaffingPlanner.DAL
             return new CourseOffering()
             {
                 Id = Guid.NewGuid(),
-                TermYear = termList[rnd.Next(0, termList.Count)],
+                Term = termList[rnd.Next(0, termList.Count)],
                 Credits = GetRandomCredit(),
                 CourseResponsible = courseResponsible,
                 NumStudents = rnd.Next(10, 80),
