@@ -1,19 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace StaffingPlanner.Models
 {
 	public class Course
 	{
-		public Guid Id { get; set; }
+        [Key]
 		public string Code { get; set; }
 		public string Name { get; set; }
-		public ICollection<CourseEdition> Editions { get; set; }
+		public ICollection<CourseOffering> Offerings { get; set; }
 
-		public CourseEdition GetEdition(string schoolYear)
+		public CourseOffering GetOffering(string term)
 		{
-			return Editions.First(e => e.SchoolYear == schoolYear);
+			return Offerings.First(o => o.Term.ToLower() == term.ToLower());
 		}
-	}
+
+        public CourseOffering GetOffering(Guid offeringId)
+        {
+            return Offerings.First(o => o.Id == offeringId);
+        }
+    }
 }

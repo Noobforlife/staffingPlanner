@@ -150,12 +150,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\CourseDetailsController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
-    <Compile Include="Controllers\CourseListController.cs" />
+    <Compile Include="Controllers\CourseController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\TeacherListController.cs" />
-    <Compile Include="Controllers\TeacherDetailsController.cs" />
+    <Compile Include="Controllers\TeacherController.cs" />
+    <Compile Include="DAL\DataGen.cs" />
     <Compile Include="DAL\Globals.cs" />
     <Compile Include="DAL\StaffingPlanContext.cs" />
     <Compile Include="DAL\StaffingPlanInitializer.cs" />
@@ -166,15 +165,13 @@
     <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="Models\AcademicTitle.cs" />
     <Compile Include="Models\Course.cs" />
-    <Compile Include="Models\CourseEdition.cs" />
+    <Compile Include="Models\CourseOffering.cs" />
     <Compile Include="Models\Credits.cs" />
     <Compile Include="Models\Period.cs" />
     <Compile Include="Models\Teacher.cs" />
     <Compile Include="Models\TeacherCourseWorkload.cs" />
-    <Compile Include="Models\Term.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\CourseViewModels.cs" />
-    <Compile Include="ViewModels\DetailedCourseViewModel.cs" />
     <Compile Include="ViewModels\TeacherViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -214,11 +211,11 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Dashboard\Index.cshtml" />
-    <Content Include="Views\CourseDetails\Course.cshtml" />
-    <Content Include="Views\CourseList\Courses.cshtml" />
-    <Content Include="Views\TeacherDetails\Teacher.cshtml" />
+    <Content Include="Views\Course\CourseDetails.cshtml" />
+    <Content Include="Views\Course\Courses.cshtml" />
+    <Content Include="Views\Teacher\TeacherDetails.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\TeacherList\Teachers.cshtml" />
+    <Content Include="Views\Teacher\Teachers.cshtml" />
     <Content Include="Views\Shared\_CourseModal.cshtml" />
     <Content Include="Views\Shared\_TeacherModal.cshtml" />
     <Content Include="Views\Shared\_Navigation.cshtml" />
