@@ -12,14 +12,15 @@ namespace StaffingPlanner.Models
 		public string Name { get; set; }
 		public ICollection<CourseOffering> Offerings { get; set; }
 
-		public CourseOffering GetOffering(string term)
+		public CourseOffering GetOffering(TermYear termYear)
 		{
-			return Offerings.First(o => o.Term.ToLower() == term.ToLower());
+			return Offerings.First(o => o.TermYear == termYear);
 		}
 
-        public CourseOffering GetOffering(Guid offeringId)
+        public CourseOffering GetOffering(SchoolYear year)
         {
-            return Offerings.First(o => o.Id == offeringId);
+            return Offerings.First(o => o.TermYear == year.FirstTerm || o.TermYear == year.SecondTerm);
         }
+
     }
 }

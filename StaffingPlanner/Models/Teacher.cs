@@ -13,11 +13,16 @@ namespace StaffingPlanner.Models
 		public string Email { get; set; }
 		public bool DirectorOfStudies { get; set; }
 		public AcademicTitle AcademicTitle { get; set; }
-		public ICollection<Contract> Contracts { get; set; }
+        public Dictionary<TermYear, EmploymentLevel> TermEmployment { get; set; }
 
-		public Contract GetContract(string schoolYear)
+
+        public void AddTermEmployment(TermYear term, EmploymentLevel employment)
+        {
+            TermEmployment.Add(term, employment);
+        }
+        public EmploymentLevel GetEmployment(TermYear term)
 		{
-			return Contracts.First(c => c.SchoolYear == schoolYear);
+            return TermEmployment[term];
 		}
 
 		// Alter to take into account any changes in workload
