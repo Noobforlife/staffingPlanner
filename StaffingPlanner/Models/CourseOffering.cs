@@ -15,7 +15,7 @@ namespace StaffingPlanner.Models
 		public Credits Credits { get; set; }
 		public List<Period> Periods { get; set; }
 		public int Budget { get; set; }
-		public ICollection<Teacher> Teachers { get; set; }
+		public virtual ICollection<Teacher> Teachers { get; set; }
 		public virtual Teacher CourseResponsible { get; set; }
 		public float HST { get; set; }
 		public int NumStudents { get; set; }

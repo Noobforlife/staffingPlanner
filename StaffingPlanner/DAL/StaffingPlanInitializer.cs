@@ -389,9 +389,9 @@ namespace StaffingPlanner.DAL
             context.SaveChanges();
 
             //Populating database with contracts
-            var contracts = new List<Contract> { };
-            contracts.ForEach(c => context.Contracts.Add(c));
-            context.SaveChanges();
+            //var contracts = new List<Contract> { };
+            //contracts.ForEach(c => context.Contracts.Add(c));
+            //context.SaveChanges();
 
         }
     }

@@ -3,6 +3,8 @@ using System.Linq;
 using System.Web.Mvc;
 using StaffingPlanner.DAL;
 using StaffingPlanner.ViewModels;
+using StaffingPlanner.Models;
+using System.Collections.Generic;
 
 namespace StaffingPlanner.Controllers
 {
@@ -34,40 +36,10 @@ namespace StaffingPlanner.Controllers
 			return View();
         }
 
-        //public ActionResult CourseDetails(SimpleCourseViewModel course)
-        //{
-        //    //var schoolYear = "17/18";
-
-        //    var db = StaffingPlanContext.GetContext();
-
-        //    //Temporary (and silly) solution
-        //    var course = db.Courses.Where(c => c.Offerings.Select(o => o.Id).Contains(offeringId)).First();
-        //    var offering = course.GetOffering(offeringId);
-
-        //    var courseDetails = new DetailedCourseViewModel
-        //    {
-        //        Name = course.Name,
-        //        Code = course.Code,
-
-        //        Credits = offering.Credits,
-        //        Term = offering.Term,
-        //        Periods = offering.Periods,
-        //        TotalHours = offering.Budget,
-        //        AllocatedHours = offering.GetAllocatedHours(),
-        //        RemainingHours = offering.GetRemainingHours(),
-        //        NumStudents = offering.NumStudents,
-        //        CourseResponsible = offering.CourseResponsible,
-        //        HST = offering.HST,
-        //        Teachers = offering.Teachers.ToList()
-        //    };
-
-        //    return View(courseDetails);
-        //}
-
         
         public ActionResult CourseDetails()
         {
-            return View("CourseModal");
+            return View();
         }
 
         public static int GetAllocatedHours(CourseOffering offering)
