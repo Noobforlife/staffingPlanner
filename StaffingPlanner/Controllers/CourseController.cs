@@ -3,8 +3,6 @@ using System.Linq;
 using System.Web.Mvc;
 using StaffingPlanner.DAL;
 using StaffingPlanner.ViewModels;
-using StaffingPlanner.Models;
-using System.Collections.Generic;
 
 namespace StaffingPlanner.Controllers
 {
@@ -12,7 +10,7 @@ namespace StaffingPlanner.Controllers
 	{
 		public ActionResult Courses()
 		{
-			var schoolYear = "17/18";
+            SchoolYear schoolYear = new SchoolYear(DateTime.Today.Year);
 
 			var db = StaffingPlanContext.GetContext();
             var offerings = db.CourseOfferings.Where(c => c.Course != null).ToList();

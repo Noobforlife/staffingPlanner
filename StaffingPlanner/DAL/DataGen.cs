@@ -11,9 +11,18 @@ namespace StaffingPlanner.DAL
     {
         public static Random rnd = new Random();
 
+
+        public static Dictionary<TermYear, EmploymentLevel> GetEmploymentDictionary(int HT17, int VT18)
+        {
+            Dictionary<TermYear, EmploymentLevel> TermEmployment = new Dictionary<TermYear, EmploymentLevel>();
+            TermEmployment.Add(new TermYear(Term.Fall, 2017), new EmploymentLevel(HT17));
+            TermEmployment.Add(new TermYear(Term.Spring, 2018), new EmploymentLevel(VT18));
+            return TermEmployment;
+        }
+
         private static List<string> termList = new List<string>()
         {
-            "VT17", "HT17"
+            "HT17", "VT18"
         };
 
         private static List<float> hst = new List<float>()

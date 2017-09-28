@@ -3,7 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using StaffingPlanner.DAL;
 using StaffingPlanner.ViewModels;
-
+using StaffingPlanner.Models;
 
 namespace StaffingPlanner.Controllers
 {
@@ -11,7 +11,7 @@ namespace StaffingPlanner.Controllers
 	{
         public ActionResult Teachers()
         {
-	        var schoolYear = "17/18";
+	        var year = 17;
 
 	        var db = StaffingPlanContext.GetContext();
 			var teachers = db.Teachers.Select(t => new TeacherViewModel
@@ -19,10 +19,10 @@ namespace StaffingPlanner.Controllers
 				Id = t.Id,
 				Name = t.Name,
 				Title = t.AcademicTitle,
-				//TotalHours = t.GetTotalHours(),
-				//FallWork = t.GetContract(schoolYear).FallWork,
-				//SpringWork = t.GetContract(schoolYear).SpringWork,
-				//RemainingHours = t.GetRemainingHours()
+				TotalHours = t.GetTotalHours(),
+				FallWork = t.TermEmployment[new TermYear(Term.Fall, year)],
+				SpringWork = t.TermEmployment[new TermYear(Term.Spring, year + 1)],
+				RemainingHours = t.GetRemainingHours()
 	        }).ToList();
 
 			return View(teachers);

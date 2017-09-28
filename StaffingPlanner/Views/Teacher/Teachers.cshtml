@@ -1,4 +1,7 @@
-﻿@{
+﻿@using StaffingPlanner.ViewModels
+@using System.Collections
+@model List<TeacherViewModel>
+@{
     ViewBag.Title = "Teachers";
 }
 
@@ -17,42 +20,18 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td> <a href="#" data-toggle="modal" data-target="#teacher-modal">anled24567 </a></td>
-                <td> <a href="#" data-toggle="modal" data-target="#teacher-modal">Aneli Edman</a></td>
-                <td>Senior Lecturer</td>
-                <td>Cell 4</td>
-                <td>Cell 5</td>
-                <td>Cell 6</td>
-                <td>Cell 7<span class="label label-success pull-right">good </span></td>
-            </tr>
-            <tr>
-                <td><a href="#">afshk14526 </a></td>
-                <td> <a href="#">Regina Fish</a></td>
-                <td>Junior Lecturer</td>
-                <td>Cell 4</td>
-                <td>Cell 5</td>
-                <td>Cell 6</td>
-                <td>Cell 7<span class="label label-warning pull-right">warning </span></td>
-            </tr>
-            <tr>
-                <td> <a href="#">anss5363 </a></td>
-                <td><a href="#">Craig David</a></td>
-                <td>Student lecturer</td>
-                <td>Cell 4</td>
-                <td>Cell 5</td>
-                <td>Cell 6</td>
-                <td>Cell 7<span class="label label-danger pull-right">issue </span></td>
-            </tr>
-            <tr>
-                <td><a href="#">ghftre1234 </a></td>
-                <td><a href="#">Stan Mash</a></td>
-                <td>Dean Of studies</td>
-                <td>Cell 4</td>
-                <td>Cell 5</td>
-                <td>Cell 6</td>
-                <td>Cell 7<span class="label label-info pull-right">suggestion </span></td>
-            </tr>
+            @foreach (TeacherViewModel teacher in Model)
+            {
+                <tr>
+                    <td> <a href="#" data-toggle="modal" data-target="#teacher-modal">Code?</a></td>
+                    <td> <a href="#" data-toggle="modal" data-target="#teacher-modal">@teacher.Name</a></td>
+                    <td>@teacher.Title</td>
+                    <td>@teacher.TotalHours</td>
+                    <td>@teacher.FallWork</td>
+                    <td>@teacher.SpringWork</td>
+                    <td>@teacher.RemainingHours<span class="label label-success pull-right">good </span></td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>

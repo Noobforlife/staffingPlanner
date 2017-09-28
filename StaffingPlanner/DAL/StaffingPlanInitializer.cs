@@ -18,6 +18,7 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = true,
+                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -27,7 +28,8 @@ namespace StaffingPlanner.DAL
                     PersonalNumber = "610427-1541",
                     Email = "",
                     Id = Guid.NewGuid(),
-                    DirectorOfStudies = false
+                    DirectorOfStudies = false,
+                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -37,7 +39,8 @@ namespace StaffingPlanner.DAL
                     PersonalNumber = "610427-1541",
                     Email = "",
                     Id = Guid.NewGuid(),
-                    DirectorOfStudies = false
+                    DirectorOfStudies = false,
+                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -47,7 +50,8 @@ namespace StaffingPlanner.DAL
                     PersonalNumber = "740905-2886",
                     Email = "",
                     Id = Guid.NewGuid(),
-                    DirectorOfStudies = false
+                    DirectorOfStudies = false,
+                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -57,7 +61,8 @@ namespace StaffingPlanner.DAL
                     PersonalNumber = "560129-7352",
                     Email = "",
                     Id = Guid.NewGuid(),
-                    DirectorOfStudies = false
+                    DirectorOfStudies = false,
+                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -67,7 +72,8 @@ namespace StaffingPlanner.DAL
                     PersonalNumber = "560129-7352",
                     Email = "",
                     Id = Guid.NewGuid(),
-                    DirectorOfStudies = false
+                    DirectorOfStudies = false,
+                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -77,7 +83,8 @@ namespace StaffingPlanner.DAL
                     PersonalNumber = "821111-8352",
                     Email = "",
                     Id = Guid.NewGuid(),
-                    DirectorOfStudies = false
+                    DirectorOfStudies = false,
+                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -87,7 +94,8 @@ namespace StaffingPlanner.DAL
                     PersonalNumber = "821111-8352",
                     Email = "",
                     Id = Guid.NewGuid(),
-                    DirectorOfStudies = false
+                    DirectorOfStudies = false,
+                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -97,7 +105,8 @@ namespace StaffingPlanner.DAL
                     PersonalNumber = "920610-8361",
                     Email = "",
                     Id = Guid.NewGuid(),
-                    DirectorOfStudies = false
+                    DirectorOfStudies = false,
+                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -107,7 +116,8 @@ namespace StaffingPlanner.DAL
                     PersonalNumber = "821111-8352",
                     Email = "",
                     Id = Guid.NewGuid(),
-                    DirectorOfStudies = false
+                    DirectorOfStudies = false,
+                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -117,7 +127,8 @@ namespace StaffingPlanner.DAL
                     PersonalNumber = "821111-8352",
                     Email = "",
                     Id = Guid.NewGuid(),
-                    DirectorOfStudies = false
+                    DirectorOfStudies = false,
+                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -127,7 +138,8 @@ namespace StaffingPlanner.DAL
                     PersonalNumber = "740905-2886",
                     Email = "",
                     Id = Guid.NewGuid(),
-                    DirectorOfStudies = false
+                    DirectorOfStudies = false,
+                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -137,7 +149,8 @@ namespace StaffingPlanner.DAL
                     PersonalNumber = "821111-8352",
                     Email = "",
                     Id = Guid.NewGuid(),
-                    DirectorOfStudies = false
+                    DirectorOfStudies = false,
+                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -147,7 +160,8 @@ namespace StaffingPlanner.DAL
                     PersonalNumber = "821111-8352",
                     Email = "",
                     Id = Guid.NewGuid(),
-                    DirectorOfStudies = false
+                    DirectorOfStudies = false,
+                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -157,7 +171,8 @@ namespace StaffingPlanner.DAL
                     PersonalNumber = "920610-8361",
                     Email = "",
                     Id = Guid.NewGuid(),
-                    DirectorOfStudies = false
+                    DirectorOfStudies = false,
+                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -167,7 +182,8 @@ namespace StaffingPlanner.DAL
                     PersonalNumber = "920610-8361",
                     Email = "",
                     Id = Guid.NewGuid(),
-                    DirectorOfStudies = false
+                    DirectorOfStudies = false,
+                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
 
