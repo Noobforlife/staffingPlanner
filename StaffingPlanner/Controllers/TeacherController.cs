@@ -63,8 +63,8 @@ namespace StaffingPlanner.Controllers
         public int GetRemainingHoursForTeacher(Teacher teacher)
         {
             var db = StaffingPlanContext.GetContext();
-            var wk = db.Workloads;
-            var hours = db.Workloads.Where(w => w.Teacher.Name == teacher.Name).Select(w => w.Workload).Sum();
+            var wk = db.Workloads.Where(k => k.Id != null).ToList();
+            var hours = db.Workloads.Where(w => w.Teacher.Equals(teacher)).Select(w => w.Workload).Sum();
 
             return GetTotalHoursForTeacher(teacher) - hours;
         }
