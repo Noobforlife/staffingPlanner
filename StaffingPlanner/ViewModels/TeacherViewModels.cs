@@ -10,8 +10,8 @@ namespace StaffingPlanner.ViewModels
 		public string Name { get; set; }
 		public AcademicTitle Title { get; set; }
 		public int TotalHours { get; set; }
-		public EmploymentLevel FallWork { get; set; }
-		public EmploymentLevel SpringWork { get; set; }
+		public int FallWork { get; set; }
+		public int SpringWork { get; set; }
 		public int RemainingHours { get; set; }
 	}
 }

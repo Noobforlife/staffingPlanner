@@ -12,8 +12,6 @@ namespace StaffingPlanner.Controllers
 	{
 		public ActionResult Courses()
 		{
-            SchoolYear schoolYear = new SchoolYear(DateTime.Today.Year);
-
 			var db = StaffingPlanContext.GetContext();
             var offerings = db.CourseOfferings.Where(c => c.Course != null).ToList();
 
@@ -23,7 +21,7 @@ namespace StaffingPlanner.Controllers
                 {
                     Code = o.Course.Code,
                     Name = o.Course.Name,
-                    Term = o.Term,
+                    TermYear = o.TermYear,
                     Credits = o.Credits,
                     AllocatedHours = GetAllocatedHours(o),
                     RemainingHours = GetRemainingHours(o),

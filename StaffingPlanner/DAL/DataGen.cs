@@ -12,17 +12,18 @@ namespace StaffingPlanner.DAL
         public static Random rnd = new Random();
 
 
-        public static Dictionary<TermYear, EmploymentLevel> GetEmploymentDictionary(int HT17, int VT18)
+        public static Dictionary<TermYear, int> GetEmploymentDictionary(int HT17, int VT18)
         {
-            Dictionary<TermYear, EmploymentLevel> TermEmployment = new Dictionary<TermYear, EmploymentLevel>();
-            TermEmployment.Add(new TermYear(Term.Fall, 2017), new EmploymentLevel(HT17));
-            TermEmployment.Add(new TermYear(Term.Spring, 2018), new EmploymentLevel(VT18));
+            Dictionary<TermYear, int> TermEmployment = new Dictionary<TermYear, int>();
+            TermEmployment.Add(new TermYear { Term = Term.Fall, Year = 2017 }, 100);
+            TermEmployment.Add(new TermYear { Term = Term.Spring, Year = 2018 }, 100);
             return TermEmployment;
         }
 
-        private static List<string> termList = new List<string>()
+        private static List<TermYear> termList = new List<TermYear>()
         {
-            "HT17", "VT18"
+            new TermYear { Id = Guid.NewGuid(), Term = Term.Fall, Year = 2017 },
+            new TermYear { Id = Guid.NewGuid(), Term = Term.Spring, Year = 2018 }
         };
 
         private static List<float> hst = new List<float>()
@@ -35,7 +36,7 @@ namespace StaffingPlanner.DAL
             return new CourseOffering {
                 Id =Guid.NewGuid(),
                 Course = course,
-                Term = termList[rnd.Next(0, termList.Count)],
+                TermYear = termList[rnd.Next(0, termList.Count)],
                 Credits = GetRandomCredit(),
                 Periods = RandomPeriod(),
                 TotalHours= rnd.Next(20, 200),
