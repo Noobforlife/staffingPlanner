@@ -1,6 +1,7 @@
-﻿@{
+﻿@{    
     ViewBag.Title = "Courses";
 }
+
 
 <h1>Courses </h1>
 <div class="table-responsive" style="font-family:Raleway, sans-serif;">
@@ -17,44 +18,30 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td> <a href="#" data-toggle="modal" data-target="#course-modal">Information Systems/Agile Methods</a></td>
-                <td> <a href="#">2IS100 </a></td>
-                <td>Cell 3</td>
-                <td>Cell 4</td>
-                <td>Cell 5</td>
-                <td>Cell 6</td>
-                <td>Cell 7<span class="label label-warning pull-right">warning </span></td>
-            </tr>
-            <tr>
-                <td> <a href="#">Organisational Behaviour</a></td>
-                <td> <a href="#">2FE223 </a></td>
-                <td>Cell 3</td>
-                <td>Cell 4</td>
-                <td>Cell 5</td>
-                <td>Cell 6</td>
-                <td>Cell 7<span class="label label-danger pull-right">issue </span></td>
-            </tr>
-            <tr>
-                <td> <a href="#">HCI/Usability Evaluation Methods</a></td>
-                <td> <a href="#">2IV134 </a></td>
-                <td>Cell 3</td>
-                <td>Cell 4</td>
-                <td>Cell 5</td>
-                <td>Cell 6</td>
-                <td>Cell 7<span class="label label-success pull-right">good </span></td>
-            </tr>
-            <tr>
-                <td> <a href="#">Software Engineering</a></td>
-                <td> <a href="#">2yt176 </a></td>
-                <td>Cell 3</td>
-                <td>Cell 4</td>
-                <td>Cell 5</td>
-                <td>Cell 6</td>
-                <td>Cell 7<span class="label label-warning pull-right">warning </span></td>
-            </tr>
+            @foreach (var course in ViewBag.courses)
+            {
+                <tr>
+                    <td> <a id="showBtn" href="#course-modal" data-toggle="modal" data-id ="@course.Code">@course.Name</a></td>
+                    <td> <a href="javascript:;">@course.Code </a></td>
+                    <td>@course.Credits</td>
+                    <td>@course.Term</td>
+                    <td>Cell 5</td>
+                    <td>@course.AllocatedHours</td>
+                    <td>@course.RemainingHours<span class="label label-warning pull-right">warning </span></td>
+                </tr>
+            }             
+           
         </tbody>
     </table>
 </div>
 
-@Html.Partial("_CourseModal");
+
+@Html.Partial("_CourseModal")"
+
+@section Scripts{
+    <script>
+    $('#showBtn').click(function (eve) {
+        $('#modal-content').load("Course/Courses/CourseDetails");
+    })
+
+</script>}

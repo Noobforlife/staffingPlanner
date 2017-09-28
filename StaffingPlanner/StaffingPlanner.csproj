@@ -219,6 +219,7 @@
     <Content Include="Views\Shared\_CourseModal.cshtml" />
     <Content Include="Views\Shared\_TeacherModal.cshtml" />
     <Content Include="Views\Shared\_Navigation.cshtml" />
+    <Content Include="Views\Course\Modal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

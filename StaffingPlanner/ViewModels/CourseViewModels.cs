@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using StaffingPlanner.Models;
+using System.Linq;
+using StaffingPlanner.DAL;
 
 namespace StaffingPlanner.ViewModels
 {
@@ -14,7 +16,8 @@ namespace StaffingPlanner.ViewModels
 		public List<Period> Periods { get; set; }
 		public int AllocatedHours { get; set; }
 		public int RemainingHours { get; set; }
-	}
+
+    }
 
     public class DetailedCourseViewModel
     {

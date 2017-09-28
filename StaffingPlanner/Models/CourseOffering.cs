@@ -10,27 +10,16 @@ namespace StaffingPlanner.Models
 	public class CourseOffering
 	{
 		public Guid Id { get; set; }
-        public string CourseCode { get; set; }
+        public virtual Course Course { get; set; }
         public string Term { get; set; }
 		public Credits Credits { get; set; }
 		public List<Period> Periods { get; set; }
 		public int Budget { get; set; }
 		public ICollection<Teacher> Teachers { get; set; }
-		public Teacher CourseResponsible { get; set; }
+		public virtual Teacher CourseResponsible { get; set; }
 		public float HST { get; set; }
 		public int NumStudents { get; set; }
-
-		public int GetAllocatedHours()
-		{
-			var db = StaffingPlanContext.GetContext();
-			return db.Workloads.Where(w => w.Course.Equals(this)).Select(w => w.Workload).Sum();
-		}
-
-		public int GetRemainingHours()
-		{
-			return Budget - GetAllocatedHours();
-		}
-
+      
 		public override bool Equals(object obj)
 		{
 			var ce = obj as CourseOffering;

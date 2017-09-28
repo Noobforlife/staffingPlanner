@@ -19,11 +19,11 @@ namespace StaffingPlanner.Controllers
 				Id = t.Id,
 				Name = t.Name,
 				Title = t.AcademicTitle,
-				TotalHours = t.GetTotalHours(),
-				FallWork = t.GetContract(schoolYear).FallWork,
-				SpringWork = t.GetContract(schoolYear).SpringWork,
-				RemainingHours = t.GetRemainingHours()
-	        });
+				//TotalHours = t.GetTotalHours(),
+				//FallWork = t.GetContract(schoolYear).FallWork,
+				//SpringWork = t.GetContract(schoolYear).SpringWork,
+				//RemainingHours = t.GetRemainingHours()
+	        }).ToList();
 
 			return View(teachers);
         }

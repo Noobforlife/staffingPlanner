@@ -10,16 +10,23 @@ namespace StaffingPlanner.Models
         [Key]
 		public string Code { get; set; }
 		public string Name { get; set; }
-		public ICollection<CourseOffering> Offerings { get; set; }
+  //      public CourseOffering CurrentOffering { get; set; }
+		//public ICollection<CourseOffering> Offerings { get; set; }
 
-		public CourseOffering GetOffering(string term)
-		{
-			return Offerings.First(o => o.Term.ToLower() == term.ToLower());
-		}
+  //      //public Course(string code, string name)
+  //      //{
+  //      //   CurrentOffering = GetOffering(term);
+  //      //}
 
-        public CourseOffering GetOffering(Guid offeringId)
-        {
-            return Offerings.First(o => o.Id == offeringId);
-        }
+  //      public CourseOffering GetOffering(string term)
+		//{
+  //          //return Offerings.First(o => o.Term.ToLower() == term.ToLower());
+  //          return Offerings.First();
+  //      }
+
+  //      public CourseOffering GetOffering(Guid offeringId)
+  //      {
+  //          return Offerings.First(o => o.Id == offeringId);
+  //      }
     }
 }
