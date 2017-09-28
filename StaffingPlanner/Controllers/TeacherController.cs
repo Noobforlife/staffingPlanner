@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using StaffingPlanner.DAL;
@@ -14,7 +15,7 @@ namespace StaffingPlanner.Controllers
         {
 	        var db = StaffingPlanContext.GetContext();
 			var teachersdb = db.Teachers.Where(t => t.Id != null).ToList();
-            Collection<TeacherViewModel> teachers = new Collection<TeacherViewModel>();
+            var teachers = new List<TeacherViewModel>();
 
             foreach (var t in teachersdb) {
                 var tvm = new TeacherViewModel
@@ -30,7 +31,7 @@ namespace StaffingPlanner.Controllers
 
             ViewBag.teachers = teachers;
 
-			return View();
+			return View(teachers);
         }
 
         public ActionResult TeacherDetails(Guid id)
@@ -59,14 +60,20 @@ namespace StaffingPlanner.Controllers
             return 1756;
         }
 
+		public static bool WorkloadHasTeacher(Teacher teacher, TeacherCourseWorkload workload)
+		{
+			return teacher.Equals(workload.Teacher);
+		}
+
         // Alter to take into account how much teaching is to be done, and if there is some decrease in workload
         public int GetRemainingHoursForTeacher(Teacher teacher)
         {
             var db = StaffingPlanContext.GetContext();
-            var wk = db.Workloads.Where(k => k.Id != null).ToList();
-            var hours = db.Workloads.Where(w => w.Teacher.Equals(teacher)).Select(w => w.Workload).Sum();
 
-            return GetTotalHoursForTeacher(teacher) - hours;
+			var hours = db.Workloads.Where(w => w.Teacher.Id.Equals(teacher.Id)).ToList().Sum(w => w.Workload);
+
+
+			return GetTotalHoursForTeacher(teacher) - hours;
         }
     }
 }
