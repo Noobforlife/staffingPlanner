@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using StaffingPlanner.DAL;
 using StaffingPlanner.ViewModels;
 using StaffingPlanner.Models;
+using System.Collections.Generic;
 
 namespace StaffingPlanner.Controllers
 {
@@ -14,47 +15,42 @@ namespace StaffingPlanner.Controllers
             SchoolYear schoolYear = new SchoolYear(DateTime.Today.Year);
 
 			var db = StaffingPlanContext.GetContext();
-			var courses = db.Courses.Select(c => new SimpleCourseViewModel
-			{
-				Id = c.GetOffering(schoolYear).Id,
-                Name = c.Name,
-				Code = c.Code,
-				Credits = c.GetOffering(schoolYear).Credits,
-				TermYear = c.GetOffering(schoolYear).GetTermYear(),
-				Periods = c.GetOffering(schoolYear).Periods,
-				AllocatedHours = c.GetOffering(schoolYear).GetAllocatedHours(),
-				RemainingHours = c.GetOffering(schoolYear).GetRemainingHours()
-			});
+            var offerings = db.CourseOfferings.Where(c => c.Course != null).ToList();
 
-			return View(courses);
+            List<SimpleCourseViewModel> courses = new List<SimpleCourseViewModel>();
+            foreach (var o in offerings) {
+                var vm = new SimpleCourseViewModel
+                {
+                    Code = o.Course.Code,
+                    Name = o.Course.Name,
+                    Term = o.Term,
+                    Credits = o.Credits,
+                    AllocatedHours = GetAllocatedHours(o),
+                    RemainingHours = GetRemainingHours(o),
+                };
+                courses.Add(vm);
+            }            
+
+            ViewBag.courses = courses;
+
+			return View();
         }
 
-        public ActionResult CourseDetails(string code, TermYear termYear)
+        
+        public ActionResult CourseDetails()
+        {
+            return View();
+        }
+
+        public static int GetAllocatedHours(CourseOffering offering)
         {
             var db = StaffingPlanContext.GetContext();
-
-            var course = db.Courses.Where(c => c.Code == code).First();
-            var offering = course.GetOffering(termYear);
-
-            var courseDetails = new DetailedCourseViewModel
-            {
-                Name = course.Name,
-                Code = course.Code,
-
-                Credits = offering.Credits,
-                TermYear = offering.GetTermYear(),
-                Periods = offering.Periods,
-                TotalHours = offering.Budget,
-                AllocatedHours = offering.GetAllocatedHours(),
-                RemainingHours = offering.GetRemainingHours(),
-                NumStudents = offering.NumStudents,
-                CourseResponsible = offering.CourseResponsible,
-                HST = offering.HST,
-                Teachers = offering.Teachers.ToList()
-            };
-
-            return View(courseDetails);
+            return db.Workloads.Where(w => w.Course.Id.Equals(offering.Id)).Select(w => w.Workload).Sum();
         }
 
+        public static int GetRemainingHours(CourseOffering offering)
+        {
+            return (offering.Budget - GetAllocatedHours(offering));
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -12,15 +12,14 @@ namespace StaffingPlanner.Models
 		public string Name { get; set; }
 		public ICollection<CourseOffering> Offerings { get; set; }
 
-		public CourseOffering GetOffering(TermYear termYear)
+		public CourseOffering GetOffering(string term)
 		{
-			return Offerings.First(o => o.GetTermYear() == termYear);
+			return Offerings.First(o => o.Term.ToLower() == term.ToLower());
 		}
 
-        public CourseOffering GetOffering(SchoolYear year)
+        public CourseOffering GetOffering(Guid offeringId)
         {
-            return Offerings.First(o => o.GetTermYear() == year.FirstTerm || o.GetTermYear() == year.SecondTerm);
+            return Offerings.First(o => o.Id == offeringId);
         }
-
     }
 }
