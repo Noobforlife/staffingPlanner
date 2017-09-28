@@ -50,7 +50,7 @@ namespace StaffingPlanner.Controllers
 
         public static int GetRemainingHours(CourseOffering offering)
         {
-            return (offering.Budget - GetAllocatedHours(offering));
+            return (offering.TotalHours - GetAllocatedHours(offering));
         }
     }
 }

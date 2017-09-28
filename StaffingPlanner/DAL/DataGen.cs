@@ -30,22 +30,6 @@ namespace StaffingPlanner.DAL
             1,9f, 10,25f, 3,25f, 6f, 27,5f, 7,5f, 7,5f, 10,25f, 1,9f, 1,9f, 7,5f, 13,75f, 5f, 6,25f, 7,5f
         };
 
-        //public static CourseOffering GetOffering(Teacher courseResponsible)
-        //{
-        //    return new CourseOffering()
-        //    {
-        //        Id = Guid.NewGuid(),
-        //        Term = termList[rnd.Next(0, termList.Count)],
-        //        Credits = GetRandomCredit(),
-        //        CourseResponsible = courseResponsible,
-        //        NumStudents = rnd.Next(10, 80),
-        //        HST = hst[rnd.Next(0, hst.Count)],
-        //        Periods = new List<Period>() { Period.P1, Period.P2 },
-        //        Budget = rnd.Next(20, 200),
-
-        //    };
-        //}
-
         public static CourseOffering CreateOffering(Teacher courseResponsible,Course course)
         {
             return new CourseOffering {
@@ -53,25 +37,20 @@ namespace StaffingPlanner.DAL
                 Course = course,
                 Term = termList[rnd.Next(0, termList.Count)],
                 Credits = GetRandomCredit(),
-                Periods = new List<Period>() { Period.P1, Period.P2 },
-                Budget= rnd.Next(20, 200),
+                Periods = RandomPeriod(),
+                TotalHours= rnd.Next(20, 200),
                 CourseResponsible = courseResponsible,
                 NumStudents = rnd.Next(10, 80),
                 HST = hst[rnd.Next(0, hst.Count)]
             };
         }
 
-        //public static List<CourseOffering> GetOfferings(Teacher courseResponsible, int number)
-        //{
-        //    List<CourseOffering> courseOfferings = new List<CourseOffering>();
-
-        //    for (int i = 0; i < number; i++)
-        //    {
-        //        courseOfferings.Add(GetOffering(courseResponsible));
-        //    }
-
-        //    return courseOfferings;
-        //}
+        private static Period RandomPeriod()
+        {
+            Array values = Enum.GetValues(typeof(Period));
+            Period randomCredit = (Period)values.GetValue(rnd.Next(values.Length));
+            return randomCredit;
+        }
 
         private static Credits GetRandomCredit()
         {
