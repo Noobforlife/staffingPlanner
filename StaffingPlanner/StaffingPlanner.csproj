@@ -172,6 +172,7 @@
     <Compile Include="Models\TeacherCourseWorkload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\CourseViewModels.cs" />
+    <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\TeacherViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
