@@ -8,6 +8,12 @@ namespace StaffingPlanner.DAL
     {
         protected override void Seed(StaffingPlanContext context)
         {
+            TermYear fallTerm = new TermYear { Id = Guid.NewGuid(), Term = Term.Fall, Year = 2017 };
+            TermYear springTerm = new TermYear { Id = Guid.NewGuid(), Term = Term.Spring, Year = 2018 };
+            context.TermYears.Add(fallTerm);
+            context.TermYears.Add(springTerm);
+            context.SaveChanges();
+
             var teachers = new List<Teacher>
             {
                 new Teacher()
@@ -18,7 +24,7 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = true,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
+                    TermEmployment = DataGen.GetEmploymentDictionary(fallTerm, 100, springTerm, 100)
                 },
 
                 new Teacher()
@@ -29,7 +35,7 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
+                    TermEmployment = DataGen.GetEmploymentDictionary(fallTerm, 100, springTerm, 100)
                 },
 
                 new Teacher()
@@ -40,7 +46,7 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
+                    TermEmployment = DataGen.GetEmploymentDictionary(fallTerm, 100, springTerm, 100)
                 },
 
                 new Teacher()
@@ -51,7 +57,7 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
+                    TermEmployment = DataGen.GetEmploymentDictionary(fallTerm, 100, springTerm, 100)
                 },
 
                 new Teacher()
@@ -62,7 +68,7 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
+                    TermEmployment = DataGen.GetEmploymentDictionary(fallTerm, 100, springTerm, 100)
                 },
 
                 new Teacher()
@@ -73,7 +79,7 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
+                    TermEmployment = DataGen.GetEmploymentDictionary(fallTerm, 100, springTerm, 100)
                 },
 
                 new Teacher()
@@ -84,7 +90,7 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
+                    TermEmployment = DataGen.GetEmploymentDictionary(fallTerm, 100, springTerm, 100)
                 },
 
                 new Teacher()
@@ -95,7 +101,7 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
+                    TermEmployment = DataGen.GetEmploymentDictionary(fallTerm, 100, springTerm, 100)
                 },
 
                 new Teacher()
@@ -106,7 +112,7 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
+                    TermEmployment = DataGen.GetEmploymentDictionary(fallTerm, 100, springTerm, 100)
                 },
 
                 new Teacher()
@@ -117,7 +123,7 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
+                    TermEmployment = DataGen.GetEmploymentDictionary(fallTerm, 100, springTerm, 100)
                 },
 
                 new Teacher()
@@ -128,7 +134,7 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
+                    TermEmployment = DataGen.GetEmploymentDictionary(fallTerm, 100, springTerm, 100)
                 },
 
                 new Teacher()
@@ -139,7 +145,7 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
+                    TermEmployment = DataGen.GetEmploymentDictionary(fallTerm, 100, springTerm, 100)
                 },
 
                 new Teacher()
@@ -150,7 +156,7 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
+                    TermEmployment = DataGen.GetEmploymentDictionary(fallTerm, 100, springTerm, 100)
                 },
 
                 new Teacher()
@@ -161,7 +167,7 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
+                    TermEmployment = DataGen.GetEmploymentDictionary(fallTerm, 100, springTerm, 100)
                 },
 
                 new Teacher()
@@ -172,7 +178,7 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
+                    TermEmployment = DataGen.GetEmploymentDictionary(fallTerm, 100, springTerm, 100)
                 },
 
                 new Teacher()
@@ -183,7 +189,7 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
+                    TermEmployment = DataGen.GetEmploymentDictionary(fallTerm, 100, springTerm, 100)
                 },
 
 
