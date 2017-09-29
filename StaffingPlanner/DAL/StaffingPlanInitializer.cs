@@ -373,12 +373,21 @@ namespace StaffingPlanner.DAL
             courses.ForEach(c => context.Courses.Add(c));
             context.SaveChanges();
 
+            //Populating database with TermYears
+            var TermYrs = new List<TermYear> {
+                new TermYear { Id = Guid.NewGuid(), Term = Term.Fall, Year = 2017 },
+                new TermYear { Id = Guid.NewGuid(), Term = Term.Spring, Year = 2018 }
+            };
+            TermYrs.ForEach(c => context.TermYears.Add(c));
+            context.SaveChanges();
+
             //Populating database with courseofferings
             foreach (var c in courses) {
-                var offering = DataGen.CreateOffering(teachers[DataGen.rnd.Next(0, teachers.Count)], c);
+                var offering = DataGen.CreateOffering(teachers[DataGen.rnd.Next(0, teachers.Count)], c, TermYrs[DataGen.rnd.Next(0, TermYrs.Count)]);
                 context.CourseOfferings.Add(offering);
             }
             context.SaveChanges();
+                       
 
             //Populating database with workloads
             foreach (var c in context.CourseOfferings)
@@ -386,12 +395,7 @@ namespace StaffingPlanner.DAL
                 var workload = DataGen.CreateWorkload(teachers[DataGen.rnd.Next(0, teachers.Count)], c);
                 context.Workloads.Add(workload);
             }            
-            context.SaveChanges();
-
-            //Populating database with contracts
-            //var contracts = new List<Contract> { };
-            //contracts.ForEach(c => context.Contracts.Add(c));
-            //context.SaveChanges();
+            context.SaveChanges();                  
 
         }
     }
