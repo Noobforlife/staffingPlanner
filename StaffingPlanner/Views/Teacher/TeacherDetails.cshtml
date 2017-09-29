@@ -1,4 +1,5 @@
-﻿@model StaffingPlanner.ViewModels.TeacherViewModel
+﻿@using StaffingPlanner.ViewModels
+@model TeacherViewModel
 
 @{
     ViewBag.Title = "Teacher";
@@ -83,15 +84,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><a href="#" data-toggle="modal" data-target="#course-modal">Information Systems/Agile Methods</a></td>
-                                <td>2IS100</td>
-                                <td>15</td>
-                                <td>HT</td>
-                                <td>1-2</td>
-                                <td>96</td>
-                                <td>14<span class="label label-warning pull-right">warning </span></td>
-                            </tr>
+                            @foreach (TeacherCourseViewModel course in Model.Courses)
+                            {
+                                <tr>
+                                    <td><a href="#" data-toggle="modal" data-target="#course-modal">@course.Name</a></td>
+                                    <td>@course.Code</td>
+                                    <td>@course.Credits</td>
+                                    <td>HT</td>
+                                    <td>1-2</td>
+                                    <td>96</td>
+                                    <td>14<span class="label label-warning pull-right">warning </span></td>
+                                </tr>
+                            }
                             <tr>
                                 <td><a href="#">Organisational Behaviour</a></td>
                                 <td>2FE223</td>
