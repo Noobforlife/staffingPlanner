@@ -8,10 +8,14 @@ namespace StaffingPlanner.DAL
     {
         protected override void Seed(StaffingPlanContext context)
         {
+            //Populating database with TermYears
             TermYear fallTerm = new TermYear { Id = Guid.NewGuid(), Term = Term.Fall, Year = 2017 };
             TermYear springTerm = new TermYear { Id = Guid.NewGuid(), Term = Term.Spring, Year = 2018 };
-            context.TermYears.Add(fallTerm);
-            context.TermYears.Add(springTerm);
+            var TermYrs = new List<TermYear> {
+                fallTerm,
+                springTerm
+            };
+            TermYrs.ForEach(c => context.TermYears.Add(c));
             context.SaveChanges();
 
             var teachers = new List<Teacher>
@@ -379,13 +383,7 @@ namespace StaffingPlanner.DAL
             courses.ForEach(c => context.Courses.Add(c));
             context.SaveChanges();
 
-            //Populating database with TermYears
-            var TermYrs = new List<TermYear> {
-                new TermYear { Id = Guid.NewGuid(), Term = Term.Fall, Year = 2017 },
-                new TermYear { Id = Guid.NewGuid(), Term = Term.Spring, Year = 2018 }
-            };
-            TermYrs.ForEach(c => context.TermYears.Add(c));
-            context.SaveChanges();
+
 
             //Populating database with courseofferings
             foreach (var c in courses) {
