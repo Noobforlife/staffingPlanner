@@ -40,8 +40,9 @@ namespace StaffingPlanner.Controllers
             var teacher = db.Teachers.Where(t => t.Id == id).First();
 
             List<TermYear> terms = db.TermYears.Take(2).ToList();
-            var fallLevel = db.TeacherTermAvailability.Where(tta => tta.TermYear.Id.Equals(terms[0].Id)).Select(tta => tta.Availability).First();
-            var springLevel = db.TeacherTermAvailability.Where(tta => tta.TermYear.Id.Equals(terms[0].Id)).Select(tta => tta.Availability).First();
+            //FIX THESE QUERIES!!
+            //var fallLevel = db.TeacherTermAvailability.Where(tta => tta.TermYear.Id.Equals(terms[0].Id)).Select(tta => tta.Availability).First();
+            //var springLevel = db.TeacherTermAvailability.Where(tta => tta.TermYear.Id.Equals(terms[0].Id)).Select(tta => tta.Availability).First();
 
             TeacherViewModel teacherModel = new TeacherViewModel
             {
@@ -51,7 +52,7 @@ namespace StaffingPlanner.Controllers
                 TotalHours = GetTotalHoursForTeacher(teacher),
                 RemainingHours = GetRemainingHoursForTeacher(teacher),
                 FallWork = 100,
-                SpringWork = springLevel              
+                SpringWork = 100              
             };
 
             return View(teacherModel);
