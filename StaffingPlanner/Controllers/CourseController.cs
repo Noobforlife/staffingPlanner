@@ -19,6 +19,7 @@ namespace StaffingPlanner.Controllers
             foreach (var o in offerings) {
                 var vm = new SimpleCourseViewModel
                 {
+                    Id = o.Id,
                     Code = o.Course.Code,
                     Name = o.Course.Name,
                     TermYear = o.TermYear,
@@ -27,19 +28,34 @@ namespace StaffingPlanner.Controllers
                     RemainingHours = GetRemainingHours(o),
                 };
                 courses.Add(vm);
-            }            
+            }
 
-            ViewBag.courses = courses;
-
-			return View();
+			return View(courses);
         }
-
+         
         
-        public ActionResult CourseDetails()
+        public ActionResult CourseDetails(Guid id)
         {
-            return View();
-        }
+            var db = StaffingPlanContext.GetContext();
+            var offering = db.CourseOfferings.Where(c => c.Id == id).ToList().First();
 
+            var vm = new DetailedCourseViewModel
+            {
+                Code = offering.Course.Code,
+                Name = offering.Course.Name,
+                TermYear = offering.TermYear,
+                Credits = offering.Credits,
+                CourseResponsible = offering.CourseResponsible,
+                HST = offering.HST,
+                NumStudents = offering.NumStudents,
+                TotalHours = offering.TotalHours,
+                AllocatedHours = GetAllocatedHours(offering),
+                RemainingHours = GetRemainingHours(offering),
+            };
+
+            return View(vm);
+        }
+        
         public static int GetAllocatedHours(CourseOffering offering)
         {
             var db = StaffingPlanContext.GetContext();

@@ -31,15 +31,15 @@ namespace StaffingPlanner.DAL
             1,9f, 10,25f, 3,25f, 6f, 27,5f, 7,5f, 7,5f, 10,25f, 1,9f, 1,9f, 7,5f, 13,75f, 5f, 6,25f, 7,5f
         };
 
-        public static CourseOffering CreateOffering(Teacher courseResponsible,Course course)
+        public static CourseOffering CreateOffering(Teacher courseResponsible,Course course, TermYear termyear)
         {
             return new CourseOffering {
                 Id =Guid.NewGuid(),
                 Course = course,
-                TermYear = termList[rnd.Next(0, termList.Count)],
+                TermYear = termyear,
                 Credits = GetRandomCredit(),
                 Periods = RandomPeriod(),
-                TotalHours= rnd.Next(20, 200),
+                TotalHours= rnd.Next(1000, 4000),
                 CourseResponsible = courseResponsible,
                 NumStudents = rnd.Next(10, 80),
                 HST = hst[rnd.Next(0, hst.Count)]

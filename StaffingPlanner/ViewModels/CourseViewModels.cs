@@ -13,7 +13,7 @@ namespace StaffingPlanner.ViewModels
 		public string Name { get; set; }
 		public string Code { get; set; }
 		public Credits Credits { get; set; }
-		public List<Period> Periods { get; set; }
+		public Period Period { get; set; }
 		public int AllocatedHours { get; set; }
 		public int RemainingHours { get; set; }
 
@@ -26,7 +26,7 @@ namespace StaffingPlanner.ViewModels
         public string Name { get; set; }
         public string Code { get; set; }
         public Credits Credits { get; set; }
-        public List<Period> Periods { get; set; }
+        public Period Period { get; set; }
         public int TotalHours { get; set; }
         public int AllocatedHours { get; set; }
         public int RemainingHours { get; set; }
