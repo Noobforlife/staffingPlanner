@@ -8,6 +8,16 @@ namespace StaffingPlanner.DAL
     {
         protected override void Seed(StaffingPlanContext context)
         {
+            //Populating database with TermYears
+            TermYear fallTerm = new TermYear { Id = Guid.NewGuid(), Term = Term.Fall, Year = 2017 };
+            TermYear springTerm = new TermYear { Id = Guid.NewGuid(), Term = Term.Spring, Year = 2018 };
+            var TermYrs = new List<TermYear> {
+                fallTerm,
+                springTerm
+            };
+            TermYrs.ForEach(c => context.TermYears.Add(c));
+            context.SaveChanges();
+
             var teachers = new List<Teacher>
             {
                 new Teacher()
@@ -18,7 +28,6 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = true,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -29,7 +38,6 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -40,7 +48,6 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -51,7 +58,6 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -62,7 +68,6 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -73,7 +78,6 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -84,7 +88,6 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -95,7 +98,6 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -106,7 +108,6 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -117,7 +118,6 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -128,7 +128,6 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -139,7 +138,6 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -150,7 +148,6 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -161,7 +158,6 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -172,7 +168,6 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
                 new Teacher()
@@ -183,7 +178,6 @@ namespace StaffingPlanner.DAL
                     Email = "",
                     Id = Guid.NewGuid(),
                     DirectorOfStudies = false,
-                    TermEmployment = DataGen.GetEmploymentDictionary(100, 100)
                 },
 
 
@@ -373,16 +367,19 @@ namespace StaffingPlanner.DAL
             courses.ForEach(c => context.Courses.Add(c));
             context.SaveChanges();
 
-            //Populating database with TermYears
-            var TermYrs = new List<TermYear> {
-                new TermYear { Id = Guid.NewGuid(), Term = Term.Fall, Year = 2017 },
-                new TermYear { Id = Guid.NewGuid(), Term = Term.Spring, Year = 2018 }
-            };
-            TermYrs.ForEach(c => context.TermYears.Add(c));
+            //Populating database with term employment
+            foreach (var t in teachers)
+            {
+                var tteFall = DataGen.GetTeacherTermAvailability(t, fallTerm, 100);
+                var tteSpring = DataGen.GetTeacherTermAvailability(t, springTerm, 100);
+                context.TeacherTermAvailability.Add(tteFall);
+                context.TeacherTermAvailability.Add(tteSpring);
+            }
             context.SaveChanges();
 
             //Populating database with courseofferings
-            foreach (var c in courses) {
+            foreach (var c in courses)
+            {
                 var offering = DataGen.CreateOffering(teachers[DataGen.rnd.Next(0, teachers.Count)], c, TermYrs[DataGen.rnd.Next(0, TermYrs.Count)]);
                 context.CourseOfferings.Add(offering);
             }

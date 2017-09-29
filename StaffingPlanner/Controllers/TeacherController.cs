@@ -36,7 +36,26 @@ namespace StaffingPlanner.Controllers
 
         public ActionResult TeacherDetails(Guid id)
         {
-            return View();
+            var db = StaffingPlanContext.GetContext();
+            var teacher = db.Teachers.Where(t => t.Id == id).First();
+
+            List<TermYear> terms = db.TermYears.Take(2).ToList();
+            //FIX THESE QUERIES!!
+            //var fallLevel = db.TeacherTermAvailability.Where(tta => tta.TermYear.Id.Equals(terms[0].Id)).Select(tta => tta.Availability).First();
+            //var springLevel = db.TeacherTermAvailability.Where(tta => tta.TermYear.Id.Equals(terms[0].Id)).Select(tta => tta.Availability).First();
+
+            TeacherViewModel teacherModel = new TeacherViewModel
+            {
+                Id = teacher.Id,
+                Name = teacher.Name,
+                Title = teacher.AcademicTitle,
+                TotalHours = GetTotalHoursForTeacher(teacher),
+                RemainingHours = GetRemainingHoursForTeacher(teacher),
+                FallWork = 100,
+                SpringWork = 100              
+            };
+
+            return View(teacherModel);
         }
 
         // Alter to take into account any changes in workload

@@ -16,7 +16,6 @@ namespace StaffingPlanner.Models
 		public string Email { get; set; }
 		public bool DirectorOfStudies { get; set; }
 		public AcademicTitle AcademicTitle { get; set; }
-        public Dictionary<TermYear, int> TermEmployment { get; set; }
 
         public override bool Equals(object obj)
         {
