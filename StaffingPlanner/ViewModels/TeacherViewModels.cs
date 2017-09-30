@@ -17,4 +17,16 @@ namespace StaffingPlanner.ViewModels
 		public int RemainingHours { get; set; }
         public List<TeacherCourseViewModel> Courses { get; set; }
 	}
+
+    public class TeacherCourseViewModel
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Code { get; set; }
+        public double Credits { get; set; }
+        public TermYear TermYear { get; set; }
+        public Period Period { get; set; }
+        public int AllocatedHours { get; set; }
+        public int RemainingHours { get; set; }
+    }
 }

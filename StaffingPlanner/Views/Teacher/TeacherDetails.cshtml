@@ -27,7 +27,7 @@
                 </div>
                 <div class="form-group detail">
                     <h5 class="detail-label">Email :</h5>
-                    <p class="detail-label">add@viewmodel.ru</p>
+                    <p class="detail-label">@Model.Email</p>
                 </div>
                 <h4>Availabillity </h4>
                 <div class="form-group detail">
@@ -87,42 +87,15 @@
                             @foreach (TeacherCourseViewModel course in Model.Courses)
                             {
                                 <tr>
-                                    <td><a href="#" data-toggle="modal" data-target="#course-modal">@course.Name</a></td>
+                                    <td><a href="#" data-toggle="modal" data-target="#course-modal">@Html.ActionLink(course.Name, "CourseDetails", "Course", new { id = course.Id }, null)</a></td>
                                     <td>@course.Code</td>
                                     <td>@course.Credits</td>
-                                    <td>HT</td>
-                                    <td>1-2</td>
-                                    <td>96</td>
-                                    <td>14<span class="label label-warning pull-right">warning </span></td>
+                                    <td>@course.TermYear.ToString()</td>
+                                    <td>@course.Period</td>
+                                    <td></td>
+                                    <td><span class="label label-warning pull-right">warning </span></td>
                                 </tr>
                             }
-                            <tr>
-                                <td><a href="#">Organisational Behaviour</a></td>
-                                <td>2FE223</td>
-                                <td>7.5</td>
-                                <td>VT</td>
-                                <td>4</td>
-                                <td>52</td>
-                                <td>0<span class="label label-danger pull-right">issue </span></td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">HCI/Usability Evaluation Methods</a></td>
-                                <td>2IV134</td>
-                                <td>7.5</td>
-                                <td>HT</td>
-                                <td>2</td>
-                                <td>63</td>
-                                <td>17<span class="label label-success pull-right">good </span></td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Software Engineering</a></td>
-                                <td>2YT176</td>
-                                <td>15</td>
-                                <td>VT</td>
-                                <td>1</td>
-                                <td>140</td>
-                                <td>-20<span class="label label-warning pull-right">warning </span></td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -130,7 +103,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-default" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("Teachers", "Teacher")'">Back to Course List</button>
+        <button class="btn btn-default" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("Teachers", "Teacher")'">Back to Teachers List</button>
         <button class="btn btn-primary" type="button">Edit</button>
     </div>
 </div>

@@ -36,11 +36,4 @@ namespace StaffingPlanner.ViewModels
         public List<TeacherViewModel> Teachers { get; set; }
     }
 
-    public class TeacherCourseViewModel
-    {
-        public string Name { get; set; }
-        public string Code { get; set; }
-        public double Credits { get; set; }
-        
-    }
 }
