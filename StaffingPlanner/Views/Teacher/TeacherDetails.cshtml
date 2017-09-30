@@ -84,7 +84,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (TeacherCourseViewModel course in Model.Courses)
+                            @foreach (SimpleCourseViewModel course in Model.Courses)
                             {
                                 <tr>
                                     <td><a href="#" data-toggle="modal" data-target="#course-modal">@Html.ActionLink(course.Name, "CourseDetails", "Course", new { id = course.Id }, null)</a></td>
@@ -92,7 +92,8 @@
                                     <td>@course.Credits</td>
                                     <td>@course.TermYear.ToString()</td>
                                     <td>@course.Period</td>
-                                    <td></td>
+                                    <td>@course.AllocatedHours</td>
+                                    <td>@course.RemainingHours</td>
                                     <td><span class="label label-warning pull-right">warning </span></td>
                                 </tr>
                             }

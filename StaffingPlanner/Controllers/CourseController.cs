@@ -72,7 +72,7 @@ namespace StaffingPlanner.Controllers
             return vm;
         }
 
-        private static List<SimpleCourseViewModel> GenerateCourseViewModelList(List<CourseOffering> offerings)
+        public static List<SimpleCourseViewModel> GenerateCourseViewModelList(List<CourseOffering> offerings)
         {
             List<SimpleCourseViewModel> courses = new List<SimpleCourseViewModel>();
             foreach (var o in offerings)

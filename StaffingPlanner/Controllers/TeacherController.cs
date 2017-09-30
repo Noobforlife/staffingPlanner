@@ -36,11 +36,10 @@ namespace StaffingPlanner.Controllers
             //This doesn't work, causes the following exception:
             //System.NotSupportedException: 'Unable to create a constant value of type 'StaffingPlanner.Models.TermYear'. Only primitive types or enumeration types are supported in this context.'
 
-            List<TeacherCourseViewModel> tcvm = db.Workloads.Where(t => t.Teacher.Id == teacher.Id).Select(wl => wl.Course)
-                .Select(c => new TeacherCourseViewModel
-                { Id = c.Id, Code = c.Course.Code, Credits = c.Credits, Name = c.Course.Name, Period = c.Periods, TermYear = c.TermYear }).ToList();
+            var courses = db.Workloads.Where(t => t.Teacher.Id == teacher.Id).Select(l => l.Course).ToList();
+            var courseViewModels = CourseController.GenerateCourseViewModelList(courses);
 
-            var teacherModel = GenerateTeacherViewModel(teacher, 100, 100, tcvm);
+            var teacherModel = GenerateTeacherViewModel(teacher, 100, 100, courseViewModels);
 
             return View(teacherModel);
         }
@@ -100,7 +99,7 @@ namespace StaffingPlanner.Controllers
             return teachers;
         }
 
-        private static TeacherViewModel GenerateTeacherViewModel(Teacher teacher, int fallAvailability, int springAvailability, List<TeacherCourseViewModel> teacherCourses)
+        private static TeacherViewModel GenerateTeacherViewModel(Teacher teacher, int fallAvailability, int springAvailability, List<SimpleCourseViewModel> teacherCourses)
         {
             TeacherViewModel teacherModel = new TeacherViewModel
             {
