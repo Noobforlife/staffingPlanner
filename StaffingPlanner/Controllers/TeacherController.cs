@@ -11,25 +11,13 @@ namespace StaffingPlanner.Controllers
 {
 	public class TeacherController : Controller
 	{
+        //View methods
         public ActionResult Teachers()
         {
 	        var db = StaffingPlanContext.GetContext();
 			var teachersdb = db.Teachers.Where(t => t.Id != null).ToList();
-            var teachers = new List<TeacherViewModel>();
 
-            foreach (var t in teachersdb) {
-                var tvm = new TeacherViewModel
-                {
-                    Id = t.Id,
-                    Name = t.Name,
-                    Title= t.AcademicTitle,
-                    TotalHours = GetTotalHoursForTeacher(t),
-                    RemainingHours = GetRemainingHoursForTeacher(t)
-                };
-                teachers.Add(tvm);
-            }
-
-            ViewBag.teachers = teachers;
+            var teachers = GenerateTeacherViewModelList(teachersdb);            
 
 			return View(teachers);
         }
@@ -38,36 +26,23 @@ namespace StaffingPlanner.Controllers
         {
             var db = StaffingPlanContext.GetContext();
             var teacher = db.Teachers.Where(t => t.Id == id).First();
-
             List<TermYear> terms = db.TermYears.Take(2).ToList();
-            var fallLevel = db.TeacherTermAvailability.Where(tta => tta.TermYear.Id.ToString() == terms[0].Id.ToString()).First();
-            var test = fallLevel.Availability;
+
             //FIX THESE QUERIES!!
             //var fallLevel = db.TeacherTermAvailability.Where(tta => tta.TermYear.Id.Equals(terms[0].Id)).Select(tta => tta.Availability).First();
             //var springLevel = db.TeacherTermAvailability.Where(tta => tta.TermYear.Id.Equals(terms[0].Id)).Select(tta => tta.Availability).First();
 
             List<TeacherCourseViewModel> tcvm = db.Workloads.Where(t => t.Teacher.Id == teacher.Id).Select(wl => wl.Course)
                 .Select(c => new TeacherCourseViewModel
-            { Code = c.Course.Code, Credits = c.Credits, Name = c.Course.Name }).ToList();
+                { Code = c.Course.Code, Credits = c.Credits, Name = c.Course.Name }).ToList();
 
-            TeacherViewModel teacherModel = new TeacherViewModel
-            {
-                Id = teacher.Id,
-                Name = teacher.Name,
-                Email = teacher.Email,
-                Title = teacher.AcademicTitle,
-                TotalHours = GetTotalHoursForTeacher(teacher),
-                RemainingHours = GetRemainingHoursForTeacher(teacher),
-                FallWork = 100,
-                SpringWork = 100,
-                Courses = tcvm
-            };
+            var teacherModel = GenerateTeacherViewModel(teacher, tcvm);
 
             return View(teacherModel);
         }
 
         // Alter to take into account any changes in workload
-        public int GetTotalHoursForTeacher(Teacher teacher)
+        public static int GetTotalHoursForTeacher(Teacher teacher)
         {
             var year = int.Parse("19" + teacher.PersonalNumber.Substring(0, 2));
             var month = int.Parse(teacher.PersonalNumber.Substring(2, 2));
@@ -93,7 +68,7 @@ namespace StaffingPlanner.Controllers
 		}
 
         // Alter to take into account how much teaching is to be done, and if there is some decrease in workload
-        public int GetRemainingHoursForTeacher(Teacher teacher)
+        public static int GetRemainingHoursForTeacher(Teacher teacher)
         {
             var db = StaffingPlanContext.GetContext();
 
@@ -101,5 +76,43 @@ namespace StaffingPlanner.Controllers
 
 			return GetTotalHoursForTeacher(teacher) - hours;
         }
+
+        //Methods to generate view models
+        public static List<TeacherViewModel> GenerateTeacherViewModelList(List<Teacher> teachersList)
+        {
+            var teachers = new List<TeacherViewModel>();
+            foreach (var t in teachersList)
+            {
+                var tvm = new TeacherViewModel
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    Title = t.AcademicTitle,
+                    TotalHours = GetTotalHoursForTeacher(t),
+                    RemainingHours = GetRemainingHoursForTeacher(t)
+                };
+                teachers.Add(tvm);
+            }
+            return teachers;
+        }
+
+        private static TeacherViewModel GenerateTeacherViewModel(Teacher teacher, List<TeacherCourseViewModel> teacherCourses)
+        {
+            TeacherViewModel teacherModel = new TeacherViewModel
+            {
+                Id = teacher.Id,
+                Name = teacher.Name,
+                Email = teacher.Email,
+                Title = teacher.AcademicTitle,
+                TotalHours = GetTotalHoursForTeacher(teacher),
+                RemainingHours = GetRemainingHoursForTeacher(teacher),
+                FallWork = 100,
+                SpringWork = 100,
+                Courses = teacherCourses
+            };
+
+            return teacherModel;
+        }
+
     }
 }

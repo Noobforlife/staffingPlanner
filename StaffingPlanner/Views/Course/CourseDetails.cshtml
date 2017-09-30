@@ -13,7 +13,7 @@
         <div class="row">
             <div class="col-md-6 col-sm-6">
                 <div class="form-group detail">
-                    <h5 class="detail-label">name : </h5>
+                    <h5 class="detail-label">Name : </h5>
                     <div class="dropdown detail-label">
                         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">@Model.Name</button>
                         <ul role="menu" class="dropdown-menu">
@@ -24,32 +24,32 @@
                     </div>
                 </div>
                 <div class="form-group detail">
-                    <h5 class="detail-label">code :</h5>
+                    <h5 class="detail-label">Code :</h5>
                     <p class="detail-label"><strong> </strong>2AD339 </p>
                 </div>
                 <div class="form-group detail">
-                    <h5 class="detail-label">hp :</h5>
+                    <h5 class="detail-label">Credits :</h5>
                     <p class="detail-label">@Model.Credits</p>
                 </div>
                 <div class="form-group detail">
-                    <h5 class="detail-label">no. of students:</h5>
+                    <h5 class="detail-label">No. of students:</h5>
                     <p class="detail-label">@Model.NumStudents </p>
                 </div>
                 <div class="form-group detail">
-                    <h5 class="detail-label">term :</h5>
+                    <h5 class="detail-label">Term :</h5>
                     <p class="detail-label">@Model.TermYear.Term </p>
                 </div>
                 <div class="form-group detail">
-                    <h5 class="detail-label">info :</h5>
+                    <h5 class="detail-label">Info :</h5>
                     <p class="detail-label">This is a new course </p>
                 </div>
             </div>
             <div class="col-md-6 col-sm-6">
                 <div class="form-group detail">
-                    <h5 class="detail-label">Course Responsible :</h5><a href="#">@Model.CourseResponsible.Name</a>
+                    <h5 class="detail-label">Course Responsible :</h5>@Html.ActionLink(Model.CourseResponsible.Name, "TeacherDetails", "Teacher", new { id = Model.CourseResponsible.Id }, null)
                 </div>
                 <div class="form-group detail">
-                    <h5 class="detail-label">period :</h5>
+                    <h5 class="detail-label">Period :</h5>
                     <p class="detail-label">@Model.Period </p>
                 </div>
                 <div class="form-group detail">
@@ -57,15 +57,15 @@
                     <p class="detail-label">@Model.HST </p>
                 </div>
                 <div class="detail-item">
-                    <p>total hours</p>
+                    <p>Total hours</p>
                     <p class="numbers blue-border">@Model.TotalHours </p>
                 </div>
                 <div class="detail-item">
-                    <p>allocated </p>
+                    <p>Allocated </p>
                     <p class="numbers green-border">@Model.AllocatedHours </p>
                 </div>
                 <div class="detail-item">
-                    <p>balance </p>
+                    <p>Balance </p>
                     <p class="numbers orange-border">@Model.RemainingHours</p>
                 </div>
             </div>
@@ -77,45 +77,37 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Code </th>
                                 <th>Name </th>
                                 <th>Title </th>
                                 <th>Total Hours</th>
                                 <th>HT work</th>
                                 <th>VT work</th>
-                                <th> Remaining(Hrs)</th>
+                                <th>Remaining(Hrs)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td> <a href="#" data-toggle="modal" data-target="#teacher-modal">anled24567 </a></td>
-                                <td> <a href="#" data-toggle="modal" data-target="#teacher-modal">Aneli Edman</a></td>
-                                <td>Senior Lecturer</td>
-                                <td>Cell 4</td>
-                                <td>Cell 5</td>
-                                <td>Cell 6</td>
-                                <td>Cell 7<span class="label label-success pull-right">good </span></td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">afshk14526 </a></td>
-                                <td> <a href="#">Regina Fish</a></td>
-                                <td>Junior Lecturer</td>
-                                <td>Cell 4</td>
-                                <td>Cell 5</td>
-                                <td>Cell 6</td>
-                                <td>Cell 7<span class="label label-warning pull-right">warning </span></td>
-                            </tr>
+                            @foreach (TeacherViewModel teacher in Model.Teachers)
+                            {
+                                <tr>
+                                    <td> @Html.ActionLink(teacher.Name, "TeacherDetails", "Teacher", new { id = teacher.Id }, null)</td>
+                                    <td>@teacher.Title</td>
+                                    <td>@teacher.TotalHours</td>
+                                    <td>@teacher.FallWork</td>
+                                    <td>@teacher.SpringWork</td>
+                                    <td>@teacher.RemainingHours<span class="label label-success pull-right">good </span></td>
+                                </tr>
+                            }                                                    
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="col-md-12">
-                <button class="btn btn-default pull-right" type="button"> add staff<i class="icon-plus" style="margin:px;margin-left:3px;"></i></button>
+                <button class="btn btn-default pull-right" type="button"> add staff<i class="icon-plus" style="margin:2px;margin-left:3px;"></i></button>
             </div>
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
-        <button class="btn btn-primary" type="button">Save</button>
+        <button class="btn btn-default" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("Courses", "Course")'">Back to Course List</button>
+        <button class="btn btn-primary" type="button">Edit</button>
     </div>
 </div>

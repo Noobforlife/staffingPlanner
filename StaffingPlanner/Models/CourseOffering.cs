@@ -10,7 +10,7 @@ namespace StaffingPlanner.Models
 		public Guid Id { get; set; }
         public virtual Course Course { get; set; }
         public virtual TermYear TermYear { get; set; }
-		public Credits Credits { get; set; }
+		public double Credits { get; set; }
 		public Period Periods { get; set; }
 		public int TotalHours { get; set; }
 		public virtual ICollection<Teacher> Teachers { get; set; }
