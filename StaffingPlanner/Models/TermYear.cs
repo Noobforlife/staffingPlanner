@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-//using System.Linq;
+
+#pragma warning disable CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
 
 namespace StaffingPlanner.Models
 {
@@ -37,5 +38,13 @@ namespace StaffingPlanner.Models
             }
         }
 
+        public override bool Equals(object obj)
+        {
+            var t = obj as TermYear;
+            return t != null && t.Term == Term && t.Year == Year;
+        }
+
     }
 }
+
+#pragma warning restore CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()

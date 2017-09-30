@@ -35,4 +35,5 @@ namespace StaffingPlanner.ViewModels
         public float HST { get; set; }
         public List<TeacherViewModel> Teachers { get; set; }
     }
+
 }

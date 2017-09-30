@@ -1,4 +1,5 @@
-﻿@model StaffingPlanner.ViewModels.TeacherViewModel
+﻿@using StaffingPlanner.ViewModels
+@model TeacherViewModel
 
 @{
     ViewBag.Title = "Teacher";
@@ -14,7 +15,7 @@
         <div class="row">
             <div class="col-md-6 col-sm-6">
                 <div class="form-group detail">
-                    <h5 class="detail-label">name : </h5>
+                    <h5 class="detail-label">Name : </h5>
                     <div class="dropdown detail-label">
                         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">@Model.Name<span class="caret"></span></button>
                         <ul role="menu" class="dropdown-menu">
@@ -24,13 +25,9 @@
                         </ul>
                     </div>
                 </div>
-                @*<div class="form-group detail">
-                    <h5 class="detail-label">code :</h5>
-                    <p class="detail-label">aned13492 </p>
-                </div>*@
                 <div class="form-group detail">
-                    <h5 class="detail-label">email :</h5>
-                    <p class="detail-label">add@viewmodel.ru</p>
+                    <h5 class="detail-label">Email :</h5>
+                    <p class="detail-label">@Model.Email</p>
                 </div>
                 <h4>Availabillity </h4>
                 <div class="form-group detail">
@@ -57,16 +54,16 @@
                 </div>
                 <h4>Hours Allocation</h4>
                 <div class="time-allocation detail-label">
-                    <p class="detail-label">research:</p><span class="badge pull-right">600hrs</span>
+                    <p class="detail-label">research</p><span class="badge pull-right">600hrs</span>
                 </div>
                 <div class="time-allocation detail-label">
-                    <p class="detail-label">teaching:</p><span class="badge pull-right">200hrs</span>
+                    <p class="detail-label">teaching</p><span class="badge pull-right">200hrs</span>
                 </div>
                 <div class="time-allocation detail-label">
-                    <p class="detail-label">admin </p><span class="badge pull-right">300hrs</span>
+                    <p class="detail-label">admin</p><span class="badge pull-right">300hrs</span>
                 </div>
                 <div class="time-allocation detail-label">
-                    <p class="detail-label">other </p><span class="badge pull-right">600hrs</span>
+                    <p class="detail-label">other</p><span class="badge pull-right">600hrs</span>
                 </div>
             </div>
         </div>
@@ -77,52 +74,28 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Name </th>
-                                <th>Code </th>
-                                <th>HP </th>
-                                <th>Term </th>
-                                <th>Period </th>
-                                <th>Alocated(hrs) </th>
-                                <th> Remaining(Hrs)</th>
+                                <th>Name</th>
+                                <th>Code</th>
+                                <th>Credits</th>
+                                <th>Term</th>
+                                <th>Period</th>
+                                <th>Allocated(Hrs)</th>
+                                <th>Remaining(Hrs)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td> <a href="#" data-toggle="modal" data-target="#course-modal">Information Systems/Agile Methods</a></td>
-                                <td> <a href="#">2IS100 </a></td>
-                                <td>Cell 3</td>
-                                <td>Cell 4</td>
-                                <td>Cell 5</td>
-                                <td>Cell 6</td>
-                                <td>Cell 7<span class="label label-warning pull-right">warning </span></td>
-                            </tr>
-                            <tr>
-                                <td> <a href="#">Organisational Behaviour</a></td>
-                                <td> <a href="#">2FE223 </a></td>
-                                <td>Cell 3</td>
-                                <td>Cell 4</td>
-                                <td>Cell 5</td>
-                                <td>Cell 6</td>
-                                <td>Cell 7<span class="label label-danger pull-right">issue </span></td>
-                            </tr>
-                            <tr>
-                                <td> <a href="#">HCI/Usability Evaluation Methods</a></td>
-                                <td> <a href="#">2IV134 </a></td>
-                                <td>Cell 3</td>
-                                <td>Cell 4</td>
-                                <td>Cell 5</td>
-                                <td>Cell 6</td>
-                                <td>Cell 7<span class="label label-success pull-right">good </span></td>
-                            </tr>
-                            <tr>
-                                <td> <a href="#">Software Engineering</a></td>
-                                <td> <a href="#">2yt176 </a></td>
-                                <td>Cell 3</td>
-                                <td>Cell 4</td>
-                                <td>Cell 5</td>
-                                <td>Cell 6</td>
-                                <td>Cell 7<span class="label label-warning pull-right">warning </span></td>
-                            </tr>
+                            @foreach (TeacherCourseViewModel course in Model.Courses)
+                            {
+                                <tr>
+                                    <td><a href="#" data-toggle="modal" data-target="#course-modal">@Html.ActionLink(course.Name, "CourseDetails", "Course", new { id = course.Id }, null)</a></td>
+                                    <td>@course.Code</td>
+                                    <td>@course.Credits</td>
+                                    <td>@course.TermYear.ToString()</td>
+                                    <td>@course.Period</td>
+                                    <td></td>
+                                    <td><span class="label label-warning pull-right">warning </span></td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -130,7 +103,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
-        <button class="btn btn-primary" type="button">Save</button>
+        <button class="btn btn-default" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("Teachers", "Teacher")'">Back to Teachers List</button>
+        <button class="btn btn-primary" type="button">Edit</button>
     </div>
 </div>
