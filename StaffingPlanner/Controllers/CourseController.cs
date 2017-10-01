@@ -96,7 +96,7 @@ namespace StaffingPlanner.Controllers
         }
 
         public static string GetStatus() {
-            List<string> credits = new List<string>(){"warning","success","danger","info"};
+            List<string> credits = new List<string>(){"warning","success","danger"};
             return credits[rnd.Next(credits.Count)];
         }
         #endregion
