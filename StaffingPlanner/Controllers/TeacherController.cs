@@ -5,7 +5,6 @@ using System.Web.Mvc;
 using StaffingPlanner.DAL;
 using StaffingPlanner.ViewModels;
 using StaffingPlanner.Models;
-using System.Collections.ObjectModel;
 
 namespace StaffingPlanner.Controllers
 {
