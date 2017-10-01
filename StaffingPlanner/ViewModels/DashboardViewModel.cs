@@ -9,8 +9,9 @@ namespace StaffingPlanner.ViewModels
 		public int PeriodsBefore { get; set; }
 		public int PeriodsDuration { get; set; }
 		public int PeriodsAfter { get; set; }
+        public string Status { get; set; }
 
-		public Period Periods
+        public Period Periods
 		{
 			set
 			{

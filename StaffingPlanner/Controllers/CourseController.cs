@@ -10,6 +10,7 @@ namespace StaffingPlanner.Controllers
 {
 	public class CourseController : Controller
 	{
+        private static Random rnd = new Random();
         //Methods handling returning of View
         #region View methods
 
@@ -67,7 +68,7 @@ namespace StaffingPlanner.Controllers
                 TotalHours = offering.TotalHours,
                 AllocatedHours = GetAllocatedHours(offering),
                 RemainingHours = GetRemainingHours(offering),
-                Teachers = teacherList
+                Teachers = teacherList                
             };
             return vm;
         }
@@ -87,12 +88,17 @@ namespace StaffingPlanner.Controllers
                     Credits = o.Credits,
                     AllocatedHours = GetAllocatedHours(o),
                     RemainingHours = GetRemainingHours(o),
+                    Status = GetStatus()
                 };
                 courses.Add(vm);
             }
             return courses;
         }
 
+        public static string GetStatus() {
+            List<string> credits = new List<string>(){"warning","success","danger","info"};
+            return credits[rnd.Next(credits.Count)];
+        }
         #endregion
 
     }

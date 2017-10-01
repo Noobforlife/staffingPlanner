@@ -92,7 +92,8 @@ namespace StaffingPlanner.Controllers
                     Name = t.Name,
                     Title = t.AcademicTitle,
                     TotalHours = GetTotalHoursForTeacher(t),
-                    RemainingHours = GetRemainingHoursForTeacher(t)
+                    RemainingHours = GetRemainingHoursForTeacher(t),
+                    Status= CourseController.GetStatus()
                 };
                 teachers.Add(tvm);
             }
