@@ -54,8 +54,7 @@ namespace StaffingPlanner.DAL
             Period randomCredit = (Period)values.GetValue(rnd.Next(values.Length));
             return randomCredit;
         }
-
-       
+               
         public static TeacherCourseWorkload CreateWorkload(Teacher teacher, CourseOffering course)
         {
             return new TeacherCourseWorkload
@@ -63,7 +62,7 @@ namespace StaffingPlanner.DAL
                 Id = Guid.NewGuid(),
                 Course = course,
                 Teacher = teacher,
-                Workload = rnd.Next(20, 80)
+                Workload = rnd.Next(200, 600)
 
             };
         }

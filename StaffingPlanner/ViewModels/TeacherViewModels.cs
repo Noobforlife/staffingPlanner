@@ -15,6 +15,7 @@ namespace StaffingPlanner.ViewModels
 		public int FallWork { get; set; }
 		public int SpringWork { get; set; }
 		public int RemainingHours { get; set; }
+        public string Status { get; set; }
         public List<SimpleCourseViewModel> Courses { get; set; }
 	}
 

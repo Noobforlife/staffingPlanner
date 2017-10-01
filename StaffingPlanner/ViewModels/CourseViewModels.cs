@@ -16,7 +16,7 @@ namespace StaffingPlanner.ViewModels
 		public Period Period { get; set; }
 		public int AllocatedHours { get; set; }
 		public int RemainingHours { get; set; }
-
+        public string Status { get; set; }
     }
 
     public class DetailedCourseViewModel
@@ -34,6 +34,6 @@ namespace StaffingPlanner.ViewModels
         public Teacher CourseResponsible { get; set; }
         public float HST { get; set; }
         public List<TeacherViewModel> Teachers { get; set; }
+        public string Status { get; set; }
     }
-
 }
