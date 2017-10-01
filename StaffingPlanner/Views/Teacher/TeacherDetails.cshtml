@@ -7,66 +7,83 @@
 
 <div class="container">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-        <h4 class="modal-title">Teacher Details</h4>
+        <h4 class="modal-title" style="display:inline-block">Teacher details</h4>
+        <div style="float: right; display:inline-block">
+            <button class="btn btn-default" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("Teachers", "Teacher")'">Back to Teachers List</button>
+            <button class="btn btn-primary" type="button">Edit</button>
+        </div>
     </div>
     <div class="modal-body">
         <!--Modal Content-->
-        <div class="row">
+
+        <div class="row well background-white">
             <div class="col-md-6 col-sm-6">
-                <div class="form-group detail">
-                    <h5 class="detail-label">Name : </h5>
-                    <div class="dropdown detail-label">
-                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">@Model.Name<span class="caret"></span></button>
-                        <ul role="menu" class="dropdown-menu">
-                            <li role="presentation"><a href="#">First Item</a></li>
-                            <li role="presentation"><a href="#">Second Item</a></li>
-                            <li role="presentation"><a href="#">Third Item</a></li>
-                        </ul>
+                <div class="table-responsive">
+                    <table class="table borderless">
+                        <tbody>
+                            <tr>
+                                <th>Name :</th>
+                                <td>@Model.Name</td>
+                            </tr>
+                            <tr>
+                                <th>Email :</th>
+                                <td>@Model.Email</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h5 class="details-h">Availability</h5>
+                <div class="table-responsive">
+                    <table class="table borderless">
+                        <tbody>
+                            <tr>
+                                <th>Autumn :</th>
+                                <td>@Model.FallWork.ToString()%</td>
+                            </tr>
+                            <tr>
+                                <th>Spring :</th>
+                                <td>@Model.SpringWork.ToString()%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">
+                <div class="hours">
+                    <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+                        <p>total </p>
+                        <p class="numbers blue-border">@Model.TotalHours.ToString()</p>
+                    </div>
+                    <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+                        <p>allocated</p>
+                        <p class="numbers green-border">@((Model.TotalHours - Model.RemainingHours).ToString())</p>
+                    </div>
+                    <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+                        <p>balance </p>
+                        <p class="numbers orange-border">@Model.RemainingHours.ToString()</p>
                     </div>
                 </div>
-                <div class="form-group detail">
-                    <h5 class="detail-label">Email :</h5>
-                    <p class="detail-label">@Model.Email</p>
+
+                <h5 class="details-h">Hours Allocation</h5>
+                <div class="time-allocation-div">
+                    <div class="time-allocation detail-label">
+                        <p class="detail-label">Teaching:</p><span class="badge pull-right">200hrs</span>
+                    </div>
+                    <div class="time-allocation detail-label">
+                        <p class="detail-label">Research:</p><span class="badge pull-right">200hrs</span>
+                    </div>
                 </div>
-                <h4>Availabillity </h4>
-                <div class="form-group detail">
-                    <h5 class="detail-label">Fall :</h5>
-                    <p class="detail-label">@Model.FallWork.ToString() %</p>
-                </div>
-                <div class="form-group detail">
-                    <h5 class="detail-label">Spring :</h5>
-                    <p class="detail-label">@Model.SpringWork.ToString() %</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-sm-6">
-                <div class="detail-item">
-                    <p>total hours</p>
-                    <p class="numbers blue-border">@Model.TotalHours.ToString()</p>
-                </div>
-                <div class="detail-item">
-                    <p>used </p>
-                    <p class="numbers orange-border">@((Model.TotalHours - Model.RemainingHours).ToString())</p>
-                </div>
-                <div class="detail-item">
-                    <p>balance </p>
-                    <p class="numbers green-border">@Model.RemainingHours.ToString()</p>
-                </div>
-                <h4>Hours Allocation</h4>
-                <div class="time-allocation detail-label">
-                    <p class="detail-label">research</p><span class="badge pull-right">600hrs</span>
-                </div>
-                <div class="time-allocation detail-label">
-                    <p class="detail-label">teaching</p><span class="badge pull-right">200hrs</span>
-                </div>
-                <div class="time-allocation detail-label">
-                    <p class="detail-label">admin</p><span class="badge pull-right">300hrs</span>
-                </div>
-                <div class="time-allocation detail-label">
-                    <p class="detail-label">other</p><span class="badge pull-right">600hrs</span>
+                <div class="time-allocation-div">
+                    <div class="time-allocation detail-label">
+                        <p class="detail-label">Other: </p><span class="badge pull-right">200hrs</span>
+                    </div>
+                    <div class="time-allocation detail-label">
+                        <p class="detail-label">Admin:</p><span class="badge pull-right">200hrs</span>
+                    </div>
                 </div>
             </div>
-        </div>
+        </div>       
+      
         <div class="row">
             <!--Table of courses-->
             <div class="col-md-12">
@@ -102,9 +119,5 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-default" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("Teachers", "Teacher")'">Back to Teachers List</button>
-        <button class="btn btn-primary" type="button">Edit</button>
-    </div>
+    </div>   
 </div>

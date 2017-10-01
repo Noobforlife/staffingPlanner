@@ -109,7 +109,8 @@ namespace StaffingPlanner.Controllers
 					FallWork = 100,
 					SpringWork = 100,
                     TotalHours = GetTotalHoursForTeacher(t),
-                    RemainingHours = GetRemainingHoursForTeacher(t)
+                    RemainingHours = GetRemainingHoursForTeacher(t),
+                    Status= CourseController.GetStatus()
                 };
                 teachers.Add(tvm);
             }

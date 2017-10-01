@@ -18,6 +18,7 @@ namespace StaffingPlanner.DAL
             TermYrs.ForEach(c => context.TermYears.Add(c));
             context.SaveChanges();
 
+            //Populating database with teachers
             var teachers = new List<Teacher>
             {
                 new Teacher()
