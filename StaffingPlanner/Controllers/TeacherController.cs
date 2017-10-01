@@ -33,10 +33,23 @@ namespace StaffingPlanner.Controllers
             var springTerm = terms[1].Term;
 	        var springYear = terms[1].Year;
 
-            var fallWorkload = db.TeacherTermAvailability.Where(tta => tta.TermYear.Term == fallTerm && tta.TermYear.Year == fallYear).AsEnumerable().Select(tta => tta.Availability).First();
-            var springWorkload = db.TeacherTermAvailability.Where(tta => tta.TermYear.Term == springTerm && tta.TermYear.Year == springYear).AsEnumerable().Select(tta => tta.Availability).First();
-            //This doesn't work, causes the following exception:
-            //System.NotSupportedException: 'Unable to create a constant value of type 'StaffingPlanner.Models.TermYear'. Only primitive types or enumeration types are supported in this context.'
+            var fallWorkload = db.TeacherTermAvailability
+				.Where(tta =>
+					tta.Teacher.Id == teacher.Id && 
+					tta.TermYear.Term == fallTerm && 
+					tta.TermYear.Year == fallYear)
+				.AsEnumerable()
+				.Select(tta => tta.Availability)
+				.First();
+
+            var springWorkload = db.TeacherTermAvailability
+				.Where(tta => 
+					tta.Teacher.Id == teacher.Id &&
+					tta.TermYear.Term == springTerm && 
+					tta.TermYear.Year == springYear)
+				.AsEnumerable()
+				.Select(tta => tta.Availability)
+				.First();
 
             var courses = db.Workloads.Where(t => t.Teacher.Id == teacher.Id).Select(l => l.Course).ToList();
             var courseViewModels = CourseController.GenerateCourseViewModelList(courses);
@@ -93,6 +106,8 @@ namespace StaffingPlanner.Controllers
                     Id = t.Id,
                     Name = t.Name,
                     Title = t.AcademicTitle,
+					FallWork = 100,
+					SpringWork = 100,
                     TotalHours = GetTotalHoursForTeacher(t),
                     RemainingHours = GetRemainingHoursForTeacher(t)
                 };
@@ -103,7 +118,7 @@ namespace StaffingPlanner.Controllers
 
         private static TeacherViewModel GenerateTeacherViewModel(Teacher teacher, int fallAvailability, int springAvailability, List<SimpleCourseViewModel> teacherCourses)
         {
-            TeacherViewModel teacherModel = new TeacherViewModel
+            return new TeacherViewModel
             {
                 Id = teacher.Id,
                 Name = teacher.Name,
@@ -115,8 +130,6 @@ namespace StaffingPlanner.Controllers
                 SpringWork = springAvailability,
                 Courses = teacherCourses
             };
-
-            return teacherModel;
         }
 
     }
