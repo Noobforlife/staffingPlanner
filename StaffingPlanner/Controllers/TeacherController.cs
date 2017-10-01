@@ -5,7 +5,6 @@ using System.Web.Mvc;
 using StaffingPlanner.DAL;
 using StaffingPlanner.ViewModels;
 using StaffingPlanner.Models;
-using System.Collections.ObjectModel;
 
 namespace StaffingPlanner.Controllers
 {
@@ -25,21 +24,36 @@ namespace StaffingPlanner.Controllers
         public ActionResult TeacherDetails(Guid id)
         {
             var db = StaffingPlanContext.GetContext();
-            var teacher = db.Teachers.Where(t => t.Id == id).First();
+            var teacher = db.Teachers.First(t => t.Id == id);
 
-            List<TermYear> terms = db.TermYears.ToList();
-            TermYear fallTerm = terms[0];
-            TermYear springTerm = terms[1];
+            var terms = db.TermYears.ToList();
+            var fallTerm = terms[0].Term;
+	        var fallYear = terms[0].Year; 
+            var springTerm = terms[1].Term;
+	        var springYear = terms[1].Year;
 
-            //int fallWorkload = db.TeacherTermAvailability.Where(tta => tta.TermYear == fallTerm).AsEnumerable().Select(tta => tta.Availability).First();
-            //int springWorkload = db.TeacherTermAvailability.Where(tta => tta.TermYear == springTerm).AsEnumerable().Select(tta => tta.Availability).First();
-            //This doesn't work, causes the following exception:
-            //System.NotSupportedException: 'Unable to create a constant value of type 'StaffingPlanner.Models.TermYear'. Only primitive types or enumeration types are supported in this context.'
+            var fallWorkload = db.TeacherTermAvailability
+				.Where(tta =>
+					tta.Teacher.Id == teacher.Id && 
+					tta.TermYear.Term == fallTerm && 
+					tta.TermYear.Year == fallYear)
+				.AsEnumerable()
+				.Select(tta => tta.Availability)
+				.First();
+
+            var springWorkload = db.TeacherTermAvailability
+				.Where(tta => 
+					tta.Teacher.Id == teacher.Id &&
+					tta.TermYear.Term == springTerm && 
+					tta.TermYear.Year == springYear)
+				.AsEnumerable()
+				.Select(tta => tta.Availability)
+				.First();
 
             var courses = db.Workloads.Where(t => t.Teacher.Id == teacher.Id).Select(l => l.Course).ToList();
             var courseViewModels = CourseController.GenerateCourseViewModelList(courses);
 
-            var teacherModel = GenerateTeacherViewModel(teacher, 100, 100, courseViewModels);
+            var teacherModel = GenerateTeacherViewModel(teacher, fallWorkload, springWorkload, courseViewModels);
 
             return View(teacherModel);
         }
@@ -91,6 +105,8 @@ namespace StaffingPlanner.Controllers
                     Id = t.Id,
                     Name = t.Name,
                     Title = t.AcademicTitle,
+					FallWork = 100,
+					SpringWork = 100,
                     TotalHours = GetTotalHoursForTeacher(t),
                     RemainingHours = GetRemainingHoursForTeacher(t),
                     Status= CourseController.GetStatus()
@@ -102,7 +118,7 @@ namespace StaffingPlanner.Controllers
 
         private static TeacherViewModel GenerateTeacherViewModel(Teacher teacher, int fallAvailability, int springAvailability, List<SimpleCourseViewModel> teacherCourses)
         {
-            TeacherViewModel teacherModel = new TeacherViewModel
+            return new TeacherViewModel
             {
                 Id = teacher.Id,
                 Name = teacher.Name,
@@ -114,8 +130,6 @@ namespace StaffingPlanner.Controllers
                 SpringWork = springAvailability,
                 Courses = teacherCourses
             };
-
-            return teacherModel;
         }
 
     }
