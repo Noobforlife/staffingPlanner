@@ -13,8 +13,14 @@ namespace StaffingPlanner.Controllers
         public ActionResult Index()
         {
 	        var db = StaffingPlanContext.GetContext();
-	        var fallOfferings = db.CourseOfferings.Where(c => c.TermYear.Term == Term.Fall).ToList();
-	        var springOfferings = db.CourseOfferings.Where(c => c.TermYear.Term == Term.Spring).ToList();
+	        var fallOfferings = db.CourseOfferings
+				.Where(c => c.TermYear.Term == Term.Fall)
+				.OrderBy(c => c.Periods)
+				.ToList();
+	        var springOfferings = db.CourseOfferings
+				.Where(c => c.TermYear.Term == Term.Spring)
+				.OrderBy(c => c.Periods)
+				.ToList();
 
             var fallCourses = GenerateDashViewModelList(fallOfferings);
             var springCourses = GenerateDashViewModelList(springOfferings);
