@@ -2,7 +2,7 @@
 {
 	public enum Credits
 	{
-		c7p5,
-		c15
+		C7P5,
+		C15
 	}
 }

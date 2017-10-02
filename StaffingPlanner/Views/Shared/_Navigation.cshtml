@@ -1,4 +1,5 @@
-﻿<nav class="navbar navbar-default">
+﻿@using StaffingPlanner.DAL
+<nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand navbar-link" href="#">Staffing Planner <img src="~/Content/img/uppsala.png"></a>
@@ -11,7 +12,7 @@
                 <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Courses" ? "active" : "")" role="presentation">@Html.ActionLink("Courses", "Courses", "Course")</li>
                 <li role="presentation"><a href="teachers.html"><i class="fa fa-envelope-o" style="font-size:22px;"></i> <span class="badge">15 </span></a></li>
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#">@Globals.user<span class="caret"></span></a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#">@Globals.User<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li role="presentation"><a href="#">Profile</a></li>
                         <li role="presentation">@Html.ActionLink("Logout", "Login", "Account")</li>

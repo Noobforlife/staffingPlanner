@@ -9,19 +9,19 @@ namespace StaffingPlanner.DAL
         protected override void Seed(StaffingPlanContext context)
         {
             //Populating database with TermYears
-            TermYear fallTerm = new TermYear { Id = Guid.NewGuid(), Term = Term.Fall, Year = 2017 };
-            TermYear springTerm = new TermYear { Id = Guid.NewGuid(), Term = Term.Spring, Year = 2018 };
-            var TermYrs = new List<TermYear> {
+            var fallTerm = new TermYear { Id = Guid.NewGuid(), Term = Term.Fall, Year = 2017 };
+            var springTerm = new TermYear { Id = Guid.NewGuid(), Term = Term.Spring, Year = 2018 };
+            var termYears = new List<TermYear> {
                 fallTerm,
                 springTerm
             };
-            TermYrs.ForEach(c => context.TermYears.Add(c));
+            termYears.ForEach(c => context.TermYears.Add(c));
             context.SaveChanges();
 
             //Populating database with teachers
             var teachers = new List<Teacher>
             {
-                new Teacher()
+                new Teacher
                 {
                     Name = "Tomas Eklund",
                     AcademicTitle = AcademicTitle.Lektor,
@@ -31,7 +31,7 @@ namespace StaffingPlanner.DAL
                     DirectorOfStudies = true,
                 },
 
-                new Teacher()
+                new Teacher
                 {
                     Name = "Andreas Hamfeldt",
                     AcademicTitle = AcademicTitle.Professor,
@@ -41,7 +41,7 @@ namespace StaffingPlanner.DAL
                     DirectorOfStudies = false,
                 },
 
-                new Teacher()
+                new Teacher
                 {
                     Name = "Mats Edenius",
                     AcademicTitle = AcademicTitle.Professor,
@@ -51,7 +51,7 @@ namespace StaffingPlanner.DAL
                     DirectorOfStudies = false,
                 },
 
-                new Teacher()
+                new Teacher
                 {
                     Name = "Pär Ågerfalk",
                     AcademicTitle = AcademicTitle.Professor,
@@ -61,7 +61,7 @@ namespace StaffingPlanner.DAL
                     DirectorOfStudies = false,
                 },
 
-                new Teacher()
+                new Teacher
                 {
                     Name = "Anneli Edman",
                     AcademicTitle = AcademicTitle.Adjunkt,
@@ -71,7 +71,7 @@ namespace StaffingPlanner.DAL
                     DirectorOfStudies = false,
                 },
 
-                new Teacher()
+                new Teacher
                 {
                     Name = "Barbro Funseth",
                     AcademicTitle = AcademicTitle.Adjunkt,
@@ -81,7 +81,7 @@ namespace StaffingPlanner.DAL
                     DirectorOfStudies = false,
                 },
 
-                new Teacher()
+                new Teacher
                 {
                     Name = "Claes Thorén",
                     AcademicTitle = AcademicTitle.Adjunkt,
@@ -91,7 +91,7 @@ namespace StaffingPlanner.DAL
                     DirectorOfStudies = false,
                 },
 
-                new Teacher()
+                new Teacher
                 {
                     Name = "Franck Tétard",
                     AcademicTitle = AcademicTitle.Adjunkt,
@@ -101,7 +101,7 @@ namespace StaffingPlanner.DAL
                     DirectorOfStudies = false,
                 },
 
-                new Teacher()
+                new Teacher
                 {
                     Name = "Anton Backe",
                     AcademicTitle = AcademicTitle.Lektor,
@@ -111,7 +111,7 @@ namespace StaffingPlanner.DAL
                     DirectorOfStudies = false,
                 },
 
-                new Teacher()
+                new Teacher
                 {
                     Name = "Christer Stuxberg",
                     AcademicTitle = AcademicTitle.Lektor,
@@ -121,7 +121,7 @@ namespace StaffingPlanner.DAL
                     DirectorOfStudies = false,
                 },
 
-                new Teacher()
+                new Teacher
                 {
                     Name = "Görkem Pacaci",
                     AcademicTitle = AcademicTitle.Lektor,
@@ -131,7 +131,7 @@ namespace StaffingPlanner.DAL
                     DirectorOfStudies = false,
                 },
 
-                new Teacher()
+                new Teacher
                 {
                     Name = "Mustafa Mudassir Imran",
                     AcademicTitle = AcademicTitle.Doktorand,
@@ -141,7 +141,7 @@ namespace StaffingPlanner.DAL
                     DirectorOfStudies = false,
                 },
 
-                new Teacher()
+                new Teacher
                 {
                     Name = "Christopher Ohkravi",
                     AcademicTitle = AcademicTitle.Doktorand,
@@ -151,7 +151,7 @@ namespace StaffingPlanner.DAL
                     DirectorOfStudies = false,
                 },
 
-                new Teacher()
+                new Teacher
                 {
                     Name = "Asma Rafiq",
                     AcademicTitle = AcademicTitle.Doktorand,
@@ -161,7 +161,7 @@ namespace StaffingPlanner.DAL
                     DirectorOfStudies = false,
                 },
 
-                new Teacher()
+                new Teacher
                 {
                     Name = "Sofie Roos",
                     AcademicTitle = AcademicTitle.Amanuens,
@@ -171,7 +171,7 @@ namespace StaffingPlanner.DAL
                     DirectorOfStudies = false,
                 },
 
-                new Teacher()
+                new Teacher
                 {
                     Name = "Daniel Wallman",
                     AcademicTitle = AcademicTitle.Amanuens,
@@ -190,151 +190,151 @@ namespace StaffingPlanner.DAL
             //Populating database with courses
             var courses = new List<Course>
             {
-                new Course()
+                new Course
                 {
                     Code = "2IS100",
                     Name = "Agile methods",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "3IS834",
                     Name = "Algoritmer och datastrukturer",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "3IS872",
                     Name = "Algoritmik",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "3IS625",
                     Name = "Användbarhet och e-tjänster",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "3IS837",
                     Name = "Artificial Intelligence ",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "3FE220",
                     Name = "Corporate communication",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "3IS155",
                     Name = "Databaser",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "3IS237",
                     Name = "Datamining och Data Warehousing",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "3IS782",
                     Name = "Declarative Problem Solving Methods",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "3MU826",
                     Name = "Dotnet-programmering",
                 },
-
-                new Course()
+		
+                new Course
                 {
                     Code = "3IS991",
                     Name = "eTjänster och webbprogrammering",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "3MU264",
                     Name = "Examensarbete",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "2IS015",
                     Name = "Forskningsmetod",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "3MU812",
                     Name = "Grundläggande MDI",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "3IS887",
                     Name = "Informationsinfrastruktur",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "3IS816",
                     Name = "Internetbaserade system",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "3MU937",
                     Name = "Introduktion till management, kommunikation och IT",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "3MU049",
                     Name = "IT och strategi",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "3IS978",
                     Name = "Knowledge Management ",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "3MU415",
                     Name = "Logik",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "3MU575",
                     Name = "Master Thesis",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "3MU677",
                     Name = "Multimedia",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "3IS102",
                     Name = "Objektorienterad programmering I",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "3IS202",
                     Name = "Objektorienterad programmering II",
                 },
 
-                new Course()
+                new Course
                 {
                     Code = "2AD339",
                     Name = "Software Engineering",
@@ -356,20 +356,18 @@ namespace StaffingPlanner.DAL
             //Populating database with courseofferings
             foreach (var c in courses)
             {
-                var offering = DataGen.CreateOffering(teachers[DataGen.rnd.Next(0, teachers.Count)], c, TermYrs[DataGen.rnd.Next(0, TermYrs.Count)]);
+                var offering = DataGen.CreateOffering(teachers[DataGen.Rnd.Next(0, teachers.Count)], c, termYears[DataGen.Rnd.Next(0, termYears.Count)]);
                 context.CourseOfferings.Add(offering);
             }
             context.SaveChanges();
                        
-
             //Populating database with workloads
             foreach (var c in context.CourseOfferings)
             {
-                var workload = DataGen.CreateWorkload(teachers[DataGen.rnd.Next(0, teachers.Count)], c);
+                var workload = DataGen.CreateWorkload(teachers[DataGen.Rnd.Next(0, teachers.Count)], c);
                 context.Workloads.Add(workload);
             }            
             context.SaveChanges();                  
-
         }
     }
 }

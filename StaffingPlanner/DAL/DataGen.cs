@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using StaffingPlanner.Models;
-using System.Collections;
 
 namespace StaffingPlanner.DAL
 {
     public static class DataGen
     {
-        public static Random rnd = new Random();
+        public static Random Rnd = new Random();
 
         public static TeacherTermAvailability GetTeacherTermAvailability(Teacher teacher, TermYear termyear, int employmentLevel)
         {
@@ -22,15 +19,15 @@ namespace StaffingPlanner.DAL
             };
         }
 
-        private static List<float> hst = new List<float>()
+        private static readonly List<float> Hst = new List<float>()
         {
             1,9f, 10,25f, 3,25f, 6f, 27,5f, 7,5f, 7,5f, 10,25f, 1,9f, 1,9f, 7,5f, 13,75f, 5f, 6,25f, 7,5f
         };
 
-        private static List<double> credits = new List<double>()
+        private static readonly List<double> Credits = new List<double>()
         {
             7.5,
-            15.0,
+            15.0
         };
 
         public static CourseOffering CreateOffering(Teacher courseResponsible,Course course, TermYear termyear)
@@ -39,19 +36,19 @@ namespace StaffingPlanner.DAL
                 Id =Guid.NewGuid(),
                 Course = course,
                 TermYear = termyear,
-                Credits = credits[rnd.Next(0, credits.Count)],
+                Credits = Credits[Rnd.Next(0, Credits.Count)],
                 Periods = RandomPeriod(),
-                TotalHours= rnd.Next(1000, 4000),
+                TotalHours= Rnd.Next(1000, 4000),
                 CourseResponsible = courseResponsible,
-                NumStudents = rnd.Next(10, 80),
-                HST = hst[rnd.Next(0, hst.Count)]
+                NumStudents = Rnd.Next(10, 80),
+                HST = Hst[Rnd.Next(0, Hst.Count)]
             };
         }
 
         private static Period RandomPeriod()
         {
-            Array values = Enum.GetValues(typeof(Period));
-            Period randomCredit = (Period)values.GetValue(rnd.Next(values.Length));
+            var values = Enum.GetValues(typeof(Period));
+            var randomCredit = (Period)values.GetValue(Rnd.Next(values.Length));
             return randomCredit;
         }
                
@@ -62,8 +59,7 @@ namespace StaffingPlanner.DAL
                 Id = Guid.NewGuid(),
                 Course = course,
                 Teacher = teacher,
-                Workload = rnd.Next(200, 600)
-
+                Workload = Rnd.Next(200, 600)
             };
         }
 

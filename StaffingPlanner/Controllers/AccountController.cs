@@ -38,12 +38,12 @@ namespace StaffingPlanner.Controllers
             var nameParts = lowerName.Split(' ');
 
             //Find any teachers with matching names
-            var matchingTeachers = db.Teachers.Where(t => nameParts.All(np => t.Name.ToLower().Contains(np))).Select(t => new { Name = t.Name, Director = t.DirectorOfStudies });
+            var matchingTeachers = db.Teachers.Where(t => nameParts.All(np => t.Name.ToLower().Contains(np))).Select(t => new { t.Name, Director = t.DirectorOfStudies });
 
             if (matchingTeachers.Any()) //If there are any teachers who match any name we are sufficiently satisfied
             {
                 authResult = true;
-                Globals.user = matchingTeachers.First().Name;
+                Globals.User = matchingTeachers.First().Name;
             }
             else
             {
@@ -54,10 +54,10 @@ namespace StaffingPlanner.Controllers
             {
                 case true:                  
                     //If the matching teacher (in db) is the director of studies than set the user role to match
-                    Globals.userRole = matchingTeachers.First().Director ? Role.DirectorOfStudies : Role.Teacher;
+                    Globals.UserRole = matchingTeachers.First().Director ? Role.DirectorOfStudies : Role.Teacher;
                     return RedirectToLocal(returnUrl);
                 default:
-                    Globals.userRole = Role.Unauthorized;
+                    Globals.UserRole = Role.Unauthorized;
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
             }
@@ -67,8 +67,8 @@ namespace StaffingPlanner.Controllers
         [AllowAnonymous]
         public ActionResult LogOff(string returnUrl)
         {
-            Globals.userRole = Role.Unauthorized;
-            Globals.user = null;
+            Globals.UserRole = Role.Unauthorized;
+            Globals.User = null;
             return RedirectToAction("Login", "Account");
         }
 

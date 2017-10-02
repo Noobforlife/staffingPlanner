@@ -38,7 +38,7 @@ namespace StaffingPlanner.Models
 			}
 		}
 
-		public int AllocatedHours
+		public int RemainingHours
 		{
 			get
 			{

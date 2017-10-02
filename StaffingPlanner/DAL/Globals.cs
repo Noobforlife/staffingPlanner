@@ -1,11 +1,9 @@
-﻿using StaffingPlanner.Models;
-
-namespace StaffingPlanner
+﻿namespace StaffingPlanner.DAL
 {
     public static class Globals
     {
-        public static Role userRole;
-        public static string user;
+        public static Role UserRole;
+        public static string User;
     }
 
     public enum Role
