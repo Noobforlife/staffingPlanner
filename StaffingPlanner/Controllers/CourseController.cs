@@ -10,13 +10,14 @@ namespace StaffingPlanner.Controllers
 {
 	public class CourseController : Controller
 	{
-        private static Random rnd = new Random();
+        private static readonly Random Rnd = new Random();
         //Methods handling returning of View
         #region View methods
 
         public ActionResult Courses()
         {
             var db = StaffingPlanContext.GetContext();
+			// Are there any course offerings where the Course is null?
             var offerings = db.CourseOfferings.Where(c => c.Course != null).ToList();
 
             var courses = GenerateCourseViewModelList(offerings);
@@ -39,17 +40,6 @@ namespace StaffingPlanner.Controllers
 
         #region Static methods
 
-        //Functions to generate derived values for a course(Allocated hours and remaining hours)
-        public static int GetAllocatedHours(CourseOffering offering)
-        {
-            var db = StaffingPlanContext.GetContext();
-            return db.Workloads.Where(w => w.Course.Id.Equals(offering.Id)).Select(w => w.Workload).Sum();
-        }
-
-        public static int GetRemainingHours(CourseOffering offering)
-        {
-            return (offering.TotalHours - GetAllocatedHours(offering));
-        }
 
         //Methods to generate view models
         private static DetailedCourseViewModel GenerateCourseDetailViewModel(CourseOffering offering, List<Teacher> teachers)
@@ -66,8 +56,8 @@ namespace StaffingPlanner.Controllers
                 HST = offering.HST,
                 NumStudents = offering.NumStudents,
                 TotalHours = offering.TotalHours,
-                AllocatedHours = GetAllocatedHours(offering),
-                RemainingHours = GetRemainingHours(offering),
+                AllocatedHours = offering.AllocatedHours,
+                RemainingHours = offering.RemainingHours,
                 Teachers = teacherList                
             };
             return vm;
@@ -75,30 +65,26 @@ namespace StaffingPlanner.Controllers
 
         public static List<SimpleCourseViewModel> GenerateCourseViewModelList(List<CourseOffering> offerings)
         {
-            List<SimpleCourseViewModel> courses = new List<SimpleCourseViewModel>();
-            foreach (var o in offerings)
-            {
-                var vm = new SimpleCourseViewModel
-                {
-                    Id = o.Id,
-                    Code = o.Course.Code,
-                    Name = o.Course.Name,
-                    TermYear = o.TermYear,
-                    Period = o.Periods,
-                    Credits = o.Credits,
-                    AllocatedHours = GetAllocatedHours(o),
-                    RemainingHours = GetRemainingHours(o),
-                    Status = GetStatus()
-                };
-                courses.Add(vm);
-            }
-            return courses;
+	        return offerings.Select(o => new SimpleCourseViewModel
+		    {
+			    Id = o.Id,
+			    Code = o.Course.Code,
+			    Name = o.Course.Name,
+			    TermYear = o.TermYear,
+			    Period = o.Periods,
+			    Credits = o.Credits,
+			    AllocatedHours = o.AllocatedHours,
+			    RemainingHours = o.RemainingHours,
+			    Status = o.Status
+		    })
+		    .ToList();
         }
 
         public static string GetStatus() {
-            List<string> credits = new List<string>(){"warning","success","danger"};
-            return credits[rnd.Next(credits.Count)];
+            var credits = new List<string> {"warning","success","danger"};
+            return credits[Rnd.Next(credits.Count)];
         }
+
         #endregion
 
     }

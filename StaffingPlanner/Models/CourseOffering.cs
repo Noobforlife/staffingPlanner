@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using StaffingPlanner.Controllers;
+using StaffingPlanner.DAL;
 
 #pragma warning disable CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
 
@@ -17,7 +20,19 @@ namespace StaffingPlanner.Models
 		public virtual Teacher CourseResponsible { get; set; }
 		public float HST { get; set; }
 		public int NumStudents { get; set; }
-      
+		public string Status => CourseController.GetStatus();
+		public int RemainingHours => TotalHours - AllocatedHours;
+		public int AllocatedHours
+		{
+			get
+			{
+				var db = StaffingPlanContext.GetContext();
+				return db.Workloads
+					.Where(w => w.Course.Id.Equals(Id))
+					.Sum(w => w.Workload);
+			}
+		}
+
 		public override bool Equals(object obj)
 		{
 			var ce = obj as CourseOffering;

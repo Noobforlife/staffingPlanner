@@ -30,20 +30,16 @@ namespace StaffingPlanner.Controllers
 			return View(courses);
         }
                 
-        private static List<DashboardViewModel> GenerateDashViewModelList(List<CourseOffering> courses) {
-            List<DashboardViewModel> list = new List<DashboardViewModel>();
-
-            foreach (var c in courses) {
-                var dvm = new DashboardViewModel
-                {
-                    Code = c.Course.Code,
-                    Name = c.Course.Name,
-                    Periods = c.Periods,
-                    Status = CourseController.GetStatus()
-                };
-                list.Add(dvm);
-              }
-            return list;
+        private static List<DashboardViewModel> GenerateDashViewModelList(IEnumerable<CourseOffering> courses)
+        {
+	        return courses.Select(c => new DashboardViewModel
+		    {
+			    Code = c.Course.Code,
+			    Name = c.Course.Name,
+			    Periods = c.Periods,
+			    Status = c.Status
+		    })
+		    .ToList();
         }
 	}
 }

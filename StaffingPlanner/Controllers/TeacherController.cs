@@ -14,8 +14,8 @@ namespace StaffingPlanner.Controllers
         public ActionResult Teachers()
         {
 	        var db = StaffingPlanContext.GetContext();
+			// Can there be teachers where the Id is null?
 			var teachersdb = db.Teachers.Where(t => t.Id != null).ToList();
-
             var teachers = GenerateTeacherViewModelList(teachersdb);            
 
 			return View(teachers);
@@ -59,7 +59,7 @@ namespace StaffingPlanner.Controllers
         }
 
         // Alter to take into account any changes in workload
-        public static int GetTotalHoursForTeacher(Teacher teacher)
+        /*public static int GetTotalHoursForTeacher(Teacher teacher)
         {
             var year = int.Parse("19" + teacher.PersonalNumber.Substring(0, 2));
             var month = int.Parse(teacher.PersonalNumber.Substring(2, 2));
@@ -77,7 +77,7 @@ namespace StaffingPlanner.Controllers
             }
 
             return 1756;
-        }
+        }*/
 
 		public static bool WorkloadHasTeacher(Teacher teacher, TeacherCourseWorkload workload)
 		{
@@ -85,35 +85,33 @@ namespace StaffingPlanner.Controllers
 		}
 
         // Alter to take into account how much teaching is to be done, and if there is some decrease in workload
-        public static int GetRemainingHoursForTeacher(Teacher teacher)
+        /*public static int GetRemainingHoursForTeacher(Teacher teacher)
         {
             var db = StaffingPlanContext.GetContext();
 
-			var hours = db.Workloads.Where(w => w.Teacher.Id.Equals(teacher.Id)).ToList().Sum(w => w.Workload);
+			var hours = db.Workloads
+				.Where(w => w.Teacher.Id.Equals(teacher.Id))
+				.ToList()
+				.Sum(w => w.Workload);
 
 			return GetTotalHoursForTeacher(teacher) - hours;
-        }
+        }*/
 
         //Methods to generate view models
         public static List<TeacherViewModel> GenerateTeacherViewModelList(List<Teacher> teachersList)
         {
-            var teachers = new List<TeacherViewModel>();
-            foreach (var t in teachersList)
-            {
-                var tvm = new TeacherViewModel
-                {
-                    Id = t.Id,
-                    Name = t.Name,
-                    Title = t.AcademicTitle,
-					FallWork = 100,
-					SpringWork = 100,
-                    TotalHours = GetTotalHoursForTeacher(t),
-                    RemainingHours = GetRemainingHoursForTeacher(t),
-                    Status= CourseController.GetStatus()
-                };
-                teachers.Add(tvm);
-            }
-            return teachers;
+	        return teachersList.Select(t => new TeacherViewModel
+		    {
+			    Id = t.Id,
+			    Name = t.Name,
+			    Title = t.AcademicTitle,
+			    FallWork = 100,
+			    SpringWork = 100,
+			    TotalHours = t.TotalHours,
+			    RemainingHours = t.RemainingHours,
+			    Status = CourseController.GetStatus()
+		    })
+		    .ToList();
         }
 
         private static TeacherViewModel GenerateTeacherViewModel(Teacher teacher, int fallAvailability, int springAvailability, List<SimpleCourseViewModel> teacherCourses)
@@ -124,8 +122,8 @@ namespace StaffingPlanner.Controllers
                 Name = teacher.Name,
                 Email = teacher.Email,
                 Title = teacher.AcademicTitle,
-                TotalHours = GetTotalHoursForTeacher(teacher),
-                RemainingHours = GetRemainingHoursForTeacher(teacher),
+                TotalHours = teacher.TotalHours,
+                RemainingHours = teacher.RemainingHours,
                 FallWork = fallAvailability,
                 SpringWork = springAvailability,
                 Courses = teacherCourses

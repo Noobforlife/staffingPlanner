@@ -1,21 +1,13 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using StaffingPlanner.ViewModels;
-using StaffingPlanner.Models;
 using StaffingPlanner.DAL;
-using System.Collections.Generic;
 
 namespace StaffingPlanner.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
-
         // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
@@ -42,8 +34,8 @@ namespace StaffingPlanner.Controllers
             bool authResult;
 
             //The user provided name is split since we want to match any name
-            string lowerName = model.Name.Trim().ToLower();
-            string[] nameParts = lowerName.Split(' ');
+            var lowerName = model.Name.Trim().ToLower();
+            var nameParts = lowerName.Split(' ');
 
             //Find any teachers with matching names
             var matchingTeachers = db.Teachers.Where(t => nameParts.All(np => t.Name.ToLower().Contains(np))).Select(t => new { Name = t.Name, Director = t.DirectorOfStudies });
@@ -58,23 +50,12 @@ namespace StaffingPlanner.Controllers
                 authResult = false;
             }
 
-            authResult = true;
-
             switch (authResult)
             {
                 case true:                  
                     //If the matching teacher (in db) is the director of studies than set the user role to match
-                    if (matchingTeachers.First().Director)
-                    {
-                        Globals.userRole = Role.DirectorOfStudies;
-                    }
-                    //Otherwise they are just a teacher
-                    else
-                    {
-                        Globals.userRole = Role.Teacher;
-                    }
+                    Globals.userRole = matchingTeachers.First().Director ? Role.DirectorOfStudies : Role.Teacher;
                     return RedirectToLocal(returnUrl);
-                case false:
                 default:
                     Globals.userRole = Role.Unauthorized;
                     ModelState.AddModelError("", "Invalid login attempt.");
@@ -99,6 +80,5 @@ namespace StaffingPlanner.Controllers
             }
             return RedirectToAction("Index", "Dashboard");
         }
-
     }
 }
