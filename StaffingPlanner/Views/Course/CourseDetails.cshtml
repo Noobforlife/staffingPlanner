@@ -1,3 +1,110 @@
-﻿@{
+﻿@using StaffingPlanner.ViewModels;
+@model DetailedCourseViewModel
+@{
     ViewBag.Title = "Course details";
 }
+
+<div class="container">
+    <div class="modal-header">
+        <h4 class="modal-title" style="display:inline-block">Course details</h4>
+        <div style="float: right; display:inline-block">
+            <button class="btn btn-default" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("Courses", "Course")'">Back to Course List</button>
+            <button class="btn btn-primary" type="button">Edit</button>
+        </div>        
+    </div>
+    <div class="modal-body">
+        <div class="row well background-white">
+            <div class="col-md-6 col-sm-6">
+                <div class="table-responsive">
+                    <table class="table borderless">
+                        <tbody>
+                            <tr>
+                                <th>Name:</th>
+                                <td>@Model.Name</td>
+                            </tr>
+                            <tr>
+                                <th>Code:</th>
+                                <td>@Model.Code</td>
+                            </tr>
+                            <tr>
+                                <th>Credits:</th>
+                                <td>@Model.Credits</td>
+                            </tr>
+                            <tr>
+                                <th>No. of students:</th>
+                                <td>@Model.NumStudents</td>
+                            </tr>
+                            <tr>
+                                <th>Info:</th>
+                                <td>This is a new course</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">
+                <div class="table-responsive">
+                    <table class="table borderless">
+                        <tbody>
+                            <tr>
+                                <th>Course responsible:</th>
+                                <td>@Html.ActionLink(Model.CourseResponsible.Name, "TeacherDetails", "Teacher", new { id = Model.CourseResponsible.Id }, null)</td>
+                            </tr>
+                            <tr>
+                                <th>HST:</th>
+                                <td>@Model.HST</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+                    <p>total</p>
+                    <p class="numbers blue-border">@Model.TotalHours</p>
+                </div>
+                <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+                    <p>allocated</p>
+                    <p class="numbers green-border">@Model.AllocatedHours</p>
+                </div>
+                <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+                    <p>balance</p>
+                    <p class="numbers orange-border">@Model.RemainingHours</p>
+                </div>
+            </div>
+        </div>        
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Staff assigned</h4>
+                <div class="table-responsive" style="font-family:Raleway, sans-serif;">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name </th>
+                                <th>Title </th>
+                                <th>Total Hours</th>
+                                <th>HT work</th>
+                                <th>VT work</th>
+                                <th>Remaining(Hrs)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (TeacherViewModel teacher in Model.Teachers)
+                            {
+                                <tr>
+                                    <td> @Html.ActionLink(teacher.Name, "TeacherDetails", "Teacher", new { id = teacher.Id }, null)</td>
+                                    <td>@teacher.Title</td>
+                                    <td>@teacher.TotalHours</td>
+                                    <td>@teacher.FallWork</td>
+                                    <td>@teacher.SpringWork</td>
+                                    <td>@teacher.RemainingHours<span class="label label-success pull-right">status </span></td>
+                                </tr>
+                            }                                                    
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <button class="btn btn-default pull-right" type="button"> add staff<i class="icon-plus" style="margin:2px;margin-left:3px;"></i></button>
+            </div>
+        </div>
+    </div>    
+</div>

@@ -1,60 +1,39 @@
-﻿@{
+﻿@using StaffingPlanner.ViewModels
+@using System.Collections.Generic
+@model List<SimpleCourseViewModel>
+@{
     ViewBag.Title = "Courses";
 }
 
+
 <h1>Courses </h1>
-<div class="table-responsive" style="font-family:Raleway, sans-serif;">
+<div class="table-responsive">
     <table class="table table-hover">
         <thead>
             <tr>
                 <th>Name </th>
                 <th>Code </th>
-                <th>HP </th>
+                <th>Credits </th>
                 <th>Term </th>
                 <th>Period </th>
-                <th>Alocated(hrs) </th>
+                <th>Allocated(hrs) </th>
                 <th> Remaining(Hrs)</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td> <a href="#" data-toggle="modal" data-target="#course-modal">Information Systems/Agile Methods</a></td>
-                <td> <a href="#">2IS100 </a></td>
-                <td>Cell 3</td>
-                <td>Cell 4</td>
-                <td>Cell 5</td>
-                <td>Cell 6</td>
-                <td>Cell 7<span class="label label-warning pull-right">warning </span></td>
-            </tr>
-            <tr>
-                <td> <a href="#">Organisational Behaviour</a></td>
-                <td> <a href="#">2FE223 </a></td>
-                <td>Cell 3</td>
-                <td>Cell 4</td>
-                <td>Cell 5</td>
-                <td>Cell 6</td>
-                <td>Cell 7<span class="label label-danger pull-right">issue </span></td>
-            </tr>
-            <tr>
-                <td> <a href="#">HCI/Usability Evaluation Methods</a></td>
-                <td> <a href="#">2IV134 </a></td>
-                <td>Cell 3</td>
-                <td>Cell 4</td>
-                <td>Cell 5</td>
-                <td>Cell 6</td>
-                <td>Cell 7<span class="label label-success pull-right">good </span></td>
-            </tr>
-            <tr>
-                <td> <a href="#">Software Engineering</a></td>
-                <td> <a href="#">2yt176 </a></td>
-                <td>Cell 3</td>
-                <td>Cell 4</td>
-                <td>Cell 5</td>
-                <td>Cell 6</td>
-                <td>Cell 7<span class="label label-warning pull-right">warning </span></td>
-            </tr>
+            @foreach (SimpleCourseViewModel course in Model)
+            {
+                <tr>
+                    <td>@Html.ActionLink(course.Name, "CourseDetails", "Course", new { id = course.Id }, null)</td>
+                    <td>@Html.ActionLink(course.Code, "CourseDetails", "Course", new { id = course.Id }, null)</td>
+                    <td>@course.Credits</td>
+                    <td>@course.TermYear.Term</td>
+                    <td>@course.Period</td>
+                    <td>@course.AllocatedHours</td>
+                    <td>@course.RemainingHours<span class="label label-@course.Status pull-right">status </span></td>
+                </tr>
+            }
+
         </tbody>
     </table>
 </div>
-
-@Html.Partial("_CourseModal");

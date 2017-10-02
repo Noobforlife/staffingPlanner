@@ -1,3 +1,119 @@
-﻿@{
+﻿@using StaffingPlanner.ViewModels
+@model TeacherViewModel
+
+@{
     ViewBag.Title = "Teacher";
 }
+
+<div class="container">
+    <div class="modal-header">
+        <h4 class="modal-title" style="display:inline-block">Teacher details</h4>
+        <div style="float: right; display:inline-block">
+            <button class="btn btn-default" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("Teachers", "Teacher")'">Back to Teachers List</button>
+            <button class="btn btn-primary" type="button">Edit</button>
+        </div>
+    </div>
+    <div class="modal-body">
+        <!--Modal Content-->
+
+        <div class="row well background-white">
+            <div class="col-md-6 col-sm-6">
+                <div class="table-responsive">
+                    <table class="table borderless">
+                        <tbody>
+                            <tr>
+                                <th>Name :</th>
+                                <td>@Model.Name</td>
+                            </tr>
+                            <tr>
+                                <th>Email :</th>
+                                <td>@Model.Email</td>
+                            </tr>
+                            <tr>
+                                <th colspan="2" style="text-align:left">Availability </th>
+                            </tr>
+                            <tr>
+                                <th>Autumn :</th>
+                                <td>@Model.FallWork.ToString()%</td>
+                            </tr>
+                            <tr>
+                                <th>Spring :</th>
+                                <td>@Model.SpringWork.ToString()%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>                
+            </div>
+            <div class="col-md-6 col-sm-6">
+                <div class="hours">
+                    <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+                        <p>total </p>
+                        <p class="numbers blue-border">@Model.TotalHours.ToString()</p>
+                    </div>
+                    <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+                        <p>allocated</p>
+                        <p class="numbers green-border">@((Model.TotalHours - Model.RemainingHours).ToString())</p>
+                    </div>
+                    <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+                        <p>balance </p>
+                        <p class="numbers orange-border">@Model.RemainingHours.ToString()</p>
+                    </div>
+                </div>
+
+                <h5 class="details-h">Hours Allocation</h5>
+                <div class="time-allocation-div">
+                    <div class="time-allocation detail-label">
+                        <p class="detail-label">Teaching:</p><span class="badge pull-right">200hrs</span>
+                    </div>
+                    <div class="time-allocation detail-label">
+                        <p class="detail-label">Research:</p><span class="badge pull-right">200hrs</span>
+                    </div>
+                </div>
+                <div class="time-allocation-div">
+                    <div class="time-allocation detail-label">
+                        <p class="detail-label">Other: </p><span class="badge pull-right">200hrs</span>
+                    </div>
+                    <div class="time-allocation detail-label">
+                        <p class="detail-label">Admin:</p><span class="badge pull-right">200hrs</span>
+                    </div>
+                </div>
+            </div>
+        </div>       
+      
+        <div class="row">
+            <!--Table of courses-->
+            <div class="col-md-12">
+                <div class="table-responsive" style="font-family:Raleway, sans-serif;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Code</th>
+                                <th>Credits</th>
+                                <th>Term</th>
+                                <th>Period</th>
+                                <th>Allocated(Hrs)</th>
+                                <th>Remaining(Hrs)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (SimpleCourseViewModel course in Model.Courses)
+                            {
+                                <tr>
+                                    <td><a href="#" data-toggle="modal" data-target="#course-modal">@Html.ActionLink(course.Name, "CourseDetails", "Course", new { id = course.Id }, null)</a></td>
+                                    <td>@course.Code</td>
+                                    <td>@course.Credits</td>
+                                    <td>@course.TermYear.ToString()</td>
+                                    <td>@course.Period</td>
+                                    <td>@course.AllocatedHours</td>
+                                    <td>@course.RemainingHours</td>
+                                    <td><span class="label label-warning pull-right">status </span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>   
+</div>
