@@ -76,7 +76,7 @@ namespace StaffingPlanner.ViewModels
 				case Period.AllPeriods:
 					return 0;
 				default:
-					return -0;
+					return -1;
 			}
 		}
 	}

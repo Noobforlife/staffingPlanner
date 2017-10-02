@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using StaffingPlanner.Models;
-using System.Linq;
-using StaffingPlanner.DAL;
 
 namespace StaffingPlanner.ViewModels
 {
