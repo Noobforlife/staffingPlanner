@@ -34,10 +34,12 @@ namespace StaffingPlanner.Controllers
         {
 	        return courses.Select(c => new DashboardViewModel
 		    {
+                Id = c.Id,
 			    Code = c.Course.Code,
 			    Name = c.Course.Name,
 			    Periods = c.Periods,
-			    Status = c.Status
+			    Status = c.Status,
+                CourseResponsible = c.CourseResponsible,
 		    })
 		    .ToList();
         }

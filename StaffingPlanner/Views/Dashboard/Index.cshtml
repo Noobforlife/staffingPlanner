@@ -86,7 +86,7 @@
                                         }   
                                         <td colspan=@item.PeriodsDuration>
                                             <div class="progress">
-                                                <div class="progress-bar progress-bar-@item.Status" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">@item.Name</div>
+                                                <a class="progress-bar progress-bar-@item.Status" role="button" data-toggle="popover" data-placement="top"  title="Course responsible" data-content="@item.CourseResponsible.Name" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">@item.Name</a>
                                             </div>
                                         </td>
                                         @for (var i = 0; i < item.PeriodsAfter; i++)
@@ -126,7 +126,7 @@
                                     }   
                                     <td colspan=@("" + item.PeriodsDuration)>
                                         <div class="progress">
-                                            <div class="progress-bar progress-bar-@item.Status" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">@item.Name</div>
+                                            <a class="progress-bar progress-bar-@item.Status"role="button" data-toggle="popover" data-placement="top"  title= "Course responsible" data-content="@item.CourseResponsible.Name" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">@item.Name</a>
                                         </div>
                                     </td>
                                     @for (var i = 0; i < item.PeriodsAfter; i++)
