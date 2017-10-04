@@ -10,6 +10,7 @@ namespace StaffingPlanner.Controllers
 {
 	public class DashboardController : Controller
 	{
+        // GET: /Dashboard/Index
         public ActionResult Index()
         {
 	        var db = StaffingPlanContext.GetContext();
@@ -30,6 +31,7 @@ namespace StaffingPlanner.Controllers
 			return View(courses);
         }
                 
+        //Method to generate list of course offerings for the dashboard view
         private static List<DashboardViewModel> GenerateDashViewModelList(IEnumerable<CourseOffering> courses)
         {
 	        return courses.Select(c => new DashboardViewModel

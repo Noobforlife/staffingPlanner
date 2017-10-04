@@ -14,6 +14,7 @@ namespace StaffingPlanner.Controllers
         //Methods handling returning of View
         #region View methods
 
+        // GET: /Course/Courses
         public ActionResult Courses()
         {
             var db = StaffingPlanContext.GetContext();
@@ -25,6 +26,7 @@ namespace StaffingPlanner.Controllers
             return View(courses);
         }
 
+        // GET: /Course/CourseDetails/{id}
         public ActionResult CourseDetails(Guid id)
         {
             var db = StaffingPlanContext.GetContext();
