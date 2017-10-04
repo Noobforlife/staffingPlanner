@@ -1,15 +1,18 @@
 ﻿using StaffingPlanner.Models;
+using System;
 
 namespace StaffingPlanner.ViewModels
 {
 	public class DashboardViewModel
 	{
+        public Guid Id { get; set; }
 		public string Code { get; set; }
 		public string Name { get; set; }
 		public int PeriodsBefore { get; set; }
 		public int PeriodsDuration { get; set; }
 		public int PeriodsAfter { get; set; }
         public string Status { get; set; }
+        public Teacher CourseResponsible { get; set; }
 
         public Period Periods
 		{
