@@ -46,6 +46,17 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PublishDatabaseSettings>
+      <Objects>
+        <ObjectGroup Name="StaffingPlanContext-Deployment" Order="1">
+          <Destination Path="Data Source=SQLExpress%3bInitial Catalog=Agile-Prod1%3bIntegrated Security=SSPI%3b" />
+          <Object Type="DbFullSql">
+            <PreSource Path="Data Source=%28LocalDb%29\mssqllocaldb%3bInitial Catalog=Agile1%3bIntegrated Security=True" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
+            <Source Path="obj\Release\AutoScripts\StaffingPlanContext-Deployment_SchemaOnly.sql" Transacted="True" />
+          </Object>
+        </ObjectGroup>
+      </Objects>
+    </PublishDatabaseSettings>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
