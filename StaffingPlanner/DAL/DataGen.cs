@@ -30,7 +30,7 @@ namespace StaffingPlanner.DAL
             15.0
         };
 
-        public static CourseOffering CreateOffering(Teacher courseResponsible,Course course, TermYear termyear)
+        public static CourseOffering CreateOffering(Teacher courseResponsible, Course course, TermYear termyear, CourseState state)
         {
             return new CourseOffering {
                 Id =Guid.NewGuid(),
@@ -59,7 +59,7 @@ namespace StaffingPlanner.DAL
                 Id = Guid.NewGuid(),
                 Course = course,
                 Teacher = teacher,
-                Workload = Rnd.Next(200, 600)
+                Workload = Rnd.Next(50, 300)
             };
         }
 
