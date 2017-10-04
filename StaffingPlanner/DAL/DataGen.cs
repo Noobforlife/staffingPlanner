@@ -40,6 +40,7 @@ namespace StaffingPlanner.DAL
                 Periods = RandomPeriod(),
                 TotalHours= Rnd.Next(1000, 4000),
                 CourseResponsible = courseResponsible,
+                State = state,
                 NumStudents = Rnd.Next(10, 80),
                 HST = Hst[Rnd.Next(0, Hst.Count)]
             };
