@@ -14,6 +14,7 @@ namespace StaffingPlanner.Models
         public virtual Course Course { get; set; }
         public virtual TermYear TermYear { get; set; }
 		public double Credits { get; set; }
+        public CourseState State { get; set; }
 		public Period Periods { get; set; }
 		public int TotalHours { get; set; }
 		public virtual ICollection<Teacher> Teachers { get; set; }
