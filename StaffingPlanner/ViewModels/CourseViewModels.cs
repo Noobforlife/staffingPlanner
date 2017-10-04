@@ -11,9 +11,11 @@ namespace StaffingPlanner.ViewModels
 		public string Name { get; set; }
 		public string Code { get; set; }
 		public double Credits { get; set; }
-		public Period Period { get; set; }
+		public string Period { get; set; }
+        public Teacher CourseResponsible { get; set; }
 		public int AllocatedHours { get; set; }
 		public int RemainingHours { get; set; }
+        public CourseState State { get; set; }
         public string Status { get; set; }
     }
 
@@ -24,7 +26,7 @@ namespace StaffingPlanner.ViewModels
         public string Name { get; set; }
         public string Code { get; set; }
         public double Credits { get; set; }
-        public Period Period { get; set; }
+        public string Period { get; set; }
         public int TotalHours { get; set; }
         public int AllocatedHours { get; set; }
         public int RemainingHours { get; set; }
