@@ -18,9 +18,7 @@ deploy:
     script:
         - '"nuget.exe" restore'
         - '"msbuild.exe" /p:VisualStudioVersion=15.0 /p:PublishProfile=FolderProfile1 /p:DeployOnBuild=true /p:OutDir= /p:Configuration=Release'
-        - RD /S /Q C:\Users\Hummus\Desktop\HummusWeb
-        - mkdir C:\Users\Hummus\Desktop\HummusWeb
-        - xcopy .\StaffingPlanner\bin\Release\PublishOutput\* C:\Users\Hummus\Desktop\HummusWeb\ /i /s
+        - xcopy .\StaffingPlanner\bin\Release\PublishOutput\* C:\Users\Hummus\Desktop\HummusWeb\ /i /s /y
     artifacts:
         untracked: true
     only:
