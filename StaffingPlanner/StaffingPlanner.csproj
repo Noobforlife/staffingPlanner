@@ -50,7 +50,7 @@
       <Objects>
         <ObjectGroup Name="StaffingPlanContext-Deployment" Order="1">
           <Destination Path="Data Source=localhost\SQLExpress%3b Database=master%3bInitial Catalog=Agile1%3bIntegrated Security=True%3b" />
-          <Object Type="DbFullSql">
+          <Object Type="DbFullSql" Enabled="False">
             <PreSource Path="Data Source=%28LocalDb%29\mssqllocaldb%3bInitial Catalog=Agile1%3bIntegrated Security=True" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
             <Source Path="obj\Release\AutoScripts\StaffingPlanContext-Deployment_SchemaOnly.sql" Transacted="True" />
           </Object>
