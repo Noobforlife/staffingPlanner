@@ -14,6 +14,7 @@ namespace StaffingPlanner.Controllers
         //Methods handling returning of View
         #region View methods
 
+        // GET: /Course/Courses
         public ActionResult Courses()
         {
             var db = StaffingPlanContext.GetContext();
@@ -25,6 +26,7 @@ namespace StaffingPlanner.Controllers
             return View(courses);
         }
 
+        // GET: /Course/CourseDetails/{id}
         public ActionResult CourseDetails(Guid id)
         {
             var db = StaffingPlanContext.GetContext();
@@ -50,7 +52,7 @@ namespace StaffingPlanner.Controllers
                 Code = offering.Course.Code,
                 Name = offering.Course.Name,
                 TermYear = offering.TermYear,
-                Period = offering.Periods,
+                Period = EnumToString.PeriodToString(offering.Periods),
                 Credits = offering.Credits,
                 CourseResponsible = offering.CourseResponsible,
                 HST = offering.HST,
@@ -65,16 +67,18 @@ namespace StaffingPlanner.Controllers
 
         public static List<SimpleCourseViewModel> GenerateCourseViewModelList(List<CourseOffering> offerings)
         {
-	        return offerings.Select(o => new SimpleCourseViewModel
-		    {
-			    Id = o.Id,
-			    Code = o.Course.Code,
-			    Name = o.Course.Name,
-			    TermYear = o.TermYear,
-			    Period = o.Periods,
-			    Credits = o.Credits,
-			    AllocatedHours = o.AllocatedHours,
-			    RemainingHours = o.RemainingHours,
+            return offerings.Select(o => new SimpleCourseViewModel
+            {
+                Id = o.Id,
+                Code = o.Course.Code,
+                Name = o.Course.TruncatedName,
+                TermYear = o.TermYear,
+                Period = EnumToString.PeriodToString(o.Periods),
+                CourseResponsible = o.CourseResponsible,
+                Credits = o.Credits,
+                AllocatedHours = o.AllocatedHours,
+                RemainingHours = o.RemainingHours,
+                State = o.State,
 			    Status = o.Status
 		    })
 		    .ToList();

@@ -12,13 +12,15 @@
     <table id="courseListTable" class="table table-hover" >
         <thead>
             <tr>
-                <th>Name </th>
-                <th>Code </th>
-                <th>Credits </th>
-                <th>Term </th>
-                <th>Period </th>
-                <th>Allocated(hrs) </th>
-                <th> Remaining(Hrs)</th>
+                <th>Name</th>
+                <th>Code</th>
+                <th>Credits</th>
+                <th>Term</th>
+                <th>Period</th>
+                <th>Course responsible</th>
+                <th>State</th>
+                <th>Allocated hours</th>
+                <th>Remaining hours</th>
             </tr>
         </thead>
         <tbody>
@@ -28,8 +30,10 @@
                     <td>@Html.ActionLink(course.Name, "CourseDetails", "Course", new { id = course.Id }, null)</td>
                     <td>@Html.ActionLink(course.Code, "CourseDetails", "Course", new { id = course.Id }, null)</td>
                     <td>@course.Credits</td>
-                    <td>@course.TermYear.Term</td>
+                    <td>@course.TermYear.ToString()</td>
                     <td>@course.Period</td>
+                    <td>@course.CourseResponsible.Name</td>
+                    <td>@course.State</td>
                     <td>@course.AllocatedHours</td>
                     <td>@course.RemainingHours<span class="label label-@course.Status pull-right">status </span></td>
                 </tr>

@@ -23,9 +23,9 @@ namespace StaffingPlanner.Models
         {
             if (Term == Term.Fall)
             {
-                return "HT" + GetTwoDigitYear();
+                return "HT-" + GetTwoDigitYear();
             }
-			return "VT" + GetTwoDigitYear();
+			return "VT-" + GetTwoDigitYear();
         }
     }
 }
