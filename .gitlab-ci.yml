@@ -22,4 +22,4 @@ deploy:
     artifacts:
         untracked: true
     only:
-        - publishandcd
+        - stable
