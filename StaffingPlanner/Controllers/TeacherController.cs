@@ -67,15 +67,15 @@ namespace StaffingPlanner.Controllers
         //Methods to generate view models
         public static List<TeacherViewModel> GenerateTeacherViewModelList(List<Teacher> teachersList)
         {
-	        return teachersList.Select(t => new TeacherViewModel
-		    {
-			    Id = t.Id,
-			    Name = t.Name,
-			    Title = t.AcademicTitle,
-			    FallWork = 100,
-			    SpringWork = 100,
-			    TotalHours = t.TotalHours,
-			    RemainingHours = t.RemainingHours,
+            return teachersList.Select(teacher => new TeacherViewModel
+            {
+                Id = teacher.Id,
+                Name = teacher.Name,
+                Title = teacher.AcademicTitle,
+                FallWork = 100,
+                SpringWork = 100,
+                TotalHours = teacher.HourBudget.TotalHours,
+                RemainingHours = teacher.HourBudget.TotalHours - teacher.AllocatedHours,
 			    Status = CourseController.GetStatus()
 		    })
 		    .ToList();
@@ -89,13 +89,14 @@ namespace StaffingPlanner.Controllers
                 Name = teacher.Name,
                 Email = teacher.Email,
                 Title = teacher.AcademicTitle,
-                TotalHours = teacher.TotalHours,
-                RemainingHours = teacher.RemainingHours,
+                TotalHours = teacher.HourBudget.TotalHours,
+                RemainingHours = teacher.HourBudget.TotalHours - teacher.AllocatedHours,
                 FallWork = fallAvailability,
                 SpringWork = springAvailability,
                 Courses = teacherCourses
             };
         }
+
 
     }
 }
