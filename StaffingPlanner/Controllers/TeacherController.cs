@@ -64,6 +64,20 @@ namespace StaffingPlanner.Controllers
 			return teacher.Equals(workload.Teacher);
 		}
 
+        
+        public static int GetTotalHoursForCurrentYear(Teacher teacher)
+        {
+            //Hopefully this hardcoded ugliness is temporary
+            var db = StaffingPlanContext.GetContext();
+            var terms = db.TermYears.ToList();
+            TermYear ht17 = terms[0]; //Let's hope the indexes are correct!
+            TermYear vt18 = terms[1];
+
+            //Return the sum
+            return teacher.GetHourBudget(ht17).TotalTermHours + teacher.GetHourBudget(vt18).TotalTermHours;
+        }
+
+
         //Methods to generate view models
         public static List<TeacherViewModel> GenerateTeacherViewModelList(List<Teacher> teachersList)
         {
@@ -74,8 +88,8 @@ namespace StaffingPlanner.Controllers
                 Title = teacher.AcademicTitle,
                 FallWork = 100,
                 SpringWork = 100,
-                TotalHours = teacher.HourBudget.TotalHours,
-                RemainingHours = teacher.HourBudget.TotalHours - teacher.AllocatedHours,
+                TotalHours = GetTotalHoursForCurrentYear(teacher),
+                RemainingHours = GetTotalHoursForCurrentYear(teacher) - teacher.AllocatedHours,
 			    Status = CourseController.GetStatus()
 		    })
 		    .ToList();
@@ -89,8 +103,8 @@ namespace StaffingPlanner.Controllers
                 Name = teacher.Name,
                 Email = teacher.Email,
                 Title = teacher.AcademicTitle,
-                TotalHours = teacher.HourBudget.TotalHours,
-                RemainingHours = teacher.HourBudget.TotalHours - teacher.AllocatedHours,
+                TotalHours = GetTotalHoursForCurrentYear(teacher),
+                RemainingHours = GetTotalHoursForCurrentYear(teacher) - teacher.AllocatedHours,
                 FallWork = fallAvailability,
                 SpringWork = springAvailability,
                 Courses = teacherCourses

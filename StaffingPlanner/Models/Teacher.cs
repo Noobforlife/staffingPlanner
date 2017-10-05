@@ -16,15 +16,12 @@ namespace StaffingPlanner.Models
 		public bool DirectorOfStudies { get; set; }
 		public AcademicTitle AcademicTitle { get; set; }
 
-        //Temporary solution, we shouldn't create a new budget every time!
-        public HourBudget HourBudget
+        public HourBudget GetHourBudget(TermYear termYear)
         {
-            get
-            {
-                return new HourBudget(this);
-            }
+            return new HourBudget(this, termYear);
         }
 
+        //Gets all allocated hours in history regardless of term or year, fix?
         public int AllocatedHours
         {
             get

@@ -7,31 +7,44 @@ namespace StaffingPlanner.Models
     public class HourBudget
     {
         public Teacher teacher { get; set; }
-        public int TotalHours { get; }
+        public TermYear TermYear { get; set; }
+        public int TotalTermHours { get; }
         public int RemainingHours { get; }
         public int TeachingHours { get; }
         public int ResearchHours { get; }
         public int AdminHours { get; }
         public int OtherHours { get; }
 
-        public HourBudget(Teacher teacher)
+        public HourBudget(Teacher teacher, TermYear termYear)
         {
             this.teacher = teacher;
+            this.TermYear = termYear;
+
+            //Get the availability for the term
+            var db = StaffingPlanContext.GetContext();
+            decimal termAvailability = db.TeacherTermAvailability.Where(tta =>
+                tta.Teacher.Id == teacher.Id &&
+                tta.TermYear.Term == termYear.Term &&
+                tta.TermYear.Year == termYear.Year)
+                .AsEnumerable()
+                .Select(tta => tta.Availability)
+                .First();
+
+            //Multiply the total hours based on availability
+            TotalTermHours = (int)(totalHoursPerYear/2 * (termAvailability/100));
 
             //Get the shares (% for teaching, research etc) for this teachers academic title
-            var db = StaffingPlanContext.GetContext();
             var result = db.AcademicProfiles.Where(ap => ap.Title == teacher.AcademicTitle)
                 .Select(ap => new { TeachingShare = ap.TeachingShare, ResearchShare = ap.ResearchShare, AdminShare = ap.AdminShare, OtherShare = ap.OtherShare });
             var shares = result.First();
 
-            TotalHours = totalHours;
-            TeachingHours = TotalHours * (int)shares.TeachingShare;
-            ResearchHours = TotalHours * (int)shares.ResearchShare;
-            AdminHours = TotalHours * (int)shares.AdminShare;
-            OtherHours = TotalHours * (int)shares.OtherShare;
+            TeachingHours = TotalTermHours * (int)shares.TeachingShare;
+            ResearchHours = TotalTermHours * (int)shares.ResearchShare;
+            AdminHours = TotalTermHours * (int)shares.AdminShare;
+            OtherHours = TotalTermHours * (int)shares.OtherShare;
         }
 
-        private int totalHours
+        private int totalHoursPerYear
         {
             get
             {
