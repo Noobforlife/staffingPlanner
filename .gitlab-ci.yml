@@ -1,6 +1,7 @@
 stages:
     - build
     - test
+    - deploy
 build:
     stage: build
     script:
@@ -12,4 +13,12 @@ test:
     stage: test
     script:
         - '"mstest.exe" /testcontainer:StaffingPlanner.Tests/bin/Debug/StaffingPlanner.Tests.dll'
-
+deploy:
+    stage: deploy
+    script:
+        - '"nuget.exe" restore'
+        - '"msbuild.exe" /p:VisualStudioVersion=15.0 /p:PublishProfile=FolderProfile1 /p:DeployOnBuild=true /p:OutDir=C:\Users\Hummus\Desktop\HummusWeb'
+    artifacts:
+        untracked: true
+    only:
+        - publishandcd
