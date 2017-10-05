@@ -48,9 +48,9 @@
     <WarningLevel>4</WarningLevel>
     <PublishDatabaseSettings>
       <Objects>
-        <ObjectGroup Name="StaffingPlanContext-Deployment" Order="1">
-          <Destination Path="Data Source=SQLExpress%3bInitial Catalog=Agile-Prod1%3bIntegrated Security=SSPI%3b" />
-          <Object Type="DbFullSql">
+        <ObjectGroup Name="StaffingPlanContext-Deployment" Order="1" Enabled="False">
+          <Destination Path="Data Source=localhost\SQLExpress%3b Database=master%3bInitial Catalog=Agile1%3bIntegrated Security=True%3b" />
+          <Object Type="DbFullSql" Enabled="False">
             <PreSource Path="Data Source=%28LocalDb%29\mssqllocaldb%3bInitial Catalog=Agile1%3bIntegrated Security=True" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
             <Source Path="obj\Release\AutoScripts\StaffingPlanContext-Deployment_SchemaOnly.sql" Transacted="True" />
           </Object>
@@ -203,6 +203,9 @@
     </Content>
     <Content Include="fonts\Montserrat-Bold.ttf" />
     <Content Include="fonts\Montserrat-Regular.ttf" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\dataTables.min.js" />
     <Content Include="Scripts\dataTables.uikit.min.js" />
