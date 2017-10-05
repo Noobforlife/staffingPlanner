@@ -18,7 +18,6 @@
                 <th>Term</th>
                 <th>Period</th>
                 <th>Course responsible</th>
-                <th>State</th>
                 <th>Allocated hours</th>
                 <th>Remaining hours</th>
             </tr>
@@ -33,9 +32,8 @@
                     <td>@course.TermYear.ToString()</td>
                     <td>@course.Period</td>
                     <td>@course.CourseResponsible.Name</td>
-                    <td>@course.State</td>
                     <td>@course.AllocatedHours</td>
-                    <td>@course.RemainingHours<span class="label label-@course.Status pull-right">status </span></td>
+                    <td>@course.RemainingHours<span class="label label-@course.Status pull-right">@course.State </span></td>
                 </tr>
             }
 
