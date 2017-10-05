@@ -26,15 +26,20 @@ namespace StaffingPlanner.Controllers
             var fallCourses = GenerateDashViewModelList(fallOfferings);
             var springCourses = GenerateDashViewModelList(springOfferings);
 
-			var courses = new Tuple<List<DashboardViewModel>, List<DashboardViewModel>>(fallCourses, springCourses);
+	        var model = new DashboardViewModel
+	        {
+				DoS = Globals.UserRole == Role.DirectorOfStudies,
+				FallCourses = fallCourses,
+				SpringCourses = springCourses
+	        };
 
-			return View(courses);
+			return View(model);
         }
                 
         //Method to generate list of course offerings for the dashboard view
-        private static List<DashboardViewModel> GenerateDashViewModelList(IEnumerable<CourseOffering> courses)
+        private static List<DashboardCourseViewModel> GenerateDashViewModelList(IEnumerable<CourseOffering> courses)
         {
-	        return courses.Select(c => new DashboardViewModel
+	        return courses.Select(c => new DashboardCourseViewModel
 		    {
                 Id = c.Id,
 			    Code = c.Course.Code,
