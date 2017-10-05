@@ -71,7 +71,7 @@ namespace StaffingPlanner.Controllers
             {
                 Id = o.Id,
                 Code = o.Course.Code,
-                Name = o.Course.Name,
+                Name = o.Course.TruncatedName,
                 TermYear = o.TermYear,
                 Period = EnumToString.PeriodToString(o.Periods),
                 CourseResponsible = o.CourseResponsible,
