@@ -23,12 +23,14 @@ namespace StaffingPlanner.Controllers
 				.OrderBy(c => c.Periods)
 				.ToList();
 
-            var fallCourses = GenerateDashViewModelList(fallOfferings);
-            var springCourses = GenerateDashViewModelList(springOfferings);
+	        var dos = Globals.UserRole == Role.DirectorOfStudies;
+
+			var fallCourses = GenerateDashViewModelList(fallOfferings, dos);
+            var springCourses = GenerateDashViewModelList(springOfferings, dos);
 
 	        var model = new DashboardViewModel
 	        {
-				DoS = Globals.UserRole == Role.DirectorOfStudies,
+				DoS = dos,
 				FallCourses = fallCourses,
 				SpringCourses = springCourses
 	        };
@@ -37,18 +39,40 @@ namespace StaffingPlanner.Controllers
         }
                 
         //Method to generate list of course offerings for the dashboard view
-        private static List<DashboardCourseViewModel> GenerateDashViewModelList(IEnumerable<CourseOffering> courses)
+        private static List<DashboardCourseViewModel> GenerateDashViewModelList(IEnumerable<CourseOffering> courses, bool dos)
         {
-	        return courses.Select(c => new DashboardCourseViewModel
-		    {
-                Id = c.Id,
-			    Code = c.Course.Code,
-			    Name = c.Course.Name,
-			    Periods = c.Periods,
-			    Status = c.Status,
-                CourseResponsible = c.CourseResponsible,
-		    })
-		    .ToList();
+	        if (dos)
+	        {
+		        return courses.Select(c => new DashboardCourseViewModel
+			        {
+				        Id = c.Id,
+				        Code = c.Course.Code,
+				        Name = c.Course.Name,
+				        Periods = c.Periods,
+				        Status = c.Status,
+				        CourseResponsible = c.CourseResponsible,
+			        })
+			        .ToList();
+	        }
+
+	        var db = StaffingPlanContext.GetContext();
+	        var teacher = db.Teachers.First(t => t.Id == Globals.UserId);
+	        var courseIds = db.Workloads.Where(w => w.Teacher.Id.Equals(teacher.Id)).Select(w => w.Course.Id);
+
+	        var courseList = courses
+		        .Where(c => courseIds.Contains(c.Id) || c.CourseResponsible.Id == teacher.Id)
+		        .Select(c => new DashboardCourseViewModel
+		        {
+			        Id = c.Id,
+			        Code = c.Course.Code,
+			        Name = c.Course.Name,
+			        Periods = c.Periods,
+			        Status = c.CourseResponsible.Id == teacher.Id ? "info" : "success",
+			        CourseResponsible = c.CourseResponsible,
+		        })
+		        .ToList();
+
+	        return courseList;
         }
 	}
 }
