@@ -17,7 +17,8 @@ deploy:
     stage: deploy
     script:
         - '"nuget.exe" restore'
-        - '"msbuild.exe" /p:VisualStudioVersion=15.0 /p:PublishProfile=FolderProfile1 /p:DeployOnBuild=true /p:OutDir=C:\Users\Hummus\Desktop\HummusWeb /p:Configuration=Release'
+        - '"msbuild.exe" /p:VisualStudioVersion=15.0 /p:PublishProfile=FolderProfile1 /p:DeployOnBuild=true /p:OutDir= /p:Configuration=Release'
+        - mv -v StaffingPlanner\bin\Release\PublishOutput C:\Users\Hummus\Desktop\HummusWeb
     artifacts:
         untracked: true
     only:
