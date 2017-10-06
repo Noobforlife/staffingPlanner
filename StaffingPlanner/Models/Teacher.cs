@@ -16,9 +16,9 @@ namespace StaffingPlanner.Models
 		public bool DirectorOfStudies { get; set; }
 		public AcademicTitle AcademicTitle { get; set; }
 
-        public HourBudget GetHourBudget(TermYear termYear)
+        public HourBudget GetHourBudget(TermYear fallTerm, TermYear springTerm)
         {
-            return new HourBudget(this, termYear);
+            return new HourBudget(this, fallTerm, springTerm);
         }
 
         //Gets all allocated hours in history regardless of term or year, fix?

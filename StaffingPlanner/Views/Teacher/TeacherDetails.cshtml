@@ -1,5 +1,5 @@
 ﻿@using StaffingPlanner.ViewModels
-@model TeacherViewModel
+@model DetailedTeacherViewModel
 
 @{
     ViewBag.Title = "Teacher";
@@ -34,11 +34,11 @@
                             </tr>
                             <tr>
                                 <th>Autumn :</th>
-                                <td>@Model.FallAvailability.ToString()%</td>
+                                <td>@Model.HourBudget.FallAvailability%</td>
                             </tr>
                             <tr>
                                 <th>Spring :</th>
-                                <td>@Model.SpringAvailability.ToString()%</td>
+                                <td>@Model.HourBudget.SpringAvailability%</td>
                             </tr>
                         </tbody>
                     </table>
@@ -48,15 +48,15 @@
                 <div class="hours">
                     <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
                         <p>total </p>
-                        <p class="numbers blue-border">@Model.TotalHours.ToString()</p>
+                        <p class="numbers blue-border">@Model.HourBudget.TotalHours</p>
                     </div>
                     <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
                         <p>allocated</p>
-                        <p class="numbers green-border">@((Model.TotalHours - Model.RemainingHours).ToString())</p>
+                        <p class="numbers green-border">@((Model.HourBudget.TotalHours - Model.RemainingHours).ToString())</p>
                     </div>
                     <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
                         <p>balance </p>
-                        <p class="numbers orange-border">@Model.RemainingHours.ToString()</p>
+                        <p class="numbers orange-border">@Model.RemainingHours</p>
                     </div>
                 </div>
 
