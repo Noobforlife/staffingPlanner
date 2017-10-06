@@ -97,7 +97,7 @@ namespace StaffingPlanner.Controllers
 
         public static string GetStatus(int TotalHours, int AllocatedHours)
         {
-            float percentage = (AllocatedHours/TotalHours)*100;
+            float percentage = (AllocatedHours/(float)TotalHours)*100;
             if (percentage >= 90)
             {
                 return "success";
