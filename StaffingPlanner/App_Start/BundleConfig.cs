@@ -23,7 +23,12 @@ namespace StaffingPlanner
 					  "~/Scripts/bootstrap.js",
 					  "~/Scripts/respond.js"));
 
-			bundles.Add(new StyleBundle("~/Content/css").Include(
+            bundles.Add(new ScriptBundle("~/bundles/customScripts").Include(
+                    "~/Scripts/dataTables.min.js",
+                    "~/Scripts/dataTables.uikit.min.js",
+                      "~/Scripts/app.js"));
+
+            bundles.Add(new StyleBundle("~/Content/css").Include(
 					  "~/Content/styles.min.css"));
 		}
 	}

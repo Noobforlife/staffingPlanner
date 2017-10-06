@@ -38,12 +38,13 @@ namespace StaffingPlanner.Controllers
             var nameParts = lowerName.Split(' ');
 
             //Find any teachers with matching names
-            var matchingTeachers = db.Teachers.Where(t => nameParts.All(np => t.Name.ToLower().Contains(np))).Select(t => new { t.Name, Director = t.DirectorOfStudies });
+            var matchingTeachers = db.Teachers.Where(t => nameParts.All(np => t.Name.ToLower().Contains(np))).Select(t => new { t.Name, t.Id, Director = t.DirectorOfStudies });
 
             if (matchingTeachers.Any()) //If there are any teachers who match any name we are sufficiently satisfied
             {
                 authResult = true;
                 Globals.User = matchingTeachers.First().Name;
+	            Globals.UserId = matchingTeachers.First().Id;
             }
             else
             {

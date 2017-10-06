@@ -9,11 +9,13 @@ namespace StaffingPlanner.DAL
         protected override void Seed(StaffingPlanContext context)
         {
             //Populating database with TermYears
-            var fallTerm = new TermYear { Id = Guid.NewGuid(), Term = Term.Fall, Year = 2017 };
-            var springTerm = new TermYear { Id = Guid.NewGuid(), Term = Term.Spring, Year = 2018 };
+            var VT17 = new TermYear { Id = Guid.NewGuid(), Term = Term.Spring, Year = 2017 };
+            var HT17 = new TermYear { Id = Guid.NewGuid(), Term = Term.Fall, Year = 2017 };
+            var VT18 = new TermYear { Id = Guid.NewGuid(), Term = Term.Spring, Year = 2018 };
             var termYears = new List<TermYear> {
-                fallTerm,
-                springTerm
+                HT17,
+                VT18,
+                VT17
             };
             termYears.ForEach(c => context.TermYears.Add(c));
             context.SaveChanges();
@@ -346,18 +348,42 @@ namespace StaffingPlanner.DAL
             //Populating database with term employment
             foreach (var t in teachers)
             {
-                var tteFall = DataGen.GetTeacherTermAvailability(t, fallTerm, 100);
-                var tteSpring = DataGen.GetTeacherTermAvailability(t, springTerm, 100);
+                var tteFall = DataGen.GetTeacherTermAvailability(t, HT17, 100);
+                var tteSpring = DataGen.GetTeacherTermAvailability(t, VT18, 100);
                 context.TeacherTermAvailability.Add(tteFall);
                 context.TeacherTermAvailability.Add(tteSpring);
             }
             context.SaveChanges();
 
-            //Populating database with courseofferings
+
+            //Populating database with ongoing offerings
             foreach (var c in courses)
             {
-                var offering = DataGen.CreateOffering(teachers[DataGen.Rnd.Next(0, teachers.Count)], c, termYears[DataGen.Rnd.Next(0, termYears.Count)]);
+                var offering = DataGen.CreateOffering(teachers[DataGen.Rnd.Next(0, teachers.Count)], c, termYears[0],
+                    CourseState.Ongoing);
                 context.CourseOfferings.Add(offering);
+            }
+            //Populating the database with planned offerings
+            foreach (var c in courses)
+            {
+                if (DataGen.Rnd.Next(3) > 0)
+                {
+                    var offering = DataGen.CreateOffering(teachers[DataGen.Rnd.Next(0, teachers.Count)], c, termYears[1],
+                    CourseState.Planned);
+                    context.CourseOfferings.Add(offering);
+                }
+            }
+            //Populating the database with completed offerings
+            foreach (var c in courses)
+            {
+                
+                if (DataGen.Rnd.Next(2) == 0)
+                {
+                    var offering = DataGen.CreateOffering(teachers[DataGen.Rnd.Next(0, teachers.Count)], c, VT17,
+                    CourseState.Completed);
+                    context.CourseOfferings.Add(offering);
+                }
+
             }
             context.SaveChanges();
                        
@@ -367,7 +393,63 @@ namespace StaffingPlanner.DAL
                 var workload = DataGen.CreateWorkload(teachers[DataGen.Rnd.Next(0, teachers.Count)], c);
                 context.Workloads.Add(workload);
             }            
-            context.SaveChanges();                  
+            context.SaveChanges();
+
+
+            //Populate the database with academic profiles
+            var profiles = new List<AcademicProfile>
+            {
+                new AcademicProfile
+                {
+                    Title = AcademicTitle.Professor,
+                    TeachingShare = 0.5m,
+                    ResearchShare = 0.4m,
+                    AdminShare = 0.1m,
+                    OtherShare = 0.0m
+                },
+
+                new AcademicProfile
+                {
+                    Title = AcademicTitle.Lektor,
+                    TeachingShare = 0.7m,
+                    ResearchShare = 0.2m,
+                    AdminShare = 0.1m,
+                    OtherShare = 0.0m
+                },
+
+                new AcademicProfile
+                {
+                    Title = AcademicTitle.Adjunkt,
+                    TeachingShare = 0.8m,
+                    ResearchShare = 0.0m,
+                    AdminShare = 0.1m,
+                    OtherShare = 0.1m
+                },
+
+                new AcademicProfile
+                {
+                    Title = AcademicTitle.Doktorand,
+                    TeachingShare = 0.2m,
+                    ResearchShare = 0.8m,
+                    AdminShare = 0.0m,
+                    OtherShare = 0.0m
+                },
+
+                new AcademicProfile
+                {
+                    Title = AcademicTitle.Amanuens,
+                    TeachingShare = 1.0m,
+                    ResearchShare = 0.0m,
+                    AdminShare = 0.0m,
+                    OtherShare = 0.0m
+                }
+            };
+
+            foreach (var profile in profiles)
+            {
+                context.AcademicProfiles.Add(profile);
+            }
+            context.SaveChanges();
         }
     }
 }

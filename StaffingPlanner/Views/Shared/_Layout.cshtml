@@ -18,16 +18,23 @@
 
     <!--main content container-->
     <div class="container body-content">
-        @RenderBody()
-        <footer class="small">
-            <hr />
-            <p>&copy; @DateTime.Now.Year -Staffing Planner</p>
-        </footer>
+        @RenderBody()       
     </div>
+
+    <footer class="small">
+        <hr />
+        <p>&copy; @DateTime.Now.Year -Staffing Planner</p>
+    </footer>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/customScripts")
+
     @RenderSection("scripts", required: false)    
-    
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="popover"]').popover();
+        });
+    </script>
 </body>
 </html>

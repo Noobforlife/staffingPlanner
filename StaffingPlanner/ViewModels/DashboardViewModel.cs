@@ -1,15 +1,25 @@
 ﻿using StaffingPlanner.Models;
+using System;
+using System.Collections.Generic;
 
 namespace StaffingPlanner.ViewModels
 {
-	public class DashboardViewModel
+	public class DashboardViewModel {
+		public bool DoS { get; set; }
+		public List<DashboardCourseViewModel> FallCourses { get; set; }
+		public List<DashboardCourseViewModel> SpringCourses { get; set; }
+	}
+
+	public class DashboardCourseViewModel
 	{
+        public Guid Id { get; set; }
 		public string Code { get; set; }
 		public string Name { get; set; }
 		public int PeriodsBefore { get; set; }
 		public int PeriodsDuration { get; set; }
 		public int PeriodsAfter { get; set; }
         public string Status { get; set; }
+        public Teacher CourseResponsible { get; set; }
 
         public Period Periods
 		{

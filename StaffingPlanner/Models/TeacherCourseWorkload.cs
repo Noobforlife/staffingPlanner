@@ -2,6 +2,7 @@
 
 namespace StaffingPlanner.Models
 {
+    //The assigned hours a teacher has for a given course offering
 	public class TeacherCourseWorkload
 	{
         public Guid Id { get; set; }

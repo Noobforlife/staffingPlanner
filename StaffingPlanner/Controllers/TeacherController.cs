@@ -10,111 +10,76 @@ namespace StaffingPlanner.Controllers
 {
 	public class TeacherController : Controller
 	{
-        //View methods
+        // GET: /Teacher/Teachers
         public ActionResult Teachers()
         {
+            //Get all teachers
 	        var db = StaffingPlanContext.GetContext();
-			// Can there be teachers where the Id is null?
 			var teachersdb = db.Teachers.Where(t => t.Id != null).ToList();
-            var teachers = GenerateTeacherViewModelList(teachersdb);            
+
+            //Get terms (HT17 and VT18)
+            var fallTerm = db.TermYears.Where(ty => ty.Term == Term.Fall && ty.Year == 2017).FirstOrDefault();
+            var springTerm = db.TermYears.Where(ty => ty.Term == Term.Spring && ty.Year == 2018).FirstOrDefault();
+
+            //Generate the viewmodel list
+            var teachers = GenerateTeacherViewModelList(teachersdb, fallTerm, springTerm);            
 
 			return View(teachers);
         }
 
+        // GET: /Teacher/TeacherDetails/{id}
         public ActionResult TeacherDetails(Guid id)
         {
             var db = StaffingPlanContext.GetContext();
+            //Get the teacher with the same Id as the parameter id
             var teacher = db.Teachers.First(t => t.Id == id);
 
-            var terms = db.TermYears.ToList();
-            var fallTerm = terms[0].Term;
-	        var fallYear = terms[0].Year; 
-            var springTerm = terms[1].Term;
-	        var springYear = terms[1].Year;
+            //Get the terms, right now we simple use HT17 and VT18
+            var fallTerm = db.TermYears.Where(ty => ty.Term == Term.Fall && ty.Year == 2017).FirstOrDefault();
+            var springTerm = db.TermYears.Where(ty => ty.Term == Term.Spring && ty.Year == 2018).FirstOrDefault();
 
-            var fallWorkload = db.TeacherTermAvailability
-				.Where(tta =>
-					tta.Teacher.Id == teacher.Id && 
-					tta.TermYear.Term == fallTerm && 
-					tta.TermYear.Year == fallYear)
-				.AsEnumerable()
-				.Select(tta => tta.Availability)
-				.First();
+            //Get availability for the teacher for the terms above
+            int fallAvailability = GetTermAvailability(teacher, fallTerm);
+            int springAvailability = GetTermAvailability(teacher, springTerm);
 
-            var springWorkload = db.TeacherTermAvailability
-				.Where(tta => 
-					tta.Teacher.Id == teacher.Id &&
-					tta.TermYear.Term == springTerm && 
-					tta.TermYear.Year == springYear)
-				.AsEnumerable()
-				.Select(tta => tta.Availability)
-				.First();
-
+            //Get all courses for which the teacher has assigned hours
             var courses = db.Workloads.Where(t => t.Teacher.Id == teacher.Id).Select(l => l.Course).ToList();
             var courseViewModels = CourseController.GenerateCourseViewModelList(courses);
 
-            var teacherModel = GenerateTeacherViewModel(teacher, fallWorkload, springWorkload, courseViewModels);
+            //Generate viewmodel
+            var teacherModel = GenerateTeacherViewModel(teacher, fallAvailability, springAvailability, courseViewModels);
 
             return View(teacherModel);
         }
 
-        // Alter to take into account any changes in workload
-        /*public static int GetTotalHoursForTeacher(Teacher teacher)
-        {
-            var year = int.Parse("19" + teacher.PersonalNumber.Substring(0, 2));
-            var month = int.Parse(teacher.PersonalNumber.Substring(2, 2));
-            var day = int.Parse(teacher.PersonalNumber.Substring(4, 2));
-            var birthdate = new DateTime(year, month, day);
-            var age = new DateTime().Subtract(birthdate);
 
-            if (age.Days / 365 > 40)
-            {
-                return 1700;
-            }
-            if (age.Days / 365 > 30 && age.Days / 365 <= 40)
-            {
-                return 1735;
-            }
+        //Helper methods
 
-            return 1756;
-        }*/
-
-		public static bool WorkloadHasTeacher(Teacher teacher, TeacherCourseWorkload workload)
-		{
-			return teacher.Equals(workload.Teacher);
-		}
-
-        // Alter to take into account how much teaching is to be done, and if there is some decrease in workload
-        /*public static int GetRemainingHoursForTeacher(Teacher teacher)
+        public static int GetTermAvailability(Teacher teacher, TermYear termYear)
         {
             var db = StaffingPlanContext.GetContext();
-
-			var hours = db.Workloads
-				.Where(w => w.Teacher.Id.Equals(teacher.Id))
-				.ToList()
-				.Sum(w => w.Workload);
-
-			return GetTotalHoursForTeacher(teacher) - hours;
-        }*/
-
-        //Methods to generate view models
-        public static List<TeacherViewModel> GenerateTeacherViewModelList(List<Teacher> teachersList)
+            var teacherAvailability = db.TeacherTermAvailability.Where(tta => tta.Teacher.Id == teacher.Id);
+            int termAvailability = teacherAvailability.
+                Where(tta => tta.TermYear.Year == termYear.Year && tta.TermYear.Term == termYear.Term)
+                .Select(tta => tta.Availability)
+                .FirstOrDefault();
+            return termAvailability;
+        }
+       
+        public static int GetTotalHoursForCurrentYear(Teacher teacher)
         {
-	        return teachersList.Select(t => new TeacherViewModel
-		    {
-			    Id = t.Id,
-			    Name = t.Name,
-			    Title = t.AcademicTitle,
-			    FallWork = 100,
-			    SpringWork = 100,
-			    TotalHours = t.TotalHours,
-			    RemainingHours = t.RemainingHours,
-			    Status = CourseController.GetStatus()
-		    })
-		    .ToList();
+            var db = StaffingPlanContext.GetContext();
+            TermYear ht17 = db.TermYears.Where(ty => ty.Term == Term.Fall && ty.Year == 2017).FirstOrDefault();
+            TermYear vt18 = db.TermYears.Where(ty => ty.Term == Term.Spring && ty.Year == 2018).FirstOrDefault();
+
+            //Return the sum
+            return teacher.GetHourBudget(ht17).TotalTermHours + teacher.GetHourBudget(vt18).TotalTermHours;
         }
 
-        private static TeacherViewModel GenerateTeacherViewModel(Teacher teacher, int fallAvailability, int springAvailability, List<SimpleCourseViewModel> teacherCourses)
+
+        //Methods to generate view models
+
+        public static TeacherViewModel GenerateTeacherViewModel(Teacher teacher, int fallAvailability, int springAvailability, List<SimpleCourseViewModel> teacherCourses)
         {
             return new TeacherViewModel
             {
@@ -122,13 +87,31 @@ namespace StaffingPlanner.Controllers
                 Name = teacher.Name,
                 Email = teacher.Email,
                 Title = teacher.AcademicTitle,
-                TotalHours = teacher.TotalHours,
-                RemainingHours = teacher.RemainingHours,
-                FallWork = fallAvailability,
-                SpringWork = springAvailability,
+                TotalHours = GetTotalHoursForCurrentYear(teacher),
+                RemainingHours = GetTotalHoursForCurrentYear(teacher) - teacher.AllocatedHours,
+                FallAvailability = fallAvailability,
+                SpringAvailability = springAvailability,
                 Courses = teacherCourses
             };
         }
+
+        public static List<TeacherViewModel> GenerateTeacherViewModelList(List<Teacher> teachersList, TermYear fallTerm, TermYear springTerm)
+        {
+            return teachersList.Select(teacher => new TeacherViewModel
+            {
+                Id = teacher.Id,
+                Name = teacher.Name,
+                Title = teacher.AcademicTitle,
+                FallAvailability = GetTermAvailability(teacher, fallTerm),
+                SpringAvailability = GetTermAvailability(teacher, springTerm),
+                TotalHours = GetTotalHoursForCurrentYear(teacher),
+                RemainingHours = GetTotalHoursForCurrentYear(teacher) - teacher.AllocatedHours,
+			    Status = CourseController.GetStatus()
+		    })
+		    .ToList();
+        }
+
+
 
     }
 }

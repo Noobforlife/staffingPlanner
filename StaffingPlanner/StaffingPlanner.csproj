@@ -46,6 +46,17 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PublishDatabaseSettings>
+      <Objects>
+        <ObjectGroup Name="StaffingPlanContext-Deployment" Order="1" Enabled="False">
+          <Destination Path="Data Source=localhost\SQLExpress%3b Database=master%3bInitial Catalog=Agile1%3bIntegrated Security=True%3b" />
+          <Object Type="DbFullSql" Enabled="False">
+            <PreSource Path="Data Source=%28LocalDb%29\mssqllocaldb%3bInitial Catalog=Agile1%3bIntegrated Security=True" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
+            <Source Path="obj\Release\AutoScripts\StaffingPlanContext-Deployment_SchemaOnly.sql" Transacted="True" />
+          </Object>
+        </ObjectGroup>
+      </Objects>
+    </PublishDatabaseSettings>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -161,14 +172,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AcademicProfile.cs" />
+    <Compile Include="Models\CourseEnums.cs" />
+    <Compile Include="Models\HourBudget.cs" />
     <Compile Include="Models\TeacherTermAvailability.cs" />
     <Compile Include="Models\TermYear.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
-    <Compile Include="Models\AcademicTitle.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\CourseOffering.cs" />
-    <Compile Include="Models\Credits.cs" />
-    <Compile Include="Models\Period.cs" />
     <Compile Include="Models\Teacher.cs" />
     <Compile Include="Models\TeacherCourseWorkload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -185,6 +196,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\app.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -192,7 +204,12 @@
     </Content>
     <Content Include="fonts\Montserrat-Bold.ttf" />
     <Content Include="fonts\Montserrat-Regular.ttf" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\dataTables.min.js" />
+    <Content Include="Scripts\dataTables.uikit.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -260,7 +277,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>62043</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:62043/</IISUrl>
+          <IISUrl>http://localhost:62055/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
