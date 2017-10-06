@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -21,6 +21,7 @@ namespace StaffingPlanner.Controllers
             var fallTerm = db.TermYears.Where(ty => ty.Term == Term.Fall && ty.Year == 2017).FirstOrDefault();
             var springTerm = db.TermYears.Where(ty => ty.Term == Term.Spring && ty.Year == 2018).FirstOrDefault();
 
+
             //Generate the viewmodel list
             var teachers = GenerateTeacherViewModelList(teachersdb, fallTerm, springTerm);            
 
@@ -37,6 +38,7 @@ namespace StaffingPlanner.Controllers
             //Get the terms, right now we simple use HT17 and VT18
             var fallTerm = db.TermYears.Where(ty => ty.Term == Term.Fall && ty.Year == 2017).FirstOrDefault();
             var springTerm = db.TermYears.Where(ty => ty.Term == Term.Spring && ty.Year == 2018).FirstOrDefault();
+            HourBudget teacherBugdet = teacher.GetHourBudget(fallTerm, springTerm);
 
             //Get availability for the teacher for the terms above
             int fallAvailability = GetTermAvailability(teacher, fallTerm);
@@ -47,7 +49,7 @@ namespace StaffingPlanner.Controllers
             var courseViewModels = CourseController.GenerateCourseViewModelList(courses);
 
             //Generate viewmodel
-            var teacherModel = GenerateTeacherViewModel(teacher, fallAvailability, springAvailability, courseViewModels);
+            var teacherModel = GenerateTeacherViewModel(teacher, teacherBugdet, courseViewModels);
 
             return View(teacherModel);
         }
@@ -66,47 +68,35 @@ namespace StaffingPlanner.Controllers
             return termAvailability;
         }
        
-        public static int GetTotalHoursForCurrentYear(Teacher teacher)
-        {
-            var db = StaffingPlanContext.GetContext();
-            TermYear ht17 = db.TermYears.Where(ty => ty.Term == Term.Fall && ty.Year == 2017).FirstOrDefault();
-            TermYear vt18 = db.TermYears.Where(ty => ty.Term == Term.Spring && ty.Year == 2018).FirstOrDefault();
-
-            //Return the sum
-            return teacher.GetHourBudget(ht17).TotalTermHours + teacher.GetHourBudget(vt18).TotalTermHours;
-        }
-
-
         //Methods to generate view models
 
-        public static TeacherViewModel GenerateTeacherViewModel(Teacher teacher, int fallAvailability, int springAvailability, List<SimpleCourseViewModel> teacherCourses)
+        public static DetailedTeacherViewModel GenerateTeacherViewModel(Teacher teacher, HourBudget teacherBudget, List<SimpleCourseViewModel> teacherCourses)
         {
-            return new TeacherViewModel
+            return new DetailedTeacherViewModel
             {
                 Id = teacher.Id,
                 Name = teacher.Name,
                 Email = teacher.Email,
                 Title = teacher.AcademicTitle,
-                TotalHours = GetTotalHoursForCurrentYear(teacher),
-                RemainingHours = GetTotalHoursForCurrentYear(teacher) - teacher.AllocatedHours,
-                FallAvailability = fallAvailability,
-                SpringAvailability = springAvailability,
-                Courses = teacherCourses
+                RemainingHours = teacherBudget.TotalHours - teacher.AllocatedHours,
+                HourBudget = teacherBudget,
+                Courses = teacherCourses,
             };
         }
 
-        public static List<TeacherViewModel> GenerateTeacherViewModelList(List<Teacher> teachersList, TermYear fallTerm, TermYear springTerm)
+        public static List<SimpleTeacherViewModel> GenerateTeacherViewModelList(List<Teacher> teachersList, TermYear fallTerm, TermYear springTerm)
         {
-            return teachersList.Select(teacher => new TeacherViewModel
+            //FIX!!! /Simon
+            return teachersList.Select(teacher => new SimpleTeacherViewModel
             {
                 Id = teacher.Id,
                 Name = teacher.Name,
                 Title = teacher.AcademicTitle,
-                FallAvailability = GetTermAvailability(teacher, fallTerm),
-                SpringAvailability = GetTermAvailability(teacher, springTerm),
-                TotalHours = GetTotalHoursForCurrentYear(teacher),
-                RemainingHours = GetTotalHoursForCurrentYear(teacher) - teacher.AllocatedHours,
-			    Status = CourseController.GetStatus()
+                FallTermAvailability = 100,
+                SpringTermAvailability = 100,
+                AllocatedHoursFall = 1,
+                AllocatedHoursSpring = 1,
+                TotalRemainingHours = 5
 		    })
 		    .ToList();
         }

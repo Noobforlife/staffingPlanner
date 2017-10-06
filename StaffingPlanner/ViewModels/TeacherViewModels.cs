@@ -5,19 +5,30 @@ using System.Collections.Generic;
 namespace StaffingPlanner.ViewModels
 {
 
-	public class TeacherViewModel
+	public class SimpleTeacherViewModel
 	{
 		public Guid Id { get; set; }
-		public string Name { get; set; }
-        public string Email { get; set; }
+        public string Name { get; set; }
 		public AcademicTitle Title { get; set; }
-		public int TotalHours { get; set; }
-		public int FallAvailability { get; set; }
-		public int SpringAvailability { get; set; }
-		public int RemainingHours { get; set; }
+        public int FallTermAvailability { get; set; }
+        public int SpringTermAvailability { get; set; }
+		public int AllocatedHoursFall { get; set; }
+        public int AllocatedHoursSpring { get; set; }
+        public int TotalRemainingHours { get; set; }
+        
+	}
+
+    public class DetailedTeacherViewModel
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public AcademicTitle Title { get; set; }
+        public HourBudget HourBudget { get; set; }
+        public int RemainingHours { get; set; }
         public string Status { get; set; }
         public List<SimpleCourseViewModel> Courses { get; set; }
-	}
+    }
 
     //Not currently used as the courses in teacher details use SimpleCourseViewModel
     //When we want to present different information from the course list we will need this

@@ -33,7 +33,7 @@ namespace StaffingPlanner.ViewModels
         public int NumStudents { get; set; }
         public Teacher CourseResponsible { get; set; }
         public float HST { get; set; }
-        public List<TeacherViewModel> Teachers { get; set; }
+        public List<SimpleTeacherViewModel> Teachers { get; set; }
         public string Status { get; set; }
     }
 }
