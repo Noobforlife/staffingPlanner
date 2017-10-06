@@ -13,6 +13,11 @@ namespace StaffingPlanner.Controllers
         // GET: /Dashboard/Index
         public ActionResult Index()
         {
+	        if (Globals.UserRole == Role.Unauthorized)
+	        {
+		        RedirectToAction("Index");
+	        }
+
             //Get all offerings for fall and spring
             //Todo: Get only current courses, not everything in database
 	        var db = StaffingPlanContext.GetContext();
@@ -26,7 +31,7 @@ namespace StaffingPlanner.Controllers
 				.ToList();
 
             //Bool indicating whethert the user is a director of studies
-	        bool directorOfStudies = Globals.UserRole == Role.DirectorOfStudies;
+	        var directorOfStudies = Globals.UserRole == Role.DirectorOfStudies;
 
             //Generate viewmodels for both fall and spring courses
 			var fallCourses = GenerateDashViewModelList(fallOfferings, directorOfStudies);
@@ -36,6 +41,7 @@ namespace StaffingPlanner.Controllers
 	        var model = new DashboardViewModel
 	        {
 				DoS = directorOfStudies,
+				TopPanel = GenerateTopPanelViewModel(),
 				FallCourses = fallCourses,
 				SpringCourses = springCourses
 	        };
@@ -81,5 +87,28 @@ namespace StaffingPlanner.Controllers
 
 	        return courseList;
         }
+
+		private static TopPanelViewModel GenerateTopPanelViewModel()
+		{
+			List<Teacher> teachers;
+			List<TeacherCourseWorkload> workloads;
+			using (var db = StaffingPlanContext.GetContext())
+			{
+				teachers = db.Teachers.ToList();
+				workloads = db.Workloads.ToList();
+			}
+
+			var model = new TopPanelViewModel();
+			foreach (var teacher in teachers)
+			{
+				
+			}
+			foreach (var workload in workloads)
+			{
+				
+			}
+
+			return model;
+		}
 	}
 }
