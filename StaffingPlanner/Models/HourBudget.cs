@@ -6,7 +6,7 @@ namespace StaffingPlanner.Models
 {
     public class HourBudget
     {
-        public Teacher teacher { get; set; }
+        public Teacher Teacher { get; set; }
         public TermYear TermYear { get; set; }
         public int TotalTermHours { get; }
         public int RemainingHours { get; }
@@ -17,18 +17,17 @@ namespace StaffingPlanner.Models
 
         public HourBudget(Teacher teacher, TermYear termYear)
         {
-            this.teacher = teacher;
-            this.TermYear = termYear;
+            Teacher = teacher;
+            TermYear = termYear;
 
             //Get the availability for the term
             var db = StaffingPlanContext.GetContext();
-            decimal termAvailability = db.TeacherTermAvailability.Where(tta =>
+            var availability = db.TeacherTermAvailability.Where(tta =>
                 tta.Teacher.Id == teacher.Id &&
                 tta.TermYear.Term == termYear.Term &&
                 tta.TermYear.Year == termYear.Year)
-                .AsEnumerable()
-                .Select(tta => tta.Availability)
-                .First();
+                .AsEnumerable();
+            var termAvailability = availability.Select(tta => tta.Availability).FirstOrDefault();
 
             //Multiply the total hours based on availability
             TotalTermHours = (int)(totalHoursPerYear/2 * (termAvailability/100));
@@ -48,9 +47,9 @@ namespace StaffingPlanner.Models
         {
             get
             {
-                var year = int.Parse("19" + teacher.PersonalNumber.Substring(0, 2));
-                var month = int.Parse(teacher.PersonalNumber.Substring(2, 2));
-                var day = int.Parse(teacher.PersonalNumber.Substring(4, 2));
+                var year = int.Parse("19" + Teacher.PersonalNumber.Substring(0, 2));
+                var month = int.Parse(Teacher.PersonalNumber.Substring(2, 2));
+                var day = int.Parse(Teacher.PersonalNumber.Substring(4, 2));
                 var birthdate = new DateTime(year, month, day);
                 var age = new DateTime().Subtract(birthdate);
 
