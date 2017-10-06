@@ -89,12 +89,25 @@ namespace StaffingPlanner.Controllers
 		    })
 		    .ToList();
         }
-
+        
         public static string GetStatus() {
             var credits = new List<string> {"warning","success","danger"};
             return credits[Rnd.Next(credits.Count)];
         }
 
+        public static string GetStatus(int TotalHours, int AllocatedHours)
+        {
+            float percentage = (AllocatedHours/(float)TotalHours)*100;
+            if (percentage >= 90)
+            {
+                return "success";
+            }
+            else if (percentage >= 55 && percentage < 90)
+            {
+                return "warning";
+            }
+            return "danger";
+        }
 
     }
 }

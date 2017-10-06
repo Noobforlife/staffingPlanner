@@ -21,7 +21,6 @@ namespace StaffingPlanner.Models
 		public virtual Teacher CourseResponsible { get; set; }
 		public float HST { get; set; }
 		public int NumStudents { get; set; }
-		public string Status => CourseController.GetStatus();
 		public int RemainingHours => TotalHours - AllocatedHours;
 		public int AllocatedHours
 		{
@@ -33,8 +32,9 @@ namespace StaffingPlanner.Models
 					.Sum(w => w.Workload);
 			}
 		}
+        public string Status => CourseController.GetStatus(TotalHours,AllocatedHours);
 
-		public override bool Equals(object obj)
+        public override bool Equals(object obj)
 		{
 			var ce = obj as CourseOffering;
 			return ce != null && ce.Id == Id;

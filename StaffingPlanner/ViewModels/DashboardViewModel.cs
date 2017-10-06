@@ -6,8 +6,20 @@ namespace StaffingPlanner.ViewModels
 {
 	public class DashboardViewModel {
 		public bool DoS { get; set; }
+		public TopPanelViewModel TopPanel { get; set; }
 		public List<DashboardCourseViewModel> FallCourses { get; set; }
 		public List<DashboardCourseViewModel> SpringCourses { get; set; }
+	}
+
+	public class TopPanelViewModel
+	{
+		public int TotalRemaining { get; set; }
+		public int ProfessorRemaining { get; set; }
+		public int LektorRemaining { get; set; }
+		public int AdjunktRemaining { get; set; }
+		public int DoktorandRemaining { get; set; }
+		public int AmanuensRemaining { get; set; }
+		public int AssistentRemaining { get; set; }
 	}
 
 	public class DashboardCourseViewModel
