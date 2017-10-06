@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using StaffingPlanner.DAL;
@@ -13,9 +12,10 @@ namespace StaffingPlanner.Controllers
         // GET: /Dashboard/Index
         public ActionResult Index()
         {
-	        if (Globals.UserRole == Role.Unauthorized)
+			// TODO: Get this shit working
+	        if (Globals.User == null)
 	        {
-		        RedirectToAction("Index");
+		        RedirectToAction("Login", "Account");
 	        }
 
             //Get all offerings for fall and spring
@@ -90,22 +90,65 @@ namespace StaffingPlanner.Controllers
 
 		private static TopPanelViewModel GenerateTopPanelViewModel()
 		{
-			List<Teacher> teachers;
-			List<TeacherCourseWorkload> workloads;
-			using (var db = StaffingPlanContext.GetContext())
-			{
-				teachers = db.Teachers.ToList();
-				workloads = db.Workloads.ToList();
-			}
+			var db = StaffingPlanContext.GetContext();
+			var teachers = db.Teachers.ToList();
+			var workloads = db.Workloads.ToList();
+			var fallTerm = db.TermYears.FirstOrDefault(ty => ty.Term == Term.Fall && ty.Year == 2017);
+			var springTerm = db.TermYears.FirstOrDefault(ty => ty.Term == Term.Spring && ty.Year == 2018);
 
 			var model = new TopPanelViewModel();
+			
 			foreach (var teacher in teachers)
 			{
-				
+				var teachingHours = teacher.GetHourBudget(fallTerm, springTerm).TeachingHours;
+				model.TotalRemaining += teachingHours;
+
+				switch (teacher.AcademicTitle)
+				{
+					case AcademicTitle.Professor:
+						model.ProfessorRemaining += teachingHours;
+						break;
+					case AcademicTitle.Lektor:
+						model.LektorRemaining += teachingHours;
+						break;
+					case AcademicTitle.Adjunkt:
+						model.AdjunktRemaining += teachingHours;
+						break;
+					case AcademicTitle.Amanuens:
+						model.AmanuensRemaining += teachingHours;
+						break;
+					case AcademicTitle.Doktorand:
+						model.DoktorandRemaining += teachingHours;
+						break;
+					case AcademicTitle.Assistent:
+						model.AssistentRemaining += teachingHours;
+						break;
+				}
 			}
 			foreach (var workload in workloads)
 			{
-				
+				model.TotalRemaining -= workload.Workload;
+				switch (workload.Teacher.AcademicTitle)
+				{
+					case AcademicTitle.Professor:
+						model.ProfessorRemaining -= workload.Workload;
+						break;
+					case AcademicTitle.Lektor:
+						model.LektorRemaining -= workload.Workload;
+						break;
+					case AcademicTitle.Adjunkt:
+						model.AdjunktRemaining -= workload.Workload;
+						break;
+					case AcademicTitle.Amanuens:
+						model.AmanuensRemaining -= workload.Workload;
+						break;
+					case AcademicTitle.Doktorand:
+						model.DoktorandRemaining -= workload.Workload;
+						break;
+					case AcademicTitle.Assistent:
+						model.AssistentRemaining -= workload.Workload;
+						break;
+				}
 			}
 
 			return model;

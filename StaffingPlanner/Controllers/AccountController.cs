@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using StaffingPlanner.ViewModels;
 using StaffingPlanner.DAL;
@@ -70,6 +71,7 @@ namespace StaffingPlanner.Controllers
         {
             Globals.UserRole = Role.Unauthorized;
             Globals.User = null;
+	        Globals.UserId = Guid.Empty;
             return RedirectToAction("Login", "Account");
         }
 

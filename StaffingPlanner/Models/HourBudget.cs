@@ -12,7 +12,7 @@ namespace StaffingPlanner.Models
         public int FallAvailability { get; set; }
         public int SpringAvailability { get; set; }
         public int TotalHours { get; }
-        public int RemainingHours { get; }
+        // public int RemainingHours { get; }
         public int TeachingHours { get; }
         public int ResearchHours { get; }
         public int AdminHours { get; }
@@ -28,22 +28,22 @@ namespace StaffingPlanner.Models
             FallAvailability = GetAvailability(fallTerm);
             SpringAvailability = GetAvailability(springTerm);
 
-            decimal yearAvailability = (FallAvailability +
+            var yearAvailability = (FallAvailability +
                                         (decimal)SpringAvailability) / 2m / 100m;
 
             //Multiply the total hours based on availability
-            TotalHours = (int)(totalHoursPerYear * yearAvailability);
+            TotalHours = (int)(TotalHoursPerYear * yearAvailability);
 
             //Get the shares (% for teaching, research etc) for this teachers academic title
             var result = db.AcademicProfiles.Where(ap => ap.Title == teacher.AcademicTitle)
-                .Select(ap => new { TeachingShare = ap.TeachingShare, ResearchShare = ap.ResearchShare, AdminShare = ap.AdminShare, OtherShare = ap.OtherShare });
+                .Select(ap => new { ap.TeachingShare, ap.ResearchShare, ap.AdminShare, ap.OtherShare });
             var shares = result.First();
 
             //Set the hours available for different tasks
-            TeachingHours = TotalHours * (int)shares.TeachingShare;
-            ResearchHours = TotalHours * (int)shares.ResearchShare;
-            AdminHours = TotalHours * (int)shares.AdminShare;
-            OtherHours = TotalHours * (int)shares.OtherShare;
+            TeachingHours = (int)(TotalHours * shares.TeachingShare);
+            ResearchHours = (int)(TotalHours * shares.ResearchShare);
+            AdminHours = (int)(TotalHours * shares.AdminShare);
+            OtherHours = (int)(TotalHours * shares.OtherShare);
         }
 
         private int GetAvailability(TermYear termYear)
@@ -59,7 +59,7 @@ namespace StaffingPlanner.Models
             return termAvailability;
         }
 
-        private int totalHoursPerYear
+        private int TotalHoursPerYear
         {
             get
             {

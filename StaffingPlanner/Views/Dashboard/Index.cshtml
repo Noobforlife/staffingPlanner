@@ -6,81 +6,42 @@
 
 @if (Model.DoS)
 {
+    // TODO: Add "show-all" button to show data for more types of employees
     <div class="row well background-white">
         <h4 style="margin-left: 15px;">Remaining hours</h4>
-        <div>
-            <div class="col-md-3 col-sm-3 col-xs-3 statictic-container">
-                <div class="statistic">
-                    <div class="capsule-side background-grey"></div>
-                    <div class="capsule-content">
-                        <div class="capsule-top">Total</div>
-                        <div class="capsule-bottom">@Model.TopPanel.TotalRemaining</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-3 col-xs-3 statictic-container">
-                <div class="statistic">
-                    <div class="capsule-side background-blue"></div>
-                    <div class="capsule-content">
-                        <div class="capsule-top">Completion</div>
-                        <div class="capsule-bottom">65%</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-3 col-xs-3 statictic-container">
-                <div class="statistic">
-                    <div class="capsule-side background-green"></div>
-                    <div class="capsule-content">
-                        <div class="capsule-top">Courses Done</div>
-                        <div class="capsule-bottom">30</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-3 col-xs-3 statictic-container">
-                <div class="statistic">
-                    <div class="capsule-side background-orange"></div>
-                    <div class="capsule-content">
-                        <div class="capsule-top">Incomplete</div>
-                        <div class="capsule-bottom">16</div>
-                    </div>
+        <div class="col-md-3 col-sm-3 col-xs-3 statictic-container">
+            <div class="statistic">
+                <div class="capsule-side background-grey"></div>
+                <div class="capsule-content">
+                    <div class="capsule-top">Total</div>
+                    <div class="capsule-bottom">@Model.TopPanel.TotalRemaining</div>
                 </div>
             </div>
         </div>
-        <div style="margin-bottom: 30px;">
-            <div class="col-md-3 col-sm-3 col-xs-3 statictic-container">
-                <div class="statistic">
-                    <div class="capsule-side background-grey"></div>
-                    <div class="capsule-content">
-                        <div class="capsule-top">Total Courses</div>
-                        <div class="capsule-bottom">46</div>
-                    </div>
+        <div class="col-md-3 col-sm-3 col-xs-3 statictic-container">
+            <div class="statistic">
+                <div class="capsule-side background-blue"></div>
+                <div class="capsule-content">
+                    <div class="capsule-top">Professors</div>
+                    <div class="capsule-bottom">@Model.TopPanel.ProfessorRemaining</div>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-3 col-xs-3 statictic-container">
-                <div class="statistic">
-                    <div class="capsule-side background-blue"></div>
-                    <div class="capsule-content">
-                        <div class="capsule-top">Completion</div>
-                        <div class="capsule-bottom">65%</div>
-                    </div>
+        </div>
+        <div class="col-md-3 col-sm-3 col-xs-3 statictic-container">
+            <div class="statistic">
+                <div class="capsule-side background-green"></div>
+                <div class="capsule-content">
+                    <div class="capsule-top">Senior lecturers</div>
+                    <div class="capsule-bottom">@Model.TopPanel.LektorRemaining</div>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-3 col-xs-3 statictic-container">
-                <div class="statistic">
-                    <div class="capsule-side background-green"></div>
-                    <div class="capsule-content">
-                        <div class="capsule-top">Courses Done</div>
-                        <div class="capsule-bottom">30</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-3 col-xs-3 statictic-container">
-                <div class="statistic">
-                    <div class="capsule-side background-orange"></div>
-                    <div class="capsule-content">
-                        <div class="capsule-top">Incomplete</div>
-                        <div class="capsule-bottom">16</div>
-                    </div>
+        </div>
+        <div class="col-md-3 col-sm-3 col-xs-3 statictic-container">
+            <div class="statistic">
+                <div class="capsule-side background-orange"></div>
+                <div class="capsule-content">
+                    <div class="capsule-top">Junior lecturers</div>
+                    <div class="capsule-bottom">@Model.TopPanel.AdjunktRemaining</div>
                 </div>
             </div>
         </div>
