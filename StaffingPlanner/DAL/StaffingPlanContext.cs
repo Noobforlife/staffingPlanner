@@ -5,11 +5,9 @@ namespace StaffingPlanner.DAL
 {
     public class StaffingPlanContext : DbContext
     {
-        private static readonly StaffingPlanContext Context = new StaffingPlanContext();
-
         public static StaffingPlanContext GetContext()
         {
-            return Context;
+            return new StaffingPlanContext();
         }
 
         private StaffingPlanContext() : base("StaffingPlanContext")
