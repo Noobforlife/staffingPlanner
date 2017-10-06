@@ -13,17 +13,14 @@ namespace StaffingPlanner.Controllers
         // GET: /Teacher/Teachers
         public ActionResult Teachers()
         {
-            //Get all teachers
 	        var db = StaffingPlanContext.GetContext();
-			var teachersdb = db.Teachers.Where(t => t.Id != null).ToList();
 
             //Get terms (HT17 and VT18)
-            var fallTerm = db.TermYears.Where(ty => ty.Term == Term.Fall && ty.Year == 2017).FirstOrDefault();
-            var springTerm = db.TermYears.Where(ty => ty.Term == Term.Spring && ty.Year == 2018).FirstOrDefault();
-
+            var fallTerm = db.TermYears.FirstOrDefault(ty => ty.Term == Term.Fall && ty.Year == 2017);
+            var springTerm = db.TermYears.FirstOrDefault(ty => ty.Term == Term.Spring && ty.Year == 2018);
 
             //Generate the viewmodel list
-            var teachers = GenerateTeacherViewModelList(teachersdb, fallTerm, springTerm);            
+            var teachers = GenerateTeacherViewModelList(db.Teachers.ToList(), fallTerm, springTerm);            
 
 			return View(teachers);
         }
@@ -87,18 +84,31 @@ namespace StaffingPlanner.Controllers
         public static List<SimpleTeacherViewModel> GenerateTeacherViewModelList(List<Teacher> teachersList, TermYear fallTerm, TermYear springTerm)
         {
             //FIX!!! /Simon
-            return teachersList.Select(teacher => new SimpleTeacherViewModel
-            {
-                Id = teacher.Id,
-                Name = teacher.Name,
-                Title = teacher.AcademicTitle,
-                FallTermAvailability = 100,
-                SpringTermAvailability = 100,
-                AllocatedHoursFall = 1,
-                AllocatedHoursSpring = 1,
-                TotalRemainingHours = 5
-		    })
-		    .ToList();
+	        var db = StaffingPlanContext.GetContext();
+	        var output = new List<SimpleTeacherViewModel>();
+
+	        foreach (var teacher in teachersList)
+	        {
+				var allocatedFall = db.Workloads.Where(w => w.Teacher.Id == teacher.Id && w.Course.TermYear.Term == fallTerm.Term && w.Course.TermYear.Year == fallTerm.Year).ToList().Sum(w => w.Workload);
+		        var allocatedSpring = db.Workloads.Where(w => w.Teacher.Id == teacher.Id && w.Course.TermYear.Term == springTerm.Term && w.Course.TermYear.Year == springTerm.Year).ToList().Sum(w => w.Workload); 
+		        var teacherHourBudget = teacher.GetHourBudget(fallTerm, springTerm);
+		        var totalRemaining = teacherHourBudget.TeachingHours - allocatedFall - allocatedSpring;
+
+				output.Add(new SimpleTeacherViewModel
+				{
+					Id = teacher.Id,
+					Name = teacher.Name,
+					Title = teacher.AcademicTitle,
+					FallTermAvailability = teacherHourBudget.FallAvailability,
+					SpringTermAvailability = teacherHourBudget.SpringAvailability,
+					AllocatedHoursFall = allocatedFall,
+					AllocatedHoursSpring = allocatedSpring,
+					TotalRemainingHours = totalRemaining
+				});
+
+	        }
+
+	        return output;
         }
 
 

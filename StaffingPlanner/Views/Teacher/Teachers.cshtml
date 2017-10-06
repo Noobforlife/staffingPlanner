@@ -25,10 +25,10 @@
                 <tr>
                     <td>@Html.ActionLink(teacher.Name, "TeacherDetails", "Teacher", new { id = teacher.Id }, null)</td>
                     <td>@teacher.Title</td>
-                    <td>@teacher.FallTermAvailability | @teacher.SpringTermAvailability</td>
-                    <td>@teacher.AllocatedHoursFall</td>
-                    <td>@teacher.AllocatedHoursSpring</td>
-                    <td>@teacher.TotalRemainingHours</td>
+                    <td class="text-center">@teacher.FallTermAvailability | @teacher.SpringTermAvailability</td>
+                    <td class="text-center">@teacher.AllocatedHoursFall</td>
+                    <td class="text-center">@teacher.AllocatedHoursSpring</td>
+                    <td class="text-center">@teacher.TotalRemainingHours</td>
                 </tr>
             }
         </tbody>
