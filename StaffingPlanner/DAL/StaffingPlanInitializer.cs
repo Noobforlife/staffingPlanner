@@ -393,7 +393,63 @@ namespace StaffingPlanner.DAL
                 var workload = DataGen.CreateWorkload(teachers[DataGen.Rnd.Next(0, teachers.Count)], c);
                 context.Workloads.Add(workload);
             }            
-            context.SaveChanges();                  
+            context.SaveChanges();
+
+
+            //Populate the database with academic profiles
+            var profiles = new List<AcademicProfile>
+            {
+                new AcademicProfile
+                {
+                    Title = AcademicTitle.Professor,
+                    TeachingShare = 0.5m,
+                    ResearchShare = 0.4m,
+                    AdminShare = 0.1m,
+                    OtherShare = 0.0m
+                },
+
+                new AcademicProfile
+                {
+                    Title = AcademicTitle.Lektor,
+                    TeachingShare = 0.7m,
+                    ResearchShare = 0.2m,
+                    AdminShare = 0.1m,
+                    OtherShare = 0.0m
+                },
+
+                new AcademicProfile
+                {
+                    Title = AcademicTitle.Adjunkt,
+                    TeachingShare = 0.8m,
+                    ResearchShare = 0.0m,
+                    AdminShare = 0.1m,
+                    OtherShare = 0.1m
+                },
+
+                new AcademicProfile
+                {
+                    Title = AcademicTitle.Doktorand,
+                    TeachingShare = 0.2m,
+                    ResearchShare = 0.8m,
+                    AdminShare = 0.0m,
+                    OtherShare = 0.0m
+                },
+
+                new AcademicProfile
+                {
+                    Title = AcademicTitle.Amanuens,
+                    TeachingShare = 1.0m,
+                    ResearchShare = 0.0m,
+                    AdminShare = 0.0m,
+                    OtherShare = 0.0m
+                }
+            };
+
+            foreach (var profile in profiles)
+            {
+                context.AcademicProfiles.Add(profile);
+            }
+            context.SaveChanges();
         }
     }
 }

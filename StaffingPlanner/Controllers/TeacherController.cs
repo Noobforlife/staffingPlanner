@@ -16,7 +16,10 @@ namespace StaffingPlanner.Controllers
 	        var db = StaffingPlanContext.GetContext();
 			// Can there be teachers where the Id is null?
 			var teachersdb = db.Teachers.Where(t => t.Id != null).ToList();
-            var teachers = GenerateTeacherViewModelList(teachersdb);            
+
+            var fallTerm = db.TermYears.Where(ty => ty.Term == Term.Fall && ty.Year == 2017).FirstOrDefault();
+            var springTerm = db.TermYears.Where(ty => ty.Term == Term.Spring && ty.Year == 2018).FirstOrDefault();
+            var teachers = GenerateTeacherViewModelList(teachersdb, fallTerm, springTerm);            
 
 			return View(teachers);
         }
@@ -25,38 +28,38 @@ namespace StaffingPlanner.Controllers
         public ActionResult TeacherDetails(Guid id)
         {
             var db = StaffingPlanContext.GetContext();
+            //Get the teacher with the same Id as the parameter id
             var teacher = db.Teachers.First(t => t.Id == id);
 
-            var terms = db.TermYears.ToList();
-            var fallTerm = terms[0].Term;
-	        var fallYear = terms[0].Year; 
-            var springTerm = terms[1].Term;
-	        var springYear = terms[1].Year;
+            //Gets the terms, right now we simple use HT17 and VT18
+            var fallTerm = db.TermYears.Where(ty => ty.Term == Term.Fall && ty.Year == 2017).FirstOrDefault();
+            var springTerm = db.TermYears.Where(ty => ty.Term == Term.Spring && ty.Year == 2018).FirstOrDefault();
 
-            var fallWorkload = db.TeacherTermAvailability
-				.Where(tta =>
-					tta.Teacher.Id == teacher.Id && 
-					tta.TermYear.Term == fallTerm && 
-					tta.TermYear.Year == fallYear)
-				.AsEnumerable()
-				.Select(tta => tta.Availability)
-				.First();
+            //Get availability for the teacher for the terms above
+            var teacherAvailability = db.TeacherTermAvailability.Where(tta => tta.Teacher.Id == teacher.Id);
+            int fallAvailability = GetTermAvailability(teacher, fallTerm);
+            int springAvailability = GetTermAvailability(teacher, springTerm);
 
-            var springWorkload = db.TeacherTermAvailability
-				.Where(tta => 
-					tta.Teacher.Id == teacher.Id &&
-					tta.TermYear.Term == springTerm && 
-					tta.TermYear.Year == springYear)
-				.AsEnumerable()
-				.Select(tta => tta.Availability)
-				.First();
-
+            //Gets all courses for which the teacher has assigned hours
             var courses = db.Workloads.Where(t => t.Teacher.Id == teacher.Id).Select(l => l.Course).ToList();
             var courseViewModels = CourseController.GenerateCourseViewModelList(courses);
 
-            var teacherModel = GenerateTeacherViewModel(teacher, fallWorkload, springWorkload, courseViewModels);
+            //Generate viewmodel
+            var teacherModel = GenerateTeacherViewModel(teacher, fallAvailability, springAvailability, courseViewModels);
 
+            //Return viewmodel to the view
             return View(teacherModel);
+        }
+
+        public static int GetTermAvailability(Teacher teacher, TermYear termYear)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var teacherAvailability = db.TeacherTermAvailability.Where(tta => tta.Teacher.Id == teacher.Id);
+            int termAvailability = teacherAvailability.
+                Where(tta => tta.TermYear.Year == termYear.Year && tta.TermYear.Term == termYear.Term)
+                .Select(tta => tta.Availability)
+                .FirstOrDefault();
+            return termAvailability;
         }
 
 		public static bool WorkloadHasTeacher(Teacher teacher, TeacherCourseWorkload workload)
@@ -64,18 +67,30 @@ namespace StaffingPlanner.Controllers
 			return teacher.Equals(workload.Teacher);
 		}
 
-        //Methods to generate view models
-        public static List<TeacherViewModel> GenerateTeacherViewModelList(List<Teacher> teachersList)
+        
+        public static int GetTotalHoursForCurrentYear(Teacher teacher)
         {
-	        return teachersList.Select(t => new TeacherViewModel
-		    {
-			    Id = t.Id,
-			    Name = t.Name,
-			    Title = t.AcademicTitle,
-			    FallWork = 100,
-			    SpringWork = 100,
-			    TotalHours = t.TotalHours,
-			    RemainingHours = t.RemainingHours,
+            var db = StaffingPlanContext.GetContext();
+            TermYear ht17 = db.TermYears.Where(ty => ty.Term == Term.Fall && ty.Year == 2017).FirstOrDefault();
+            TermYear vt18 = db.TermYears.Where(ty => ty.Term == Term.Spring && ty.Year == 2018).FirstOrDefault();
+
+            //Return the sum
+            return teacher.GetHourBudget(ht17).TotalTermHours + teacher.GetHourBudget(vt18).TotalTermHours;
+        }
+
+
+        //Methods to generate view models
+        public static List<TeacherViewModel> GenerateTeacherViewModelList(List<Teacher> teachersList, TermYear fallTerm, TermYear springTerm)
+        {
+            return teachersList.Select(teacher => new TeacherViewModel
+            {
+                Id = teacher.Id,
+                Name = teacher.Name,
+                Title = teacher.AcademicTitle,
+                FallAvailability = GetTermAvailability(teacher, fallTerm),
+                SpringAvailability = GetTermAvailability(teacher, springTerm),
+                TotalHours = GetTotalHoursForCurrentYear(teacher),
+                RemainingHours = GetTotalHoursForCurrentYear(teacher) - teacher.AllocatedHours,
 			    Status = CourseController.GetStatus()
 		    })
 		    .ToList();
@@ -89,13 +104,14 @@ namespace StaffingPlanner.Controllers
                 Name = teacher.Name,
                 Email = teacher.Email,
                 Title = teacher.AcademicTitle,
-                TotalHours = teacher.TotalHours,
-                RemainingHours = teacher.RemainingHours,
-                FallWork = fallAvailability,
-                SpringWork = springAvailability,
+                TotalHours = GetTotalHoursForCurrentYear(teacher),
+                RemainingHours = GetTotalHoursForCurrentYear(teacher) - teacher.AllocatedHours,
+                FallAvailability = fallAvailability,
+                SpringAvailability = springAvailability,
                 Courses = teacherCourses
             };
         }
+
 
     }
 }
