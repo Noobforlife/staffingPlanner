@@ -12,8 +12,8 @@ namespace StaffingPlanner.ViewModels
         public string Email { get; set; }
 		public AcademicTitle Title { get; set; }
 		public int TotalHours { get; set; }
-		public int FallWork { get; set; }
-		public int SpringWork { get; set; }
+		public int FallAvailability { get; set; }
+		public int SpringAvailability { get; set; }
 		public int RemainingHours { get; set; }
         public string Status { get; set; }
         public List<SimpleCourseViewModel> Courses { get; set; }

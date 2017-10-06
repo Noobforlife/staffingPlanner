@@ -29,12 +29,19 @@ namespace StaffingPlanner.Controllers
         // GET: /Course/CourseDetails/{id}
         public ActionResult CourseDetails(Guid id)
         {
+            //Gets the matching course offering and all teacher who have assigned hours to the offering
             var db = StaffingPlanContext.GetContext();
             var offering = db.CourseOfferings.Where(c => c.Id == id).ToList().First();
             var teachers = db.Workloads.Where(w => w.Course.Course.Code == offering.Course.Code).Select(x => x.Teacher).ToList();
 
-            var vm = GenerateCourseDetailViewModel(offering, teachers);
+            //Terms for current year
+            var fallTerm = db.TermYears.Where(ty => ty.Term == Term.Fall && ty.Year == 2017).FirstOrDefault();
+            var springTerm = db.TermYears.Where(ty => ty.Term == Term.Spring && ty.Year == 2018).FirstOrDefault();
 
+            //Generate viewmodel
+            var vm = GenerateCourseDetailViewModel(offering, teachers, fallTerm, springTerm);
+
+            //Return viewmodel to view
             return View(vm);
         }
 
@@ -44,9 +51,9 @@ namespace StaffingPlanner.Controllers
 
 
         //Methods to generate view models
-        private static DetailedCourseViewModel GenerateCourseDetailViewModel(CourseOffering offering, List<Teacher> teachers)
+        private static DetailedCourseViewModel GenerateCourseDetailViewModel(CourseOffering offering, List<Teacher> teachers, TermYear fallTerm, TermYear springTerm)
         {
-            var teacherList = TeacherController.GenerateTeacherViewModelList(teachers);
+            var teacherList = TeacherController.GenerateTeacherViewModelList(teachers, fallTerm, springTerm);
             var vm = new DetailedCourseViewModel
             {
                 Code = offering.Course.Code,
