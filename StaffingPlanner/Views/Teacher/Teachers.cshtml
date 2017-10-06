@@ -1,5 +1,4 @@
 ﻿@using StaffingPlanner.ViewModels
-@using System.Collections
 @model List<SimpleTeacherViewModel>
 
 @{
@@ -20,8 +19,9 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (SimpleTeacherViewModel teacher in Model)
+            @foreach (var teacher in Model)
             {
+                // TODO: Give allocation cells a background color depending on allocation status (the status is in the viewmodel)
                 <tr>
                     <td>@Html.ActionLink(teacher.Name, "TeacherDetails", "Teacher", new { id = teacher.Id }, null)</td>
                     <td>@teacher.Title</td>
@@ -29,8 +29,7 @@
                     <td class="text-center">@teacher.AllocatedHoursFall</td>
                     <td class="text-center">@teacher.AllocatedHoursSpring</td>
                     <td class="text-center">@teacher.TotalRemainingHours</td>
-                </tr>
-            }
+                </tr>}
         </tbody>
     </table>
 </div>

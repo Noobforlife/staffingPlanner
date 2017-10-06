@@ -13,7 +13,9 @@ namespace StaffingPlanner.ViewModels
         public int FallTermAvailability { get; set; }
         public int SpringTermAvailability { get; set; }
 		public int AllocatedHoursFall { get; set; }
+		public string StatusFall { get; set; }
         public int AllocatedHoursSpring { get; set; }
+		public string StatusSpring { get; set; }
         public int TotalRemainingHours { get; set; }
         
 	}

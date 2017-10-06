@@ -93,6 +93,7 @@ namespace StaffingPlanner.Controllers
 		        var allocatedSpring = db.Workloads.Where(w => w.Teacher.Id == teacher.Id && w.Course.TermYear.Term == springTerm.Term && w.Course.TermYear.Year == springTerm.Year).ToList().Sum(w => w.Workload); 
 		        var teacherHourBudget = teacher.GetHourBudget(fallTerm, springTerm);
 		        var totalRemaining = teacherHourBudget.TeachingHours - allocatedFall - allocatedSpring;
+		        var allocationWarnings = GenerateAllocationWarning(teacherHourBudget, allocatedFall, allocatedSpring);
 
 				output.Add(new SimpleTeacherViewModel
 				{
@@ -102,7 +103,9 @@ namespace StaffingPlanner.Controllers
 					FallTermAvailability = teacherHourBudget.FallAvailability,
 					SpringTermAvailability = teacherHourBudget.SpringAvailability,
 					AllocatedHoursFall = allocatedFall,
+					StatusFall = allocationWarnings.Item1,
 					AllocatedHoursSpring = allocatedSpring,
+					StatusSpring = allocationWarnings.Item2,
 					TotalRemainingHours = totalRemaining
 				});
 
@@ -111,7 +114,36 @@ namespace StaffingPlanner.Controllers
 	        return output;
         }
 
+		// Feel free to replace "warning" with "status" if it makes more sense for its intended use
+		private static Tuple<string, string> GenerateAllocationWarning(HourBudget budget, int allocatedFall, int allocatedSpring)
+		{
+			var fallWarning = "";
+			var springWarning = "";
 
+			var fallAllocationShouldBe = budget.TeachingHours / 2 * budget.FallAvailability;
+			var springAllocationShouldBe = budget.TeachingHours / 2 * budget.SpringAvailability;
 
+			// Set the fall warning attribute according to allocation status
+			if (allocatedFall >= fallAllocationShouldBe * 1.5)
+			{
+				fallWarning = "";
+			}
+			else if (allocatedFall >= fallAllocationShouldBe * 1.1)
+			{
+				fallWarning = "";
+			}
+
+			// Set the spring warning attribute according to allocation status
+			if (allocatedSpring >= springAllocationShouldBe * 1.5)
+			{
+				springWarning = "";
+			}
+			else if (allocatedSpring >= springAllocationShouldBe * 1.1)
+			{
+				springWarning = "";
+			}
+
+			return new Tuple<string, string>(fallWarning, springWarning);
+		}
     }
 }
