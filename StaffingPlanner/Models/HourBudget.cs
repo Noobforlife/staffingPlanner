@@ -37,6 +37,7 @@ namespace StaffingPlanner.Models
                 .Select(ap => new { TeachingShare = ap.TeachingShare, ResearchShare = ap.ResearchShare, AdminShare = ap.AdminShare, OtherShare = ap.OtherShare });
             var shares = result.First();
 
+            //Set the hours available for different tasks
             TeachingHours = TotalTermHours * (int)shares.TeachingShare;
             ResearchHours = TotalTermHours * (int)shares.ResearchShare;
             AdminHours = TotalTermHours * (int)shares.AdminShare;

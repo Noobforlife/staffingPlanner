@@ -11,16 +11,17 @@ namespace StaffingPlanner.Controllers
 	public class CourseController : Controller
 	{
         private static readonly Random Rnd = new Random();
+
         //Methods handling returning of View
-        #region View methods
 
         // GET: /Course/Courses
         public ActionResult Courses()
         {
+            //Get all course offerings
             var db = StaffingPlanContext.GetContext();
-			// Are there any course offerings where the Course is null?
             var offerings = db.CourseOfferings.Where(c => c.Course != null).ToList();
 
+            //Generate course
             var courses = GenerateCourseViewModelList(offerings);
 
             return View(courses);
@@ -29,7 +30,7 @@ namespace StaffingPlanner.Controllers
         // GET: /Course/CourseDetails/{id}
         public ActionResult CourseDetails(Guid id)
         {
-            //Gets the matching course offering and all teacher who have assigned hours to the offering
+            //Get the matching course offering and all teacher who have assigned hours to the offering
             var db = StaffingPlanContext.GetContext();
             var offering = db.CourseOfferings.Where(c => c.Id == id).ToList().First();
             var teachers = db.Workloads.Where(w => w.Course.Course.Code == offering.Course.Code).Select(x => x.Teacher).ToList();
@@ -41,16 +42,13 @@ namespace StaffingPlanner.Controllers
             //Generate viewmodel
             var vm = GenerateCourseDetailViewModel(offering, teachers, fallTerm, springTerm);
 
-            //Return viewmodel to view
             return View(vm);
         }
 
-        #endregion
-
-        #region Static methods
-
 
         //Methods to generate view models
+        
+        //Generates a detailed course view model
         private static DetailedCourseViewModel GenerateCourseDetailViewModel(CourseOffering offering, List<Teacher> teachers, TermYear fallTerm, TermYear springTerm)
         {
             var teacherList = TeacherController.GenerateTeacherViewModelList(teachers, fallTerm, springTerm);
@@ -72,6 +70,7 @@ namespace StaffingPlanner.Controllers
             return vm;
         }
 
+        //Generates a list of simple course view models
         public static List<SimpleCourseViewModel> GenerateCourseViewModelList(List<CourseOffering> offerings)
         {
             return offerings.Select(o => new SimpleCourseViewModel
@@ -96,7 +95,6 @@ namespace StaffingPlanner.Controllers
             return credits[Rnd.Next(credits.Count)];
         }
 
-        #endregion
 
     }
 }

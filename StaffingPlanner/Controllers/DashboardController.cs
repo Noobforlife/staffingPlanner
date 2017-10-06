@@ -13,24 +13,29 @@ namespace StaffingPlanner.Controllers
         // GET: /Dashboard/Index
         public ActionResult Index()
         {
+            //Get all offerings for fall and spring
+            //Todo: Get only current courses, not everything in database
 	        var db = StaffingPlanContext.GetContext();
 	        var fallOfferings = db.CourseOfferings
-				.Where(c => c.TermYear.Term == Term.Fall)
-				.OrderBy(c => c.Periods)
+				.Where(co => co.TermYear.Term == Term.Fall)
+				.OrderBy(co => co.Periods)
 				.ToList();
 	        var springOfferings = db.CourseOfferings
-				.Where(c => c.TermYear.Term == Term.Spring)
-				.OrderBy(c => c.Periods)
+				.Where(co => co.TermYear.Term == Term.Spring)
+				.OrderBy(co => co.Periods)
 				.ToList();
 
-	        var dos = Globals.UserRole == Role.DirectorOfStudies;
+            //Bool indicating whethert the user is a director of studies
+	        bool directorOfStudies = Globals.UserRole == Role.DirectorOfStudies;
 
-			var fallCourses = GenerateDashViewModelList(fallOfferings, dos);
-            var springCourses = GenerateDashViewModelList(springOfferings, dos);
+            //Generate viewmodels for both fall and spring courses
+			var fallCourses = GenerateDashViewModelList(fallOfferings, directorOfStudies);
+            var springCourses = GenerateDashViewModelList(springOfferings, directorOfStudies);
 
+            //Create model that contains all necessary information
 	        var model = new DashboardViewModel
 	        {
-				DoS = dos,
+				DoS = directorOfStudies,
 				FallCourses = fallCourses,
 				SpringCourses = springCourses
 	        };
@@ -41,6 +46,7 @@ namespace StaffingPlanner.Controllers
         //Method to generate list of course offerings for the dashboard view
         private static List<DashboardCourseViewModel> GenerateDashViewModelList(IEnumerable<CourseOffering> courses, bool dos)
         {
+            //If the user is director of studies they can see all courses
 	        if (dos)
 	        {
 		        return courses.Select(c => new DashboardCourseViewModel
@@ -55,6 +61,7 @@ namespace StaffingPlanner.Controllers
 			        .ToList();
 	        }
 
+            //If the user is a teacher, get the courses that they are assigned to
 	        var db = StaffingPlanContext.GetContext();
 	        var teacher = db.Teachers.First(t => t.Id == Globals.UserId);
 	        var courseIds = db.Workloads.Where(w => w.Teacher.Id.Equals(teacher.Id)).Select(w => w.Course.Id);

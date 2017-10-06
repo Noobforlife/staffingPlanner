@@ -19,15 +19,16 @@ namespace StaffingPlanner.ViewModels
         public List<SimpleCourseViewModel> Courses { get; set; }
 	}
 
-    public class TeacherCourseViewModel
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Code { get; set; }
-        public double Credits { get; set; }
-        public TermYear TermYear { get; set; }
-        public Period Period { get; set; }
-        public int AllocatedHours { get; set; }
-        public int RemainingHours { get; set; }
-    }
+    //Not currently used as the courses in teacher details use SimpleCourseViewModel
+    //When we want to present different information from the course list we will need this
+    //
+    //public class TeacherCourseViewModel
+    //{
+    //    public string CourseName { get; set; }
+    //    public string CourseCode { get; set; }
+    //    public string CourseInfo { get; set; }
+    //    public int CourseAllocatedHours { get; set; }
+    //    public int CourseRemainingHours { get; set; }
+    //    public int TeacherAssignedHours { get; set; }
+    //}
 }
