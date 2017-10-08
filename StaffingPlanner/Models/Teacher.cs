@@ -33,6 +33,18 @@ namespace StaffingPlanner.Models
             return hours;
         }
 
+        public int GetAllocatedHoursForOffering(CourseOffering offering)
+        {
+            var db = StaffingPlanContext.GetContext();
+
+            var hours = db.Workloads
+                .Where(w => w.Teacher.Id.Equals(Id) && w.Course.Id == offering.Id)
+                .ToList()
+                .Sum(w => w.Workload);
+
+            return hours;
+        }
+
         public override bool Equals(object obj)
         {
             var t = obj as Teacher;
