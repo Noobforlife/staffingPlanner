@@ -60,7 +60,7 @@ namespace StaffingPlanner.DAL
                 Id = Guid.NewGuid(),
                 Course = course,
                 Teacher = teacher,
-                Workload = Rnd.Next(50, 300)
+                Workload = Rnd.Next(300, 800)
             };
         }
 

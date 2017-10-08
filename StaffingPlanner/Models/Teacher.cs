@@ -16,25 +16,33 @@ namespace StaffingPlanner.Models
 		public bool DirectorOfStudies { get; set; }
 		public AcademicTitle AcademicTitle { get; set; }
 
-        public HourBudget GetHourBudget(TermYear termYear)
+        public HourBudget GetHourBudget(TermYear fallTerm, TermYear springTerm)
         {
-            return new HourBudget(this, termYear);
+            return new HourBudget(this, fallTerm, springTerm);
         }
 
-        //Gets all allocated hours in history regardless of term or year, fix?
-        public int AllocatedHours
+        public int GetAllocatedHoursForTerm(TermYear term)
         {
-            get
-            {
-                var db = StaffingPlanContext.GetContext();
+            var db = StaffingPlanContext.GetContext();
 
-                var hours = db.Workloads
-                    .Where(w => w.Teacher.Id.Equals(Id))
-                    .ToList()
-                    .Sum(w => w.Workload);
+            var hours = db.Workloads
+                .Where(w => w.Teacher.Id.Equals(Id) && w.Course.TermYear.Term == term.Term && w.Course.TermYear.Year == term.Year)
+                .ToList()
+                .Sum(w => w.Workload);
 
-                return hours;
-            }
+            return hours;
+        }
+
+        public int GetAllocatedHoursForOffering(CourseOffering offering)
+        {
+            var db = StaffingPlanContext.GetContext();
+
+            var hours = db.Workloads
+                .Where(w => w.Teacher.Id.Equals(Id) && w.Course.Id == offering.Id)
+                .ToList()
+                .Sum(w => w.Workload);
+
+            return hours;
         }
 
         public override bool Equals(object obj)

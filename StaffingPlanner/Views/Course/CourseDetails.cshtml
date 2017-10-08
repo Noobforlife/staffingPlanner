@@ -87,15 +87,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (TeacherViewModel teacher in Model.Teachers)
+                            @foreach (var teacher in Model.Teachers)
                             {
                                 <tr>
-                                    <td> @Html.ActionLink(teacher.Name, "TeacherDetails", "Teacher", new { id = teacher.Id }, null)</td>
+                                    <td>@Html.ActionLink(teacher.Name, "TeacherDetails", "Teacher", new { id = teacher.Id }, null)</td>
                                     <td>@teacher.Title</td>
-                                    <td>@teacher.TotalHours</td>
-                                    <td>@teacher.FallAvailability</td>
-                                    <td>@teacher.SpringAvailability</td>
-                                    <td>@teacher.RemainingHours<span class="label label-success pull-right">status </span></td>
+                                    <td>500</td>
+                                    <td>@teacher.FallTermAvailability</td>
+                                    <td>@teacher.SpringTermAvailability</td>
+                                    <td>@teacher.TotalRemainingHours<span class="label label-success pull-right">status </span></td>
                                 </tr>
                             }                                                    
                         </tbody>
