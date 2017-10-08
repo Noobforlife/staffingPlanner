@@ -77,6 +77,8 @@ namespace StaffingPlanner.Controllers
                 CourseResponsible = offering.CourseResponsible,
                 HST = offering.HST,
                 NumStudents = offering.NumStudents,
+                RegisteredStudents = offering.RegisteredStudents,
+                PassedStudents = offering.PassedStudents,
                 TotalHours = offering.TotalHours,
                 AllocatedHours = offering.AllocatedHours,
                 RemainingHours = offering.RemainingHours,
