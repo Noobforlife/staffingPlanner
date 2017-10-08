@@ -89,6 +89,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Code</th>
+                                <th>Responsible</th>
                                 <th>Term</th>
                                 <th>Period</th>
                                 <th>Total budget</th>
@@ -102,6 +103,7 @@
                                 <tr>
                                     <td><a href="#" data-toggle="modal" data-target="#course-modal">@Html.ActionLink(course.CourseName, "CourseDetails", "Course", new { id = course.Id }, null)</a></td>
                                     <td>@course.Code</td>
+                                    <td>@Html.ActionLink(course.CourseResponsible.Name, "TeacherDetails", "Teacher", new { id = course.CourseResponsible.Id }, null)</td>
                                     <td>@course.TermYear.ToString()</td>
                                     <td>@course.Period</td>
                                     <td>@course.TotalHours</td>

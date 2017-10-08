@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using StaffingPlanner.Models;
+using StaffingPlanner.DAL;
 using System.Collections.Generic;
 
 namespace StaffingPlanner.ViewModels
@@ -31,6 +33,8 @@ namespace StaffingPlanner.ViewModels
         public string Status { get; set; }
         public List<TeacherCourseViewModel> CurrentCourseOfferings { get; set; }
         public List<TeacherCourseViewModel> PastCourseOfferings { get; set; }
+        public TeacherPeriodWorkload FallPeriodWorkload { get; set; }
+        public TeacherPeriodWorkload SpringPeriodWorkload { get; set; }
     }
 
     public class TeacherCourseViewModel
@@ -45,5 +49,37 @@ namespace StaffingPlanner.ViewModels
         public int AllocatedHours { get; set; }
         public int RemainingHours { get; set; }
         public int TeacherAssignedHours { get; set; }
+    }
+
+    public class TeacherPeriodWorkload
+    {
+        public int Period1Workload { get; set; }
+        public int Period2Workload { get; set; }
+        public int Period3Workload { get; set; }
+        public int Period4Workload { get; set; }
+
+        public TeacherPeriodWorkload(Teacher teacher, TermYear term)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var teacherWorkloads = db.Workloads.Where(wl => wl.Teacher.Id == teacher.Id);
+
+            int allTermWorkload = teacherWorkloads.Where(wl => wl.Course.Periods == Period.AllPeriods)
+                .Select(wl => wl.Workload).DefaultIfEmpty(0).Sum(wl => wl);
+            int firstHalfWorkload = teacherWorkloads.Where(wl => wl.Course.Periods == Period.P1P2)
+                .Select(wl => wl.Workload).DefaultIfEmpty(0).Sum(wl => wl);
+            int secondHalfWorkload = teacherWorkloads.Where(wl => wl.Course.Periods == Period.P3P4)
+                .Select(wl => wl.Workload).DefaultIfEmpty(0).Sum(wl => wl);
+
+            Period1Workload = teacherWorkloads.Where(wl => wl.Course.Periods == Period.P1)
+                .Select(wl => wl.Workload).DefaultIfEmpty(0).Sum(wl => wl) + firstHalfWorkload / 2 + allTermWorkload / 4;
+            Period1Workload = teacherWorkloads.Where(wl => wl.Course.Periods == Period.P2)
+                .Select(wl => wl.Workload).DefaultIfEmpty(0).Sum(wl => wl) + firstHalfWorkload / 2 + allTermWorkload / 4;
+            Period1Workload = teacherWorkloads.Where(wl => wl.Course.Periods == Period.P3)
+                .Select(wl => wl.Workload).DefaultIfEmpty(0).Sum(wl => wl) + secondHalfWorkload / 2 + allTermWorkload / 4;
+            Period1Workload = teacherWorkloads.Where(wl => wl.Course.Periods == Period.P4)
+                .Select(wl => wl.Workload).DefaultIfEmpty(0).Sum(wl => wl) + secondHalfWorkload / 2 + allTermWorkload / 4;
+        }
+
+
     }
 }

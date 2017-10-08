@@ -100,7 +100,9 @@ namespace StaffingPlanner.Controllers
                 RemainingHours = teacherBudget.TotalHours - teacher.GetAllocatedHoursForTerm(teacherBudget.FallTerm) - teacher.GetAllocatedHoursForTerm(teacherBudget.SpringTerm),
                 HourBudget = teacherBudget,
                 CurrentCourseOfferings = currentCourseOfferings,
-                PastCourseOfferings = pastCourseOfferings
+                PastCourseOfferings = pastCourseOfferings,
+                FallPeriodWorkload = new TeacherPeriodWorkload(teacher, teacherBudget.FallTerm),
+                SpringPeriodWorkload = new TeacherPeriodWorkload(teacher, teacherBudget.SpringTerm)
             };
         }
 
@@ -129,14 +131,13 @@ namespace StaffingPlanner.Controllers
 
         public static List<SimpleTeacherViewModel> GenerateTeacherViewModelList(List<Teacher> teachersList, TermYear fallTerm, TermYear springTerm)
         {
-            //FIX!!! /Simon
 	        var db = StaffingPlanContext.GetContext();
 	        var output = new List<SimpleTeacherViewModel>();
 
 	        foreach (var teacher in teachersList)
 	        {
-				var allocatedFall = db.Workloads.Where(w => w.Teacher.Id == teacher.Id && w.Course.TermYear.Term == fallTerm.Term && w.Course.TermYear.Year == fallTerm.Year).ToList().Sum(w => w.Workload);
-		        var allocatedSpring = db.Workloads.Where(w => w.Teacher.Id == teacher.Id && w.Course.TermYear.Term == springTerm.Term && w.Course.TermYear.Year == springTerm.Year).ToList().Sum(w => w.Workload); 
+                var allocatedFall = teacher.GetAllocatedHoursForTerm(fallTerm);
+                var allocatedSpring = teacher.GetAllocatedHoursForTerm(springTerm);
 		        var teacherHourBudget = teacher.GetHourBudget(fallTerm, springTerm);
 		        var totalRemaining = teacherHourBudget.TeachingHours - allocatedFall - allocatedSpring;
 		        var allocationWarnings = GenerateAllocationWarning(teacherHourBudget, allocatedFall, allocatedSpring);
