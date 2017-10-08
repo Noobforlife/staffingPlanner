@@ -29,7 +29,6 @@ namespace StaffingPlanner.Controllers
         }
 
         // GET: /Teacher/TeacherDetails/{id}
-        [HandleError]
         public ActionResult TeacherDetails(Guid id)
         {
             if (Globals.User == null)
@@ -59,6 +58,14 @@ namespace StaffingPlanner.Controllers
             return View(teacherModel);
         }
 
+        [ChildActionOnly]
+        public PartialViewResult CourseHistory(Guid teacherid)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var courses = db.Workloads.Where(x => x.Teacher.Id == teacherid && x.Course.TermYear.Year < DateTime.Now.Year).ToList();
+            
+            return PartialView("~/Views/Teacher/_TeacherCourseHistory.cshtml", courses);
+        }
 
         //Helper methods
 

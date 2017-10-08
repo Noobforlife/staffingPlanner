@@ -1,0 +1,39 @@
+﻿@using StaffingPlanner.Models;
+@model List<TeacherCourseWorkload> 
+<div class="card card-block">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name </th>
+                <th>Term </th>
+                <th>Year</th>
+                <th>Period</th>
+                <th>Hours Taught</th>
+            </tr>
+        </thead>
+        <tbody>
+    @{        
+            if (Model.Count == 0)
+            {
+                <tr>
+                    <td colspan="5" class="text-center">No Teaching History available</td>
+                </tr>                
+            }
+            else
+            {
+                foreach (var workload in Model)
+                {
+                    <tr>
+                        <td>@workload.Course.Course.Name</td>
+                        <td>@workload.Course.TermYear.Term</td>
+                        <td>@workload.Course.TermYear.Year</td>
+                        <td>@workload.Course.Periods</td>
+                        <td>@workload.Workload<span class="label label-success pull-right">Completed</span></td>
+                    </tr>
+                }
+            }
+
+    }
+        </tbody>
+    </table>
+</div>

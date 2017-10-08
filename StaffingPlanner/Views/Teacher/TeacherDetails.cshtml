@@ -115,5 +115,17 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-12">
+            <button class="btn btn-primary pull-left" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                View teaching History
+            </button>
+        </div>
+        <!--Course history table-->
+        <div class="row">
+            </p>
+            <div class="collapse" id="collapseExample">
+               @Html.Action("CourseHistory","Teacher", new { teacherid = Model.Id })
+            </div>            
+        </div>
     </div>   
 </div>

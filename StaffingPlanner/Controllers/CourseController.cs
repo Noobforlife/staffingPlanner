@@ -53,10 +53,17 @@ namespace StaffingPlanner.Controllers
             return View(vm);
         }
 
+        [ChildActionOnly]
+        public PartialViewResult CourseHistory(Guid courseid)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var courses = db.CourseOfferings.Where(x => x.Id == courseid && x.TermYear.Year < DateTime.Now.Year).ToList();
+
+            return PartialView("~/Views/Course/_CourseHistory.cshtml", courses);
+        }
 
         //Methods to generate view models
-        
-        //Generates a detailed course view model
+                
         private static DetailedCourseViewModel GenerateCourseDetailViewModel(CourseOffering offering, List<Teacher> teachers, TermYear fallTerm, TermYear springTerm)
         {
             var teacherList = TeacherController.GenerateTeacherViewModelList(teachers, fallTerm, springTerm);
@@ -77,8 +84,7 @@ namespace StaffingPlanner.Controllers
             };
             return vm;
         }
-
-        //Generates a list of simple course view models
+        
         public static List<SimpleCourseViewModel> GenerateCourseViewModelList(List<CourseOffering> offerings)
         {
             return offerings.Select(o => new SimpleCourseViewModel
@@ -98,6 +104,7 @@ namespace StaffingPlanner.Controllers
 		    .ToList();
         }
         
+        //helpers
         public static string GetStatus() {
             var credits = new List<string> {"warning","success","danger"};
             return credits[Rnd.Next(credits.Count)];
