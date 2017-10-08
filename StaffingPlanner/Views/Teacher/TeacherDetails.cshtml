@@ -60,21 +60,21 @@
                     </div>
                 </div>
 
-                <h5 class="details-h">Hours Allocation</h5>
+                <h5 class="details-h">Yearly hours by task</h5>
                 <div class="time-allocation-div">
                     <div class="time-allocation detail-label">
-                        <p class="detail-label">Teaching:</p><span class="badge pull-right">200hrs</span>
+                        <p class="detail-label">Teaching:</p><span class="badge pull-right">@Model.HourBudget.TeachingHours</span>
                     </div>
                     <div class="time-allocation detail-label">
-                        <p class="detail-label">Research:</p><span class="badge pull-right">200hrs</span>
+                        <p class="detail-label">Research:</p><span class="badge pull-right">@Model.HourBudget.ResearchHours</span>
                     </div>
                 </div>
                 <div class="time-allocation-div">
                     <div class="time-allocation detail-label">
-                        <p class="detail-label">Other: </p><span class="badge pull-right">200hrs</span>
+                        <p class="detail-label">Other: </p><span class="badge pull-right">@Model.HourBudget.OtherHours</span>
                     </div>
                     <div class="time-allocation detail-label">
-                        <p class="detail-label">Admin:</p><span class="badge pull-right">200hrs</span>
+                        <p class="detail-label">Admin:</p><span class="badge pull-right">@Model.HourBudget.AdminHours</span>
                     </div>
                 </div>
             </div>
