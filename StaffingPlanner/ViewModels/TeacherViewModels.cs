@@ -33,9 +33,6 @@ namespace StaffingPlanner.ViewModels
         public List<TeacherCourseViewModel> PastCourseOfferings { get; set; }
     }
 
-    //Not currently used as the courses in teacher details use SimpleCourseViewModel
-    //When we want to present different information from the course list we will need this
-    //
     public class TeacherCourseViewModel
     {
         public Guid Id { get; set; }

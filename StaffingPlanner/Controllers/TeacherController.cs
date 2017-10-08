@@ -58,7 +58,7 @@ namespace StaffingPlanner.Controllers
             var currentCoursesViewModel = GenerateTeacherCourseList(teacher, currentOfferings);
             var pastCoursesViewModel = GenerateTeacherCourseList(teacher, pastOfferings);
 
-            //Generate viewmodel
+            //Generate final viewmodel
             var teacherModel = GenerateTeacherViewModel(teacher, teacherBugdet, currentCoursesViewModel, pastCoursesViewModel);
 
             return View(teacherModel);
