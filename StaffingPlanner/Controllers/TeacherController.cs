@@ -48,12 +48,17 @@ namespace StaffingPlanner.Controllers
             int fallAvailability = GetTermAvailability(teacher, fallTerm);
             int springAvailability = GetTermAvailability(teacher, springTerm);
 
-            //Get all courses for which the teacher has assigned hours
-            var courses = db.Workloads.Where(t => t.Teacher.Id == teacher.Id).Select(l => l.Course).ToList();
-            var courseViewModels = CourseController.GenerateCourseViewModelList(courses);
+            //Get all offerings for this teacher and divide them into past and current
+            List<CourseOffering> allOfferings = db.Workloads.Where(t => t.Teacher.Id == teacher.Id).Select(l => l.Course).ToList();
+            var pastOfferings = allOfferings.Where(co => co.State == CourseState.Completed).ToList();
+            var currentOfferings = allOfferings.Except(pastOfferings).ToList();
 
-            //Generate viewmodel
-            var teacherModel = GenerateTeacherViewModel(teacher, teacherBugdet, courseViewModels);
+            //Generate viewmodel for both sets of offerings
+            var currentCoursesViewModel = GenerateTeacherCourseList(teacher, currentOfferings);
+            var pastCoursesViewModel = GenerateTeacherCourseList(teacher, pastOfferings);
+
+            //Generate final viewmodel
+            var teacherModel = GenerateTeacherViewModel(teacher, teacherBugdet, currentCoursesViewModel, pastCoursesViewModel);
 
             return View(teacherModel);
         }
@@ -82,7 +87,9 @@ namespace StaffingPlanner.Controllers
        
         //Methods to generate view models
 
-        public static DetailedTeacherViewModel GenerateTeacherViewModel(Teacher teacher, HourBudget teacherBudget, List<SimpleCourseViewModel> teacherCourses)
+        public static DetailedTeacherViewModel GenerateTeacherViewModel(Teacher teacher, HourBudget teacherBudget,
+            List<TeacherCourseViewModel> currentCourseOfferings,
+            List<TeacherCourseViewModel> pastCourseOfferings)
         {
             return new DetailedTeacherViewModel
             {
@@ -90,10 +97,34 @@ namespace StaffingPlanner.Controllers
                 Name = teacher.Name,
                 Email = teacher.Email,
                 Title = teacher.AcademicTitle,
-                RemainingHours = teacherBudget.TotalHours - teacher.AllocatedHours,
+                RemainingHours = teacherBudget.TotalHours - teacher.GetAllocatedHoursForTerm(teacherBudget.FallTerm) - teacher.GetAllocatedHoursForTerm(teacherBudget.SpringTerm),
                 HourBudget = teacherBudget,
-                Courses = teacherCourses,
+                CurrentCourseOfferings = currentCourseOfferings,
+                PastCourseOfferings = pastCourseOfferings
             };
+        }
+
+        public static List<TeacherCourseViewModel> GenerateTeacherCourseList(Teacher teacher, List<CourseOffering> offerings)
+        {
+            var db = StaffingPlanContext.GetContext();
+
+            return offerings.OrderBy(o => o.TermYear.Year)
+                .ThenBy(o => o.TermYear.Term)
+                .ThenBy(o => o.Periods)
+                .Select(o => new TeacherCourseViewModel
+            {
+                Id = o.Id,
+                Code = o.Course.Code,
+                CourseName = o.Course.TruncatedName,
+                TermYear = o.TermYear,
+                Period = EnumToString.PeriodToString(o.Periods),
+                CourseResponsible = o.CourseResponsible,
+                TotalHours = o.TotalHours,
+                AllocatedHours = o.AllocatedHours,
+                RemainingHours = o.RemainingHours,
+                TeacherAssignedHours = teacher.GetAllocatedHoursForOffering(o)
+            })
+            .ToList();
         }
 
         public static List<SimpleTeacherViewModel> GenerateTeacherViewModelList(List<Teacher> teachersList, TermYear fallTerm, TermYear springTerm)
