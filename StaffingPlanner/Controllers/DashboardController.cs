@@ -12,15 +12,14 @@ namespace StaffingPlanner.Controllers
         // GET: /Dashboard/Index
         public ActionResult Index()
         {
-			// TODO: Get this shit working
-	        if (Globals.User == null)
-	        {
-		        RedirectToAction("Login", "Account");
-	        }
-
+            if (Globals.User == null)
+            {
+                RedirectToAction("Login", "Account");
+            }
+            // TODO: Get this shit working
             //Get all offerings for fall and spring
             //Todo: Get only current courses, not everything in database
-	        var db = StaffingPlanContext.GetContext();
+            var db = StaffingPlanContext.GetContext();
 	        var fallOfferings = db.CourseOfferings
 				.Where(co => co.TermYear.Term == Term.Fall)
 				.OrderBy(co => co.Periods)
