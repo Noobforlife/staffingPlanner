@@ -83,7 +83,7 @@ namespace StaffingPlanner.Controllers
                 Name = teacher.Name,
                 Email = teacher.Email,
                 Title = teacher.AcademicTitle,
-                RemainingHours = teacherBudget.TotalHours - teacher.AllocatedHours,
+                RemainingHours = teacherBudget.TotalHours - teacher.GetAllocatedHoursForTerm(teacherBudget.FallTerm) - teacher.GetAllocatedHoursForTerm(teacherBudget.SpringTerm),
                 HourBudget = teacherBudget,
                 Courses = teacherCourses,
             };
