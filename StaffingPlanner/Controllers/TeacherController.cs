@@ -13,6 +13,9 @@ namespace StaffingPlanner.Controllers
         // GET: /Teacher/Teachers
         public ActionResult Teachers()
         {
+            if (Globals.User == null) {
+                return RedirectToAction("Login", "Account");
+            }
 	        var db = StaffingPlanContext.GetContext();
 
             //Get terms (HT17 and VT18)
@@ -26,8 +29,13 @@ namespace StaffingPlanner.Controllers
         }
 
         // GET: /Teacher/TeacherDetails/{id}
+        [HandleError]
         public ActionResult TeacherDetails(Guid id)
         {
+            if (Globals.User == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             var db = StaffingPlanContext.GetContext();
             //Get the teacher with the same Id as the parameter id
             var teacher = db.Teachers.First(t => t.Id == id);

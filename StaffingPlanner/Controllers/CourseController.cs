@@ -17,6 +17,10 @@ namespace StaffingPlanner.Controllers
         // GET: /Course/Courses
         public ActionResult Courses()
         {
+            if (Globals.User == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             //Get all course offerings
             var db = StaffingPlanContext.GetContext();
             var offerings = db.CourseOfferings.Where(c => c.Course != null).ToList();
@@ -30,6 +34,10 @@ namespace StaffingPlanner.Controllers
         // GET: /Course/CourseDetails/{id}
         public ActionResult CourseDetails(Guid id)
         {
+            if (Globals.User == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             //Get the matching course offering and all teacher who have assigned hours to the offering
             var db = StaffingPlanContext.GetContext();
             var offering = db.CourseOfferings.Where(c => c.Id == id).ToList().First();
