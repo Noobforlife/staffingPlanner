@@ -21,7 +21,9 @@ namespace StaffingPlanner.Models
 		public virtual Teacher CourseResponsible { get; set; }
 		public float HST { get; set; }
 		public int NumStudents { get; set; }
-		public int RemainingHours => TotalHours - AllocatedHours;
+        public int RegisteredStudents { get; set; }
+        public int PassedStudents { get; set; }
+        public int RemainingHours => TotalHours - AllocatedHours;
 		public int AllocatedHours
 		{
 			get

@@ -20,23 +20,23 @@
                         <tbody>
                             <tr>
                                 <th>Name:</th>
-                                <td>@Model.Name</td>
+                                <td colspan="2">@Model.Name</td>
                             </tr>
                             <tr>
                                 <th>Code:</th>
-                                <td>@Model.Code</td>
+                                <td colspan="2">@Model.Code</td>
                             </tr>
                             <tr>
                                 <th>Credits:</th>
-                                <td>@Model.Credits</td>
+                                <td colspan="2">@Model.Credits</td>
                             </tr>
                             <tr>
-                                <th>No. of students:</th>
-                                <td>@Model.NumStudents</td>
+                                <th colspan="3" class="text-center">Students</th>
                             </tr>
                             <tr>
-                                <th>Info:</th>
-                                <td>This is a new course</td>
+                                <td class="text-center">Budgeted<br>@Model.NumStudents</td>
+                                <td class="text-center">Registered<br>@Model.RegisteredStudents</td>
+                                <td class="text-center">Passed<br>@Model.PassedStudents</td>
                             </tr>
                         </tbody>
                     </table>
