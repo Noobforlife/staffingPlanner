@@ -28,10 +28,10 @@ namespace StaffingPlanner.Controllers
 			return View(teachers);
         }
 
-		public ActionResult TeacherDetails(Guid id, Guid offeringId, int hours)
+		public ActionResult AlterTeacherAllocation(Guid teacherId, Guid offeringId, int hours)
 		{
 			var db = StaffingPlanContext.GetContext();
-			var teacher = db.Teachers.FirstOrDefault(t => t.Id == id);
+			var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
 			var offering = db.CourseOfferings.FirstOrDefault(co => co.Id == offeringId);
 			var existingWorkload = db.Workloads
 				.FirstOrDefault(w => w.Teacher.Id == teacher.Id && w.Course.Id == offering.Id);
@@ -51,7 +51,7 @@ namespace StaffingPlanner.Controllers
 				existingWorkload.Workload = hours;
 			}
 
-			return TeacherDetails(id);
+			return TeacherDetails(teacherId);
 		}
 
         // GET: /Teacher/TeacherDetails/{id}
