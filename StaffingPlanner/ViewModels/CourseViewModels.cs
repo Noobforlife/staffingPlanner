@@ -38,4 +38,15 @@ namespace StaffingPlanner.ViewModels
         public List<SimpleTeacherViewModel> Teachers { get; set; }
         public string Status { get; set; }
     }
+
+    public class CourseTeacherViewModel
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public AcademicTitle Title { get; set; }
+        public int AllocatedFall { get; set; }
+        public int AllocatedSpring { get; set; }
+        public int RemainingTeachingHours { get; set; }
+        public int AllocatedCourse { get; set; }
+    }
 }
