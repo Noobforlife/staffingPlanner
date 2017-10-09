@@ -16,9 +16,9 @@ namespace StaffingPlanner.Models
 		public bool DirectorOfStudies { get; set; }
 		public AcademicTitle AcademicTitle { get; set; }
 
-        public HourBudget GetHourBudget(TermYear fallTerm, TermYear springTerm)
+        public HourBudget GetHourBudget(TermYear term)
         {
-            return new HourBudget(this, fallTerm, springTerm);
+            return new HourBudget(this, term);
         }
 
         public int GetAllocatedHoursForTerm(TermYear term)

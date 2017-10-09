@@ -36,11 +36,11 @@
                             </tr>
                             <tr>
                                 <th>Autumn :</th>
-                                <td>@Model.HourBudget.FallAvailability%</td>
+                                <td>@Model.FallBudget.TermAvailability%</td>
                             </tr>
                             <tr>
                                 <th>Spring :</th>
-                                <td>@Model.HourBudget.SpringAvailability%</td>
+                                <td>@Model.SpringBudget.TermAvailability%</td>
                             </tr>
                         </tbody>
                     </table>
@@ -50,33 +50,33 @@
                 <div class="hours">
                     <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
                         <p>total </p>
-                        <p class="numbers blue-border">@Model.HourBudget.TotalHours</p>
+                        <p class="numbers blue-border">@(Model.FallBudget.TotalTermHours + Model.SpringBudget.TotalTermHours)</p>
                     </div>
                     <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
                         <p>allocated</p>
-                        <p class="numbers green-border">@((Model.HourBudget.TotalHours - Model.RemainingHours).ToString())</p>
+                        <p class="numbers green-border">-1</p>
                     </div>
                     <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
                         <p>balance </p>
-                        <p class="numbers orange-border">@Model.RemainingHours</p>
+                        <p class="numbers orange-border">-1</p>
                     </div>
                 </div>
 
                 <h5 class="details-h">Yearly hours by task</h5>
                 <div class="time-allocation-div">
                     <div class="time-allocation detail-label">
-                        <p class="detail-label">Teaching:</p><span class="badge pull-right">@Model.HourBudget.TeachingHours</span>
+                        <p class="detail-label">Teaching:</p><span class="badge pull-right">@(Model.FallBudget.TeachingHours + Model.SpringBudget.TeachingHours)</span>
                     </div>
                     <div class="time-allocation detail-label">
-                        <p class="detail-label">Research:</p><span class="badge pull-right">@Model.HourBudget.ResearchHours</span>
+                        <p class="detail-label">Research:</p><span class="badge pull-right">@(Model.FallBudget.ResearchHours + Model.SpringBudget.ResearchHours)</span>
                     </div>
                 </div>
                 <div class="time-allocation-div">
                     <div class="time-allocation detail-label">
-                        <p class="detail-label">Other: </p><span class="badge pull-right">@Model.HourBudget.OtherHours</span>
+                        <p class="detail-label">Other: </p><span class="badge pull-right">@(Model.FallBudget.OtherHours + Model.SpringBudget.OtherHours)</span>
                     </div>
                     <div class="time-allocation detail-label">
-                        <p class="detail-label">Admin:</p><span class="badge pull-right">@Model.HourBudget.AdminHours</span>
+                        <p class="detail-label">Admin:</p><span class="badge pull-right">@(Model.FallBudget.AdminHours + Model.SpringBudget.AdminHours)</span>
                     </div>
                 </div>
             </div>

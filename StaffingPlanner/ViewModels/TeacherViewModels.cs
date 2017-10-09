@@ -28,14 +28,18 @@ namespace StaffingPlanner.ViewModels
         public string Name { get; set; }
         public string Email { get; set; }
         public AcademicTitle Title { get; set; }
-        public HourBudget HourBudget { get; set; }
-        public int RemainingHours { get; set; }
-        public string Status { get; set; }
-        public List<TeacherCourseViewModel> CurrentCourseOfferings { get; set; }
-        public List<TeacherCourseViewModel> PastCourseOfferings { get; set; }
+
+        //The total hours available for different tasks
+        public HourBudget FallBudget { get; set; }
+        public HourBudget SpringBudget { get; set; }
+
+        //The hours actually allocated on differnt periods
         public TeacherPeriodWorkload FallPeriodWorkload { get; set; }
         public TeacherPeriodWorkload SpringPeriodWorkload { get; set; }
-		public List<TeacherCourseViewModel> OtherCourseOfferings { get; set; }
+
+        public List<TeacherCourseViewModel> CurrentCourseOfferings { get; set; }
+        public List<TeacherCourseViewModel> OtherCourseOfferings { get; set; }
+
     }
 
     public class TeacherCourseViewModel
