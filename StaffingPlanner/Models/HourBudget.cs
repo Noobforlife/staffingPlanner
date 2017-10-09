@@ -7,59 +7,55 @@ namespace StaffingPlanner.Models
     public class HourBudget
     {
         public Teacher Teacher { get; set; }
-        public TermYear FallTerm { get; set; }
-        public TermYear SpringTerm { get; set; }
-        public int FallAvailability { get; set; }
-        public int SpringAvailability { get; set; }
-        public int TotalHours { get; }
-        // public int RemainingHours { get; }
-        public int TeachingHours { get; }
-        public int ResearchHours { get; }
-        public int AdminHours { get; }
-        public int OtherHours { get; }
+        public TermYear TermYear { get; set; }
+        public int TermAvailability { get; set; }
+        public int TotalTermHours { get; set; }
+        public int TeachingHours { get; set; }
+        public int ResearchHours { get; set; }
+        public int AdminHours { get; set; }
+        public int OtherHours { get; set; }
 
-        public HourBudget(Teacher teacher, TermYear fallTerm, TermYear springTerm)
+        public int TeachingShare { get; set; }
+        public int ResearchShare { get; set; }
+        public int AdminShare { get; set; }
+        public int OtherShare { get; set; }
+
+        public HourBudget(Teacher teacher, TermYear termYear)
         {
-            var db = StaffingPlanContext.GetContext();
             Teacher = teacher;
-            FallTerm = fallTerm;
-            SpringTerm = springTerm;
+            TermYear = termYear;
 
-            FallAvailability = GetAvailability(fallTerm);
-            SpringAvailability = GetAvailability(springTerm);
-
-            var yearAvailability = (FallAvailability +
-                                        (decimal)SpringAvailability) / 2m / 100m;
-
-            //Multiply the total hours based on availability
-            TotalHours = (int)(TotalHoursPerYear * yearAvailability);
-
-            //Get the shares (% for teaching, research etc) for this teachers academic title
-            var result = db.AcademicProfiles.Where(ap => ap.Title == teacher.AcademicTitle)
-                .Select(ap => new { ap.TeachingShare, ap.ResearchShare, ap.AdminShare, ap.OtherShare });
-            var shares = result.First();
-
-            //Set the hours available for different tasks
-            TeachingHours = (int)(TotalHours * shares.TeachingShare);
-            ResearchHours = (int)(TotalHours * shares.ResearchShare);
-            AdminHours = (int)(TotalHours * shares.AdminShare);
-            OtherHours = (int)(TotalHours * shares.OtherShare);
-        }
-
-        private int GetAvailability(TermYear termYear)
-        {
             //Get the availability for the term
             var db = StaffingPlanContext.GetContext();
             var availability = db.TeacherTermAvailability.Where(tta =>
-                tta.Teacher.Id == Teacher.Id &&
+                tta.Teacher.Id == teacher.Id &&
                 tta.TermYear.Term == termYear.Term &&
                 tta.TermYear.Year == termYear.Year)
                 .AsEnumerable();
-            var termAvailability = availability.Select(tta => tta.Availability).FirstOrDefault();
-            return termAvailability;
+            TermAvailability = availability.Select(tta => tta.Availability).FirstOrDefault();
+
+            //Multiply the total term hours (half of yearly) by term availability
+            TotalTermHours = (int)(BaseYearlyHours / 2m * (TermAvailability / 100m));
+
+            //Get the shares (% for teaching, research etc) for this teachers academic title
+            var result = db.AcademicProfiles.Where(ap => ap.Title == teacher.AcademicTitle)
+                .Select(ap => new { TeachingShare = ap.TeachingShare, ResearchShare = ap.ResearchShare, AdminShare = ap.AdminShare, OtherShare = ap.OtherShare });
+            var shares = result.First();
+
+            //Set the shares
+            TeachingShare = (int)(shares.TeachingShare * 100);
+            ResearchShare = (int)(shares.ResearchShare * 100);
+            AdminShare = (int)(shares.AdminShare * 100);
+            OtherShare = (int)(shares.OtherShare * 100);
+
+            //Set the hours available for different tasks
+            TeachingHours = (int)(TotalTermHours * shares.TeachingShare);
+            ResearchHours = (int)(TotalTermHours * shares.ResearchShare);
+            AdminHours = (int)(TotalTermHours * shares.AdminShare);
+            OtherHours = (int)(TotalTermHours * shares.OtherShare);
         }
 
-        private int TotalHoursPerYear
+        public int BaseYearlyHours
         {
             get
             {

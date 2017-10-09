@@ -348,8 +348,19 @@ namespace StaffingPlanner.DAL
             //Populating database with term employment
             foreach (var t in teachers)
             {
-                var tteFall = DataGen.GetTeacherTermAvailability(t, HT17, 100);
-                var tteSpring = DataGen.GetTeacherTermAvailability(t, VT18, 100);
+                TeacherTermAvailability tteFall;
+                TeacherTermAvailability tteSpring;
+
+                if (t.AcademicTitle == AcademicTitle.Amanuens)
+                {
+                    tteFall = DataGen.GetTeacherTermAvailability(t, HT17, 25);
+                    tteSpring = DataGen.GetTeacherTermAvailability(t, VT18, 25);
+                }
+                else
+                {
+                    tteFall = DataGen.GetTeacherTermAvailability(t, HT17, 100);
+                    tteSpring = DataGen.GetTeacherTermAvailability(t, VT18, 100);
+                }
                 context.TeacherTermAvailability.Add(tteFall);
                 context.TeacherTermAvailability.Add(tteSpring);
             }
@@ -390,8 +401,10 @@ namespace StaffingPlanner.DAL
             //Populating database with workloads
             foreach (var c in context.CourseOfferings)
             {
-                var workload = DataGen.CreateWorkload(teachers[DataGen.Rnd.Next(0, teachers.Count)], c);
-                context.Workloads.Add(workload);
+                var workload1 = DataGen.CreateWorkload(teachers[DataGen.Rnd.Next(0, teachers.Count)], c);
+                var workload2 = DataGen.CreateWorkload(teachers[DataGen.Rnd.Next(0, teachers.Count)], c);
+                context.Workloads.Add(workload1);
+                context.Workloads.Add(workload2);
             }            
             context.SaveChanges();
 

@@ -38,7 +38,7 @@ namespace StaffingPlanner.DAL
                 TermYear = termyear,
                 Credits = Credits[Rnd.Next(0, Credits.Count)],
                 Periods = RandomPeriod(),
-                TotalHours= Rnd.Next(1000, 4000),
+                TotalHours = Rnd.Next(300, 800),
                 CourseResponsible = courseResponsible,
                 State = state,
                 NumStudents = Rnd.Next(10, 80),
@@ -57,12 +57,27 @@ namespace StaffingPlanner.DAL
                
         public static TeacherCourseWorkload CreateWorkload(Teacher teacher, CourseOffering course)
         {
+            int min = 50;
+            int max = 300;
+            if (teacher.AcademicTitle == AcademicTitle.Amanuens || teacher.AcademicTitle == AcademicTitle.Doktorand)
+            {
+                max = 120;
+            }
+            else if (teacher.AcademicTitle == AcademicTitle.Professor)
+            {
+                max = 200;
+            }
+            else if (teacher.AcademicTitle == AcademicTitle.Lektor || teacher.AcademicTitle == AcademicTitle.Adjunkt)
+            {
+                min = 150;
+            }
+
             return new TeacherCourseWorkload
             {
                 Id = Guid.NewGuid(),
                 Course = course,
                 Teacher = teacher,
-                Workload = Rnd.Next(300, 800)
+                Workload = Rnd.Next(min, max)
             };
         }
 
