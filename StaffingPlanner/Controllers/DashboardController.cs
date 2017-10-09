@@ -14,7 +14,7 @@ namespace StaffingPlanner.Controllers
         {
             if (Globals.User == null)
             {
-                RedirectToAction("Login", "Account");
+                return RedirectToAction("Login", "Account");
             }
             // TODO: Get this shit working
             //Get all offerings for fall and spring
