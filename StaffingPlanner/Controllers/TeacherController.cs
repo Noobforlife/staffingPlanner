@@ -28,6 +28,32 @@ namespace StaffingPlanner.Controllers
 			return View(teachers);
         }
 
+		public ActionResult TeacherDetails(Guid id, Guid offeringId, int hours)
+		{
+			var db = StaffingPlanContext.GetContext();
+			var teacher = db.Teachers.FirstOrDefault(t => t.Id == id);
+			var offering = db.CourseOfferings.FirstOrDefault(co => co.Id == offeringId);
+			var existingWorkload = db.Workloads
+				.FirstOrDefault(w => w.Teacher.Id == teacher.Id && w.Course.Id == offering.Id);
+			if (existingWorkload == null)
+			{
+				var newWorkload = new TeacherCourseWorkload
+				{
+					Id = Guid.NewGuid(),
+					Course = offering,
+					Teacher = teacher,
+					Workload = hours
+				};
+				db.Workloads.Add(newWorkload);
+			}
+			else
+			{
+				existingWorkload.Workload = hours;
+			}
+
+			return TeacherDetails(id);
+		}
+
         // GET: /Teacher/TeacherDetails/{id}
         public ActionResult TeacherDetails(Guid id)
         {
@@ -40,25 +66,29 @@ namespace StaffingPlanner.Controllers
             var teacher = db.Teachers.First(t => t.Id == id);
 
             //Get the terms, right now we simple use HT17 and VT18
-            var fallTerm = db.TermYears.Where(ty => ty.Term == Term.Fall && ty.Year == 2017).FirstOrDefault();
-            var springTerm = db.TermYears.Where(ty => ty.Term == Term.Spring && ty.Year == 2018).FirstOrDefault();
-            HourBudget teacherBugdet = teacher.GetHourBudget(fallTerm, springTerm);
-
-            //Get availability for the teacher for the terms above
-            int fallAvailability = GetTermAvailability(teacher, fallTerm);
-            int springAvailability = GetTermAvailability(teacher, springTerm);
+            var fallTerm = db.TermYears.FirstOrDefault(ty => ty.Term == Term.Fall && ty.Year == 2017);
+            var springTerm = db.TermYears.FirstOrDefault(ty => ty.Term == Term.Spring && ty.Year == 2018);
+            var teacherBugdet = teacher.GetHourBudget(fallTerm, springTerm);
 
             //Get all offerings for this teacher and divide them into past and current
-            List<CourseOffering> allOfferings = db.Workloads.Where(t => t.Teacher.Id == teacher.Id).Select(l => l.Course).ToList();
+            var allOfferings = db.Workloads.Where(t => t.Teacher.Id == teacher.Id).Select(l => l.Course).ToList();
             var pastOfferings = allOfferings.Where(co => co.State == CourseState.Completed).ToList();
             var currentOfferings = allOfferings.Except(pastOfferings).ToList();
+
+			// Get all current offerings that this teacher is not part of
+	        var otherOfferings = allOfferings
+		        .Where(co => (co.TermYear.Year == fallTerm.Year && co.TermYear.Term == fallTerm.Term) || 
+					(co.TermYear.Year == springTerm.Year && co.TermYear.Term == springTerm.Term))
+		        .Except(currentOfferings)
+				.ToList();
 
             //Generate viewmodel for both sets of offerings
             var currentCoursesViewModel = GenerateTeacherCourseList(teacher, currentOfferings);
             var pastCoursesViewModel = GenerateTeacherCourseList(teacher, pastOfferings);
+	        var otherCoursesViewModel = GenerateOtherOfferingsViewModel(otherOfferings);
 
             //Generate final viewmodel
-            var teacherModel = GenerateTeacherViewModel(teacher, teacherBugdet, currentCoursesViewModel, pastCoursesViewModel);
+            var teacherModel = GenerateTeacherViewModel(teacher, teacherBugdet, currentCoursesViewModel, pastCoursesViewModel, otherCoursesViewModel);
 
             return View(teacherModel);
         }
@@ -78,7 +108,7 @@ namespace StaffingPlanner.Controllers
         {
             var db = StaffingPlanContext.GetContext();
             var teacherAvailability = db.TeacherTermAvailability.Where(tta => tta.Teacher.Id == teacher.Id);
-            int termAvailability = teacherAvailability.
+            var termAvailability = teacherAvailability.
                 Where(tta => tta.TermYear.Year == termYear.Year && tta.TermYear.Term == termYear.Term)
                 .Select(tta => tta.Availability)
                 .FirstOrDefault();
@@ -89,7 +119,8 @@ namespace StaffingPlanner.Controllers
 
         public static DetailedTeacherViewModel GenerateTeacherViewModel(Teacher teacher, HourBudget teacherBudget,
             List<TeacherCourseViewModel> currentCourseOfferings,
-            List<TeacherCourseViewModel> pastCourseOfferings)
+            List<TeacherCourseViewModel> pastCourseOfferings,
+			List<TeacherCourseViewModel> otherOfferings)
         {
             return new DetailedTeacherViewModel
             {
@@ -101,15 +132,35 @@ namespace StaffingPlanner.Controllers
                 HourBudget = teacherBudget,
                 CurrentCourseOfferings = currentCourseOfferings,
                 PastCourseOfferings = pastCourseOfferings,
+				OtherCourseOfferings = otherOfferings,
                 FallPeriodWorkload = new TeacherPeriodWorkload(teacher, teacherBudget.FallTerm),
                 SpringPeriodWorkload = new TeacherPeriodWorkload(teacher, teacherBudget.SpringTerm)
             };
         }
 
+		public static List<TeacherCourseViewModel> GenerateOtherOfferingsViewModel(List<CourseOffering> offerings)
+		{
+			return offerings.OrderBy(o => o.TermYear.Year)
+				.ThenBy(o => o.TermYear.Term)
+				.ThenBy(o => o.Periods)
+				.Select(o => new TeacherCourseViewModel
+				{
+					Id = o.Id,
+					Code = o.Course.Code,
+					CourseName = o.Course.TruncatedName,
+					TermYear = o.TermYear,
+					Period = EnumToString.PeriodToString(o.Periods),
+					CourseResponsible = o.CourseResponsible,
+					TotalHours = o.TotalHours,
+					AllocatedHours = o.AllocatedHours,
+					RemainingHours = o.RemainingHours,
+					TeacherAssignedHours = 0
+				})
+				.ToList();
+		}
+
         public static List<TeacherCourseViewModel> GenerateTeacherCourseList(Teacher teacher, List<CourseOffering> offerings)
         {
-            var db = StaffingPlanContext.GetContext();
-
             return offerings.OrderBy(o => o.TermYear.Year)
                 .ThenBy(o => o.TermYear.Term)
                 .ThenBy(o => o.Periods)
@@ -131,7 +182,6 @@ namespace StaffingPlanner.Controllers
 
         public static List<SimpleTeacherViewModel> GenerateTeacherViewModelList(List<Teacher> teachersList, TermYear fallTerm, TermYear springTerm)
         {
-	        var db = StaffingPlanContext.GetContext();
 	        var output = new List<SimpleTeacherViewModel>();
 
 	        foreach (var teacher in teachersList)
