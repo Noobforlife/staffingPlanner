@@ -1,4 +1,4 @@
-﻿ using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -28,27 +28,38 @@ namespace StaffingPlanner.Controllers
 			return View(teachers);
         }
 
-		public ActionResult AlterTeacherAllocation(Guid teacherId, Guid offeringId, int hours)
+		public ActionResult AlterTeacherAllocation(Guid teacherId, List<Guid> offeringId, List<int> hours)
 		{
-			var db = StaffingPlanContext.GetContext();
-			var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
-			var offering = db.CourseOfferings.FirstOrDefault(co => co.Id == offeringId);
-			var existingWorkload = db.Workloads
-				.FirstOrDefault(w => w.Teacher.Id == teacher.Id && w.Course.Id == offering.Id);
-			if (existingWorkload == null)
+			for (var i = 0; i < offeringId.Count; i++)
 			{
-				var newWorkload = new TeacherCourseWorkload
+				var db = StaffingPlanContext.GetContext();
+				var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
+				var offering = db.CourseOfferings.FirstOrDefault(co => co.Id == offeringId[i]);
+				var existingWorkload = db.Workloads
+					.FirstOrDefault(w => w.Teacher.Id == teacher.Id && w.Course.Id == offering.Id);
+				if (existingWorkload == null)
 				{
-					Id = Guid.NewGuid(),
-					Course = offering,
-					Teacher = teacher,
-					Workload = hours
-				};
-				db.Workloads.Add(newWorkload);
-			}
-			else
-			{
-				existingWorkload.Workload = hours;
+					if (hours[i] == 0) continue;
+					var newWorkload = new TeacherCourseWorkload
+					{
+						Id = Guid.NewGuid(),
+						Course = offering,
+						Teacher = teacher,
+						Workload = hours[i]
+					};
+					db.Workloads.Add(newWorkload);
+				}
+				else
+				{
+					if (hours[i] == 0)
+					{
+						db.Workloads.Remove(existingWorkload);
+					}
+					else
+					{
+						existingWorkload.Workload = hours[i];
+					}
+				}
 			}
 
 			return TeacherDetails(teacherId);

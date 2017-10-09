@@ -3,6 +3,7 @@
 
 @{
     ViewBag.Title = "Teacher";
+    var editMode = false;
 }
 
 <div class="container">
@@ -15,6 +16,7 @@
     </div>
     <div class="modal-body">
         <!--Modal Content-->
+
 
         <div class="row well background-white">
             <div class="col-md-6 col-sm-6">
@@ -42,7 +44,7 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>                
+                </div>
             </div>
             <div class="col-md-6 col-sm-6">
                 <div class="hours">
@@ -78,14 +80,20 @@
                     </div>
                 </div>
             </div>
-        </div>       
-      
+        </div>
+
         <div class="row">
             <!--Table of courses-->
-            <div class="col-md-12">
-                <div class="table-responsive" style="font-family:Raleway, sans-serif;">
-                    <table class="table">
-                        <thead>
+            @if (editMode)
+            {
+
+            }
+            else
+            {
+                <div class="col-md-12">
+                    <div class="table-responsive" style="font-family: Raleway, sans-serif;">
+                        <table class="table">
+                            <thead>
                             <tr>
                                 <th>Name</th>
                                 <th>Code</th>
@@ -96,8 +104,8 @@
                                 <th>Total allocated hours</th>
                                 <th>@Model.Name hours</th>
                             </tr>
-                        </thead>
-                        <tbody>
+                            </thead>
+                            <tbody>
                             @foreach (var course in Model.CurrentCourseOfferings)
                             {
                                 <tr>
@@ -112,10 +120,11 @@
                                     <td><span class="label label-warning pull-right">status </span></td>
                                 </tr>
                             }
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
+            }
         </div>
         <div class="col-md-12">
             <button class="btn btn-primary pull-left" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
@@ -124,10 +133,9 @@
         </div>
         <!--Course history table-->
         <div class="row">
-            </p>
             <div class="collapse" id="collapseExample">
-               @Html.Action("CourseHistory","Teacher", new { teacherid = Model.Id })
-            </div>            
+                @Html.Action("CourseHistory", "Teacher", new { teacherid = Model.Id })
+            </div>
         </div>
-    </div>   
+    </div>
 </div>
