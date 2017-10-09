@@ -6,7 +6,7 @@
 
 <div class="container">
     <div class="modal-header">
-        <h4 class="modal-title" style="display:inline-block">Course details</h4>
+        <h3 class="modal-title" style="display:inline-block">@Model.Name</h3>
         <div style="float: right; display:inline-block">
             <button class="btn btn-default" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("Courses", "Course")'">Back to Course List</button>
             <button class="btn btn-primary" type="button">Edit</button>
@@ -18,10 +18,10 @@
                 <div class="table-responsive">
                     <table class="table borderless">
                         <tbody>
-                            <tr>
+                            @*<tr>
                                 <th>Name:</th>
                                 <td colspan="2">@Model.Name</td>
-                            </tr>
+                            </tr>*@
                             <tr>
                                 <th>Code:</th>
                                 <td colspan="2">@Model.Code</td>
