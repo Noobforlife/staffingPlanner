@@ -9,11 +9,16 @@ namespace StaffingPlanner.Models
         public Teacher Teacher { get; set; }
         public TermYear TermYear { get; set; }
         public int TermAvailability { get; set; }
-        public int TotalTermHours { get; }
-        public int TeachingHours { get; }
-        public int ResearchHours { get; }
-        public int AdminHours { get; }
-        public int OtherHours { get; }
+        public int TotalTermHours { get; set; }
+        public int TeachingHours { get; set; }
+        public int ResearchHours { get; set; }
+        public int AdminHours { get; set; }
+        public int OtherHours { get; set; }
+
+        public int TeachingShare { get; set; }
+        public int ResearchShare { get; set; }
+        public int AdminShare { get; set; }
+        public int OtherShare { get; set; }
 
         public HourBudget(Teacher teacher, TermYear termYear)
         {
@@ -29,13 +34,19 @@ namespace StaffingPlanner.Models
                 .AsEnumerable();
             TermAvailability = availability.Select(tta => tta.Availability).FirstOrDefault();
 
-            //Multiply the total tern hours (half of yearly) based on availability
+            //Multiply the total term hours (half of yearly) by term availability
             TotalTermHours = (int)(BaseYearlyHours / 2m * (TermAvailability / 100m));
 
             //Get the shares (% for teaching, research etc) for this teachers academic title
             var result = db.AcademicProfiles.Where(ap => ap.Title == teacher.AcademicTitle)
                 .Select(ap => new { TeachingShare = ap.TeachingShare, ResearchShare = ap.ResearchShare, AdminShare = ap.AdminShare, OtherShare = ap.OtherShare });
             var shares = result.First();
+
+            //Set the shares
+            TeachingShare = (int)(shares.TeachingShare * 100);
+            ResearchShare = (int)(shares.ResearchShare * 100);
+            AdminShare = (int)(shares.AdminShare * 100);
+            OtherShare = (int)(shares.OtherShare * 100);
 
             //Set the hours available for different tasks
             TeachingHours = (int)(TotalTermHours * shares.TeachingShare);
