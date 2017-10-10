@@ -151,6 +151,12 @@ namespace StaffingPlanner.Controllers
 			return PartialView("~/Views/Teacher/_EditableTeacherCourseList.cshtml", model);
 		}
 
+		[HttpPost]
+		public void SaveHours(Guid id, int hours)
+		{
+			
+		}
+
         //Helper methods
 
         public static int GetTermAvailability(Teacher teacher, TermYear termYear)
