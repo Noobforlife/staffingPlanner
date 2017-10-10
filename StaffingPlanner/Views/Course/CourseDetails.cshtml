@@ -6,117 +6,31 @@
 
 <div class="container">
     <div class="modal-header">
-        <h3 class="modal-title" style="display:inline-block">@Model.Name</h3>
+        <h4 class="modal-title" style="display:inline-block">Course details</h4>
         <div style="float: right; display:inline-block">
             <button class="btn btn-default" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("Courses", "Course")'">Back to Course List</button>
-            <button class="btn btn-primary" type="button">Edit</button>
+            <button class="btn btn-primary" onclick="EditCourse(this)" type="button" id="EditcourseButton">Edit</button>
         </div>        
     </div>
     <div class="modal-body">
-        <div class="row well background-white">
-            <div class="col-md-6 col-sm-6">
-                <div class="table-responsive">
-                    <table class="table borderless">
-                        <tbody>
-                            @*<tr>
-                                <th>Name:</th>
-                                <td colspan="2">@Model.Name</td>
-                            </tr>*@
-                            <tr>
-                                <th>Code:</th>
-                                <td colspan="2">@Model.Code</td>
-                            </tr>
-                            <tr>
-                                <th>Credits:</th>
-                                <td colspan="2">@Model.Credits</td>
-                            </tr>
-                            <tr>
-                                <th colspan="3" class="text-center">Students</th>
-                            </tr>
-                            <tr>
-                                <td class="text-center">Budgeted<br>@Model.NumStudents</td>
-                                <td class="text-center">Registered<br>@Model.RegisteredStudents</td>
-                                <td class="text-center">Passed<br>@Model.PassedStudents</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="col-md-6 col-sm-6">
-                <div class="table-responsive">
-                    <table class="table borderless">
-                        <tbody>
-                            <tr>
-                                <th>Course responsible:</th>
-                                <td>@Html.ActionLink(Model.CourseResponsible.Name, "TeacherDetails", "Teacher", new { id = Model.CourseResponsible.Id }, null)</td>
-                            </tr>
-                            <tr>
-                                <th>HST:</th>
-                                <td>@Model.HST</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-                    <p>total</p>
-                    <p class="numbers blue-border">@Model.TotalHours</p>
-                </div>
-                <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-                    <p>allocated</p>
-                    <p class="numbers green-border">@Model.AllocatedHours</p>
-                </div>
-                <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-                    <p>balance</p>
-                    <p class="numbers orange-border">@Model.RemainingHours</p>
-                </div>
-            </div>
+        <div id ="courseDetails" class="row well background-white">
+            @Html.Partial("_courseDetailsTop", Model)
         </div>        
         <div class="row">
-            <div class="col-md-12">
-                <h4>Staff assigned</h4>
-                <div class="table-responsive" style="font-family:Raleway, sans-serif;">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Name </th>
-                                <th>Title </th>
-                                <th>Workload HT</th>
-                                <th>Workload VT</th>
-                                <th>Remaining hours</th>
-                                <th>Allocated course</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var teacher in Model.Teachers)
-                            {
-                                <tr>
-                                    <td>@Html.ActionLink(teacher.Name, "TeacherDetails", "Teacher", new { id = teacher.Id }, null)</td>
-                                    <td>@teacher.Title</td>
-                                    <td>@teacher.WorkloadFall</td>
-                                    <td>@teacher.WorkloadSpring</td>
-                                    <td>@teacher.RemainingTeachingHours</td>
-                                    <td>@teacher.AllocatedCourse<span class="label label-success pull-right">status </span></td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <button class="btn btn-primary pull-left" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                    Course History
-                </button>
-            </div>
-            <div class="col-md-6">
-                <button class="btn btn-default pull-right" type="button"> add staff<i class="icon-plus" style="margin:2px;margin-left:3px;"></i></button>
-            </div>
-            <!--Course history table-->
-            <div class="row">
-                </p>
-                <div class="collapse" id="collapseExample">
-                    @Html.Action("CourseHistory", "Course",new { courseid = Model.Id })
-                </div>
+            @Html.Action("RenderTeacherList", "Course", new { Courseid = Model.Id})
+        </div>
+
+        <!--Course history table-->
+        <div class="row">
+            </p>
+            <div class="collapse" id="collapseExample">
+                @Html.Action("RenderCourseHistory", "Course", new { courseid = Model.Id })
             </div>
         </div>
-    </div>    
+    </div>
+    <script>
+        function EditCourse(evt) {
+            $('#courseDetails').load('@Url.Action("EditCourse", "Course", new { course = Model.Id})');
+        }       
+    </script>
 </div>
