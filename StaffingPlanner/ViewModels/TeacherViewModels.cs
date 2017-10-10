@@ -28,14 +28,18 @@ namespace StaffingPlanner.ViewModels
         public string Name { get; set; }
         public string Email { get; set; }
         public AcademicTitle Title { get; set; }
-        public HourBudget HourBudget { get; set; }
-        public int RemainingHours { get; set; }
-        public string Status { get; set; }
-        public List<TeacherCourseViewModel> CurrentCourseOfferings { get; set; }
-        public List<TeacherCourseViewModel> PastCourseOfferings { get; set; }
+
+        //The total hours available for different tasks
+        public HourBudget FallBudget { get; set; }
+        public HourBudget SpringBudget { get; set; }
+
+        //The hours actually allocated on differnt periods
         public TeacherPeriodWorkload FallPeriodWorkload { get; set; }
         public TeacherPeriodWorkload SpringPeriodWorkload { get; set; }
-		public List<TeacherCourseViewModel> OtherCourseOfferings { get; set; }
+
+        public List<TeacherCourseViewModel> CurrentCourseOfferings { get; set; }
+        public List<TeacherCourseViewModel> OtherCourseOfferings { get; set; }
+
     }
 
     public class TeacherCourseViewModel
@@ -54,6 +58,7 @@ namespace StaffingPlanner.ViewModels
 
     public class TeacherPeriodWorkload
     {
+        public int TotalTermWorkload { get; set; }
         public int Period1Workload { get; set; }
         public int Period2Workload { get; set; }
         public int Period3Workload { get; set; }
@@ -62,7 +67,11 @@ namespace StaffingPlanner.ViewModels
         public TeacherPeriodWorkload(Teacher teacher, TermYear term)
         {
             var db = StaffingPlanContext.GetContext();
-            var teacherWorkloads = db.Workloads.Where(wl => wl.Teacher.Id == teacher.Id);
+            var teacherWorkloads = db.Workloads.Where(wl => wl.Teacher.Id == teacher.Id 
+            && wl.Course.TermYear.Year == term.Year
+            && wl.Course.TermYear.Term == term.Term);
+
+            TotalTermWorkload = teacherWorkloads.Select(wl => wl.Workload).DefaultIfEmpty(0).Sum(wl => wl);
 
             var allTermWorkload = teacherWorkloads.Where(wl => wl.Course.Periods == Period.AllPeriods)
                 .Select(wl => wl.Workload).DefaultIfEmpty(0).Sum(wl => wl);
@@ -73,11 +82,11 @@ namespace StaffingPlanner.ViewModels
 
             Period1Workload = teacherWorkloads.Where(wl => wl.Course.Periods == Period.P1)
                 .Select(wl => wl.Workload).DefaultIfEmpty(0).Sum(wl => wl) + firstHalfWorkload / 2 + allTermWorkload / 4;
-            Period1Workload = teacherWorkloads.Where(wl => wl.Course.Periods == Period.P2)
+            Period2Workload = teacherWorkloads.Where(wl => wl.Course.Periods == Period.P2)
                 .Select(wl => wl.Workload).DefaultIfEmpty(0).Sum(wl => wl) + firstHalfWorkload / 2 + allTermWorkload / 4;
-            Period1Workload = teacherWorkloads.Where(wl => wl.Course.Periods == Period.P3)
+            Period3Workload = teacherWorkloads.Where(wl => wl.Course.Periods == Period.P3)
                 .Select(wl => wl.Workload).DefaultIfEmpty(0).Sum(wl => wl) + secondHalfWorkload / 2 + allTermWorkload / 4;
-            Period1Workload = teacherWorkloads.Where(wl => wl.Course.Periods == Period.P4)
+            Period4Workload = teacherWorkloads.Where(wl => wl.Course.Periods == Period.P4)
                 .Select(wl => wl.Workload).DefaultIfEmpty(0).Sum(wl => wl) + secondHalfWorkload / 2 + allTermWorkload / 4;
         }
     }

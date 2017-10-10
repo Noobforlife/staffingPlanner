@@ -16,9 +16,9 @@ namespace StaffingPlanner.Models
 		public bool DirectorOfStudies { get; set; }
 		public AcademicTitle AcademicTitle { get; set; }
 
-        public HourBudget GetHourBudget(TermYear fallTerm, TermYear springTerm)
+        public HourBudget GetHourBudget(TermYear term)
         {
-            return new HourBudget(this, fallTerm, springTerm);
+            return new HourBudget(this, term);
         }
 
         public int GetAllocatedHoursForTerm(TermYear term)
@@ -33,14 +33,16 @@ namespace StaffingPlanner.Models
             return hours;
         }
 
+        //Something seem to be wrong here: it sometimes can't find any workloads and returns 0 hours
         public int GetAllocatedHoursForOffering(CourseOffering offering)
         {
             var db = StaffingPlanContext.GetContext();
 
-            var hours = db.Workloads
-                .Where(w => w.Teacher.Id.Equals(Id) && w.Course.Id == offering.Id)
-                .ToList()
-                .Sum(w => w.Workload);
+            //For debugging
+            //var courseWorkloads = db.Workloads.Where(w => w.Course.Id == offering.Id);
+
+            var workloads = db.Workloads.Where(w => w.Teacher.Id.Equals(Id) && w.Course.Id == offering.Id).ToList();
+            var hours = workloads.Sum(w => w.Workload);
 
             return hours;
         }
