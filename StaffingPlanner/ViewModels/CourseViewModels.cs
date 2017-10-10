@@ -35,7 +35,7 @@ namespace StaffingPlanner.ViewModels
         public int PassedStudents { get; set; }
         public Teacher CourseResponsible { get; set; }
         public float HST { get; set; }
-        public List<SimpleTeacherViewModel> Teachers { get; set; }
+        public List<CourseTeacherViewModel> Teachers { get; set; }
         public string Status { get; set; }
     }
 
@@ -44,8 +44,8 @@ namespace StaffingPlanner.ViewModels
         public Guid Id { get; set; }
         public string Name { get; set; }
         public AcademicTitle Title { get; set; }
-        public int AllocatedFall { get; set; }
-        public int AllocatedSpring { get; set; }
+        public int WorkloadFall { get; set; }
+        public int WorkloadSpring { get; set; }
         public int RemainingTeachingHours { get; set; }
         public int AllocatedCourse { get; set; }
     }

@@ -80,10 +80,10 @@
                             <tr>
                                 <th>Name </th>
                                 <th>Title </th>
-                                <th>Total Hours</th>
-                                <th>HT work</th>
-                                <th>VT work</th>
-                                <th>Remaining(Hrs)</th>
+                                <th>Workload HT</th>
+                                <th>Workload VT</th>
+                                <th>Remaining hours</th>
+                                <th>Allocated course</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -92,10 +92,10 @@
                                 <tr>
                                     <td>@Html.ActionLink(teacher.Name, "TeacherDetails", "Teacher", new { id = teacher.Id }, null)</td>
                                     <td>@teacher.Title</td>
-                                    <td>500</td>
-                                    <td>@teacher.FallTermAvailability</td>
-                                    <td>@teacher.SpringTermAvailability</td>
-                                    <td>@teacher.TotalRemainingHours<span class="label label-success pull-right">status </span></td>
+                                    <td>@teacher.WorkloadFall</td>
+                                    <td>@teacher.WorkloadSpring</td>
+                                    <td>@teacher.RemainingTeachingHours</td>
+                                    <td>@teacher.AllocatedCourse<span class="label label-success pull-right">status </span></td>
                                 </tr>
                             }
                         </tbody>

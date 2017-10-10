@@ -228,7 +228,7 @@ namespace StaffingPlanner.Controllers
         }
 
 		// Feel free to replace "warning" with "status" if it makes more sense for its intended use
-		private static Tuple<string, string> GenerateAllocationWarning(HourBudget fallBudget, HourBudget springBudget, int allocatedFall, int allocatedSpring)
+		public static Tuple<string, string> GenerateAllocationWarning(HourBudget fallBudget, HourBudget springBudget, int allocatedFall, int allocatedSpring)
 		{
 			var fallWarning = "";
 			var springWarning = "";

@@ -33,14 +33,16 @@ namespace StaffingPlanner.Models
             return hours;
         }
 
+        //Something seem to be wrong here: it sometimes can't find any workloads and returns 0 hours
         public int GetAllocatedHoursForOffering(CourseOffering offering)
         {
             var db = StaffingPlanContext.GetContext();
 
-            var hours = db.Workloads
-                .Where(w => w.Teacher.Id.Equals(Id) && w.Course.Id == offering.Id)
-                .ToList()
-                .Sum(w => w.Workload);
+            //For debugging
+            //var courseWorkloads = db.Workloads.Where(w => w.Course.Id == offering.Id);
+
+            var workloads = db.Workloads.Where(w => w.Teacher.Id.Equals(Id) && w.Course.Id == offering.Id).ToList();
+            var hours = workloads.Sum(w => w.Workload);
 
             return hours;
         }
