@@ -1,4 +1,56 @@
-﻿
-<div>
-    
+﻿@using StaffingPlanner.ViewModels
+@model Tuple<List<TeacherCourseViewModel>, List<TeacherCourseViewModel>>
+
+<div class="col-md-12">
+    <div class="table-responsive" style="font-family: Raleway, sans-serif;">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Code</th>
+                <th>Responsible</th>
+                <th>Term</th>
+                <th>Period</th>
+                <th>Total budget</th>
+                <th>Total allocated hours</th>
+                <th>@ViewBag.Name hours</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var course in Model.Item1)
+            {
+                @Html.Partial("_EditableTeacherCourseListRow", course)
+            }
+            </tbody>
+        </table>
+        <div>
+            <select id="dropdown" onchange="DropDownChanged()">
+                <option value="none">Select a course to add</option>
+                @foreach (var course in Model.Item2)
+                {
+                    <option value="@course.Id">@course.CourseName</option>
+                }
+            </select>
+        </div>
+        <button class="btn btn-primary" style="float: right;" onclick="SaveEdits()">Save edits</button>
+    </div>
+    <script>
+        function DropDownChanged() {
+            var dropdown = $('#dropdown option:selected').val();
+        }
+
+        function SaveEdits() {
+            // *** When changing hours ***
+            // Add id as data to assignment td
+            // When editable div loses focus, save course id and hours to two lists
+            // on save, send lists to controller method
+
+            // *** When adding courses ***
+            // 
+            var hours = $('.hours');
+            for (var i = 0; i < hours.length; i++) {
+                alert(hours[i].text());
+            }
+        }
+    </script>
 </div>
