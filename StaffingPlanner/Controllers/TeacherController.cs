@@ -114,7 +114,7 @@ namespace StaffingPlanner.Controllers
             return PartialView("~/Views/Teacher/_TeacherCourseHistory.cshtml", courses);
         }
 
-		[ChildActionOnly]
+		[HttpGet]
 		public PartialViewResult CourseList(Guid teacherId)
 		{
 			var db = StaffingPlanContext.GetContext();
@@ -134,6 +134,12 @@ namespace StaffingPlanner.Controllers
 				: "";
 
 			return PartialView("~/Views/Teacher/_TeacherCourseList.cshtml", courses);
+		}
+
+		[HttpGet]
+		public PartialViewResult EditableCourseList(Guid teacherId)
+		{
+			return PartialView("~/Views/Teacher/_EditableTeacherCourseList.cshtml");
 		}
 
         //Helper methods

@@ -10,7 +10,7 @@
         <h3 class="modal-title" style="display:inline-block">@Model.Name</h3>
         <div style="float: right; display:inline-block">
             <button class="btn btn-default" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("Teachers", "Teacher")'">Back to Teachers List</button>
-            <button class="btn btn-primary" type="button">Edit</button>
+            <button class="btn btn-primary" onclick="EditTeacher()" type="button" id="EditTeacherButton">Edit</button>
         </div>
     </div>
     <div class="modal-body">
@@ -19,7 +19,7 @@
             @Html.Partial("_TeacherDetailsTop", Model)
         </div>
 
-        <div class="row">
+        <div class="row" id="courseList">
             <!--Table of courses-->
             @Html.Action("CourseList", "Teacher", new {teacherId = Model.Id})
         </div>
@@ -31,8 +31,23 @@
         <!--Course history table-->
         <div class="row">
             <div class="collapse" id="collapseExample">
-                @Html.Action("CourseHistory", "Teacher", new {teacherid = Model.Id})
+                @Url.Action("CourseHistory", "Teacher", new {teacherid = Model.Id})
             </div>
         </div>
     </div>
+    <script>
+        function EditTeacher() {
+            $('#courseList').load('@Url.Action("EditableCourseList", "Teacher", new { teacherId = Model.Id})');
+            var editButton = $('#EditTeacherButton');
+            editButton.attr("onclick", "CancelEdit()");
+            editButton.html("Cancel");
+        }
+
+        function CancelEdit() {
+            $('#courseList').load('@Url.Action("CourseList", "Teacher", new { teacherId = Model.Id})');
+            var editButton = $('#EditTeacherButton');
+            editButton.attr("onclick", "EditTeacher()");
+            editButton.html("Edit");
+        }
+    </script>
 </div>
