@@ -74,7 +74,7 @@ namespace StaffingPlanner.Controllers
             }
             var db = StaffingPlanContext.GetContext();
             //Get the teacher with the same Id as the parameter id
-            var teacher = db.Teachers.First(t => t.Id == id);
+            var teacher = db.Teachers.FirstOrDefault(t => t.Id == id);
 
             //Get the terms, right now we simple use HT17 and VT18
             var fallTerm = db.TermYears.FirstOrDefault(ty => ty.Term == Term.Fall && ty.Year == 2017);
@@ -82,25 +82,8 @@ namespace StaffingPlanner.Controllers
             var fallBudget = teacher.GetHourBudget(fallTerm);
             var springBudget = teacher.GetHourBudget(springTerm);
 
-            //Get all offerings for this teacher and divide them into past and current
-            var allOfferings = db.Workloads.Where(t => t.Teacher.Id == teacher.Id).Select(l => l.Course).ToList();
-            var pastOfferings = allOfferings.Where(co => co.State == CourseState.Completed).ToList();
-            var currentOfferings = allOfferings.Except(pastOfferings).ToList();
-
-			// Get all current offerings that this teacher is not part of
-	        var otherOfferings = allOfferings
-		        .Where(co => (co.TermYear.Year == fallTerm.Year && co.TermYear.Term == fallTerm.Term) || 
-					(co.TermYear.Year == springTerm.Year && co.TermYear.Term == springTerm.Term))
-		        .Except(currentOfferings)
-				.ToList();
-
-            //Generate viewmodel for both sets of offerings
-            var currentCoursesViewModel = GenerateTeacherCourseList(teacher, currentOfferings);
-            var pastCoursesViewModel = GenerateTeacherCourseList(teacher, pastOfferings);
-	        var otherCoursesViewModel = GenerateOtherOfferingsViewModel(otherOfferings);
-
             //Generate final viewmodel
-            var teacherModel = GenerateTeacherViewModel(teacher, fallBudget, springBudget, currentCoursesViewModel, otherCoursesViewModel);
+            var teacherModel = GenerateTeacherViewModel(teacher, fallBudget, springBudget);
 
             return View(teacherModel);
         }
@@ -113,6 +96,66 @@ namespace StaffingPlanner.Controllers
             
             return PartialView("~/Views/Teacher/_TeacherCourseHistory.cshtml", courses);
         }
+
+		[HttpGet]
+		public PartialViewResult CourseList(Guid teacherId)
+		{
+			var db = StaffingPlanContext.GetContext();
+
+			var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
+
+			var allOfferings = db.Workloads.Where(t => t.Teacher.Id == teacher.Id).Select(l => l.Course).ToList();
+			var pastOfferings = allOfferings.Where(co => co.State == CourseState.Completed).ToList();
+			var currentOfferings = allOfferings.Except(pastOfferings).ToList();
+
+			var courses = teacher != null
+				? GenerateTeacherCourseList(teacher, currentOfferings)
+				: new List<TeacherCourseViewModel>();
+
+			ViewBag.Name = teacher != null 
+				? teacher.Name
+				: "";
+
+			return PartialView("~/Views/Teacher/_TeacherCourseList.cshtml", courses);
+		}
+
+		[HttpGet]
+		public PartialViewResult EditableCourseList(Guid teacherId)
+		{
+			var db = StaffingPlanContext.GetContext();
+
+			var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
+
+			var allOfferings = db.CourseOfferings;
+			var allOfferingsForTeacher = db.Workloads.Where(t => t.Teacher.Id == teacher.Id).Select(l => l.Course).ToList();
+			var pastOfferings = allOfferingsForTeacher.Where(co => co.State == CourseState.Completed).ToList();
+			var currentOfferings = allOfferingsForTeacher.Except(pastOfferings).ToList();
+			var currentOfferingIds = currentOfferings.Select(o => o.Id);
+
+			var otherOfferings = allOfferings
+				.Where(co => ((co.TermYear.Year == 2017 && co.TermYear.Term == Term.Fall) ||
+				             (co.TermYear.Year == 2018 && co.TermYear.Term == Term.Spring)) &&
+							 !currentOfferingIds.Contains(co.Id))
+				.ToList();
+
+			var currentCourses = teacher != null
+				? GenerateTeacherCourseList(teacher, currentOfferings)
+				: new List<TeacherCourseViewModel>();
+			var otherCourses = GenerateOtherOfferingsViewModel(otherOfferings);
+			var model = new Tuple<List<TeacherCourseViewModel>, List<TeacherCourseViewModel>>(currentCourses, otherCourses);
+
+			ViewBag.Name = teacher != null
+				? teacher.Name
+				: "";
+
+			return PartialView("~/Views/Teacher/_EditableTeacherCourseList.cshtml", model);
+		}
+
+		[HttpPost]
+		public void SaveHours(Guid id, int hours)
+		{
+			
+		}
 
         //Helper methods
 
@@ -129,9 +172,7 @@ namespace StaffingPlanner.Controllers
        
         //Methods to generate view models
 
-        public static DetailedTeacherViewModel GenerateTeacherViewModel(Teacher teacher, HourBudget fallBudget, HourBudget springBudget,
-            List<TeacherCourseViewModel> currentCourseOfferings,
-			List<TeacherCourseViewModel> otherOfferings)
+        public static DetailedTeacherViewModel GenerateTeacherViewModel(Teacher teacher, HourBudget fallBudget, HourBudget springBudget)
         {
             return new DetailedTeacherViewModel
             {
@@ -144,10 +185,7 @@ namespace StaffingPlanner.Controllers
                 SpringBudget = springBudget,
 
                 FallPeriodWorkload = new TeacherPeriodWorkload(teacher, fallBudget.TermYear),
-                SpringPeriodWorkload = new TeacherPeriodWorkload(teacher, springBudget.TermYear),
-
-                CurrentCourseOfferings = currentCourseOfferings,
-                OtherCourseOfferings = otherOfferings
+                SpringPeriodWorkload = new TeacherPeriodWorkload(teacher, springBudget.TermYear)
             };
         }
 

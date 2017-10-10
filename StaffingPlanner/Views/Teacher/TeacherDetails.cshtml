@@ -1,11 +1,8 @@
 ﻿@using StaffingPlanner.ViewModels;
-@using StaffingPlanner.DAL;
-
 @model DetailedTeacherViewModel
 
 @{
     ViewBag.Title = "Teacher";
-    var editMode = false;
 }
 
 <div class="container">
@@ -13,189 +10,18 @@
         <h3 class="modal-title" style="display:inline-block">@Model.Name</h3>
         <div style="float: right; display:inline-block">
             <button class="btn btn-default" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("Teachers", "Teacher")'">Back to Teachers List</button>
-            <button class="btn btn-primary" type="button">Edit</button>
+            <button class="btn btn-primary" onclick="EditTeacher()" type="button" id="EditTeacherButton">Edit</button>
         </div>
     </div>
     <div class="modal-body">
-        <!--Modal Content-->
-
-        <div class="row well background-white">
-            @*<div class="page-header">
-                <h3>@Model.Name</h3>
-            </div>*@
-            <div class="col-md-5 col-sm-5">
-                <div class="table-responsive">
-                    <table class="table borderless">
-                        <tbody>
-                            @if (Globals.UserRole == Role.DirectorOfStudies)
-                            {
-                                <tr>
-                                    <th>Personal number :</th>
-                                    <td>1234567890</td>
-                                </tr>
-                            }
-                            <tr>
-                                <th>Employed as :</th>
-                                <td>@Model.Title</td>
-                            </tr>
-                            <tr>
-                                <th>Email :</th>
-                                <td>@Model.Email</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <div class="table-responsive" style="font-family: Raleway, sans-serif;">
-                        <table class="table">
-                            <thead>
-                                <tr>@Model.FallBudget.TermYear.ToString() Workload (h)</tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th>P1</th>
-                                    <th>P2</th>
-                                    <th>P3</th>
-                                    <th>P4</th>
-                                    <th>Total</th>
-                                </tr>
-                                <tr>
-                                    <td>@Model.FallPeriodWorkload.Period1Workload</td>
-                                    <td>@Model.FallPeriodWorkload.Period2Workload</td>
-                                    <td>@Model.FallPeriodWorkload.Period3Workload</td>
-                                    <td>@Model.FallPeriodWorkload.Period4Workload</td>
-                                    <td>@Model.FallPeriodWorkload.TotalTermWorkload</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="table-responsive" style="font-family: Raleway, sans-serif;">
-                        <table class="table">
-                            <thead>
-                                <tr>@Model.SpringBudget.TermYear.ToString() Workload (h)</tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th>P1</th>
-                                    <th>P2</th>
-                                    <th>P3</th>
-                                    <th>P4</th>
-                                    <th>Total</th>
-                                </tr>
-                                <tr>
-                                    <td>@Model.SpringPeriodWorkload.Period1Workload</td>
-                                    <td>@Model.SpringPeriodWorkload.Period2Workload</td>
-                                    <td>@Model.SpringPeriodWorkload.Period3Workload</td>
-                                    <td>@Model.SpringPeriodWorkload.Period4Workload</td>
-                                    <td>@Model.SpringPeriodWorkload.TotalTermWorkload</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
-            </div>
-            <div class="col-md-6 col-sm-6">
-
-                <div class="hours">
-                    <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-                        <p>Base yearly hours</p>
-                        <p class="numbers blue-border">@(Model.FallBudget.TotalTermHours + Model.SpringBudget.TotalTermHours)</p>
-                    </div>
-                    <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-                        <p>@Model.FallBudget.TermYear.ToString()%</p>
-                        <p class="numbers orange-border">@Model.FallBudget.TermAvailability%</p>
-                    </div>
-                    <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-                        <p>@Model.SpringBudget.TermYear.ToString()%</p>
-                        <p class="numbers green-border">@Model.SpringBudget.TermAvailability%</p>
-                    </div>
-                </div>
-
-                <div class="hours">
-                    <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-                        <p>Total teaching hours</p>
-                        <p class="numbers blue-border">@(Model.FallBudget.TeachingHours + Model.SpringBudget.TeachingHours)</p>
-                    </div>
-                    <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-                        <p>@Model.FallBudget.TermYear.ToString() teaching hours</p>
-                        <p class="numbers orange-border">@Model.FallBudget.TeachingHours</p>
-                    </div>
-                    <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-                        <p>@Model.SpringBudget.TermYear.ToString() teaching hours</p>
-                        <p class="numbers green-border">@Model.SpringBudget.TeachingHours</p>
-                    </div>
-                </div>
-
-                <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-                    <p>Total workload hours</p>
-                    <p class="numbers red-border">@(Model.FallPeriodWorkload.TotalTermWorkload + @Model.SpringPeriodWorkload.TotalTermWorkload)</p>
-                </div>
-
-                <h5 class="details-h">Task share</h5>
-                <div class="time-allocation-div">
-                    <div class="time-allocation detail-label">
-                        <p class="detail-label">Teaching:</p><span class="badge pull-right">@Model.FallBudget.TeachingShare%</span>
-                    </div>
-                    <div class="time-allocation detail-label">
-                        <p class="detail-label">Research:</p><span class="badge pull-right">@Model.FallBudget.ResearchShare%</span>
-                    </div>
-                </div>
-                <div class="time-allocation-div">
-                    <div class="time-allocation detail-label">
-                        <p class="detail-label">Admin:</p><span class="badge pull-right">@Model.FallBudget.AdminShare%</span>
-                    </div>
-                    <div class="time-allocation detail-label">
-                        <p class="detail-label">Other: </p><span class="badge pull-right">@Model.FallBudget.OtherShare%</span>
-                    </div>
-                </div>
-
-            </div>
+        <!--Information about teacher-->
+        <div id="teacherDetails" class="row well background-white">
+            @Html.Partial("_TeacherDetailsTop", Model)
         </div>
 
-        <div class="row">
+        <div class="row" id="courseList">
             <!--Table of courses-->
-            @if (editMode)
-            {
-
-            }
-            else
-            {
-                <div class="col-md-12">
-                    <div class="table-responsive" style="font-family: Raleway, sans-serif;">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Code</th>
-                                <th>Responsible</th>
-                                <th>Term</th>
-                                <th>Period</th>
-                                <th>Total budget</th>
-                                <th>Total allocated hours</th>
-                                <th>@Model.Name hours</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach (var course in Model.CurrentCourseOfferings)
-                            {
-                                <tr>
-                                    <td><a href="#" data-toggle="modal" data-target="#course-modal">@Html.ActionLink(course.CourseName, "CourseDetails", "Course", new { id = course.Id }, null)</a></td>
-                                    <td>@course.Code</td>
-                                    <td>@Html.ActionLink(course.CourseResponsible.Name, "TeacherDetails", "Teacher", new { id = course.CourseResponsible.Id }, null)</td>
-                                    <td>@course.TermYear.ToString()</td>
-                                    <td>@course.Period</td>
-                                    <td>@course.TotalHours</td>
-                                    <td>@course.AllocatedHours</td>
-                                    <td>@course.TeacherAssignedHours</td>
-                                    <td><span class="label label-warning pull-right">status </span></td>
-                                </tr>
-                            }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            }
+            @Html.Action("CourseList", "Teacher", new {teacherId = Model.Id})
         </div>
         <div class="col-md-12">
             <button class="btn btn-primary pull-left" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
@@ -205,8 +31,23 @@
         <!--Course history table-->
         <div class="row">
             <div class="collapse" id="collapseExample">
-                @Html.Action("CourseHistory", "Teacher", new { teacherid = Model.Id })
+                @Url.Action("CourseHistory", "Teacher", new {teacherid = Model.Id})
             </div>
         </div>
     </div>
+    <script>
+        function EditTeacher() {
+            $('#courseList').load('@Url.Action("EditableCourseList", "Teacher", new { teacherId = Model.Id})');
+            var editButton = $('#EditTeacherButton');
+            editButton.attr("onclick", "CancelEdit()");
+            editButton.html("Cancel");
+        }
+
+        function CancelEdit() {
+            $('#courseList').load('@Url.Action("CourseList", "Teacher", new { teacherId = Model.Id})');
+            var editButton = $('#EditTeacherButton');
+            editButton.attr("onclick", "EditTeacher()");
+            editButton.html("Edit");
+        }
+    </script>
 </div>

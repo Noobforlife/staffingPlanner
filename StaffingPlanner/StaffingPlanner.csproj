@@ -251,6 +251,11 @@
     <Content Include="Views\Course\_CourseDetailsTop.cshtml" />
     <Content Include="Views\Course\_CourseTeacherList.cshtml" />
     <Content Include="Views\Course\_AddCourseTeacher.cshtml" />
+    <Content Include="Views\Teacher\_TeacherDetailsTop.cshtml" />
+    <Content Include="Views\Teacher\_TeacherCourseList.cshtml" />
+    <Content Include="Views\Teacher\_EditableTeacherCourseList.cshtml" />
+    <Content Include="Views\Teacher\_EditableTeacherCourseListRow.cshtml" />
+>>>>>>> teacherwork
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
