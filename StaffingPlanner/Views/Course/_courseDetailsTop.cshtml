@@ -1,0 +1,59 @@
+﻿@using StaffingPlanner.ViewModels;
+@model DetailedCourseViewModel
+
+<div class="col-md-6 col-sm-6">
+    <div class="table-responsive">
+        <table class="table borderless">
+            <tbody>
+                <tr>
+                    <th>Name:</th>
+                    <td colspan="2">@Model.Name</td>
+                </tr>
+                <tr>
+                    <th>Code:</th>
+                    <td colspan="2">@Model.Code</td>
+                </tr>
+                <tr>
+                    <th>Credits:</th>
+                    <td colspan="2">@Model.Credits</td>
+                </tr>
+                <tr>
+                    <th colspan="3" class="text-center">Students</th>
+                </tr>
+                <tr>
+                    <td class="text-center">Budgeted<br>@Model.NumStudents</td>
+                    <td class="text-center">Registered<br>@Model.RegisteredStudents</td>
+                    <td class="text-center">Passed<br>@Model.PassedStudents</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="col-md-6 col-sm-6">
+    <div class="table-responsive">
+        <table class="table borderless">
+            <tbody>
+                <tr id="courseResponsible">
+                    <th>Course responsible:</th>
+                    <td>@Html.ActionLink(Model.CourseResponsible.Name, "TeacherDetails", "Teacher", new { id = Model.CourseResponsible.Id }, null)</td>
+                </tr>
+                <tr>
+                    <th>HST:</th>
+                    <td>@Model.HST</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+        <p>total</p>
+        <p class="numbers blue-border">@Model.TotalHours</p>
+    </div>
+    <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+        <p>allocated</p>
+        <p class="numbers green-border">@Model.AllocatedHours</p>
+    </div>
+    <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+        <p>balance</p>
+        <p class="numbers orange-border">@Model.RemainingHours</p>
+    </div>
+</div>
