@@ -42,6 +42,7 @@
                        <td>
                           
                             <select id="Responsible" name="Responsible" class="teacher-selector" id="Responsible" name="Responsible" data-style="btn-primary">
+                                <option value="@Model.Item1.CourseResponsible.Id">@Model.Item1.CourseResponsible.Name</option>
                                 @foreach (var teacher in Model.Item2)
                                 {
                                     <option value="@teacher.Id">@teacher.Name</option>
