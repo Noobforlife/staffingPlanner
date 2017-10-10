@@ -74,7 +74,7 @@ namespace StaffingPlanner.Controllers
             }
             var db = StaffingPlanContext.GetContext();
             //Get the teacher with the same Id as the parameter id
-            var teacher = db.Teachers.First(t => t.Id == id);
+            var teacher = db.Teachers.FirstOrDefault(t => t.Id == id);
 
             //Get the terms, right now we simple use HT17 and VT18
             var fallTerm = db.TermYears.FirstOrDefault(ty => ty.Term == Term.Fall && ty.Year == 2017);
@@ -100,7 +100,7 @@ namespace StaffingPlanner.Controllers
 	        var otherCoursesViewModel = GenerateOtherOfferingsViewModel(otherOfferings);
 
             //Generate final viewmodel
-            var teacherModel = GenerateTeacherViewModel(teacher, fallBudget, springBudget, currentCoursesViewModel, otherCoursesViewModel);
+            var teacherModel = GenerateTeacherViewModel(teacher, fallBudget, springBudget);
 
             return View(teacherModel);
         }
@@ -113,6 +113,28 @@ namespace StaffingPlanner.Controllers
             
             return PartialView("~/Views/Teacher/_TeacherCourseHistory.cshtml", courses);
         }
+
+		[ChildActionOnly]
+		public PartialViewResult CourseList(Guid teacherId)
+		{
+			var db = StaffingPlanContext.GetContext();
+
+			var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
+
+			var allOfferings = db.Workloads.Where(t => t.Teacher.Id == teacher.Id).Select(l => l.Course).ToList();
+			var pastOfferings = allOfferings.Where(co => co.State == CourseState.Completed).ToList();
+			var currentOfferings = allOfferings.Except(pastOfferings).ToList();
+
+			var courses = teacher != null
+				? GenerateTeacherCourseList(teacher, currentOfferings)
+				: new List<TeacherCourseViewModel>();
+
+			ViewBag.Name = teacher != null 
+				? teacher.Name
+				: "";
+
+			return PartialView("~/Views/Teacher/_TeacherCourseList.cshtml", courses);
+		}
 
         //Helper methods
 
@@ -129,9 +151,7 @@ namespace StaffingPlanner.Controllers
        
         //Methods to generate view models
 
-        public static DetailedTeacherViewModel GenerateTeacherViewModel(Teacher teacher, HourBudget fallBudget, HourBudget springBudget,
-            List<TeacherCourseViewModel> currentCourseOfferings,
-			List<TeacherCourseViewModel> otherOfferings)
+        public static DetailedTeacherViewModel GenerateTeacherViewModel(Teacher teacher, HourBudget fallBudget, HourBudget springBudget)
         {
             return new DetailedTeacherViewModel
             {
@@ -144,10 +164,7 @@ namespace StaffingPlanner.Controllers
                 SpringBudget = springBudget,
 
                 FallPeriodWorkload = new TeacherPeriodWorkload(teacher, fallBudget.TermYear),
-                SpringPeriodWorkload = new TeacherPeriodWorkload(teacher, springBudget.TermYear),
-
-                CurrentCourseOfferings = currentCourseOfferings,
-                OtherCourseOfferings = otherOfferings
+                SpringPeriodWorkload = new TeacherPeriodWorkload(teacher, springBudget.TermYear)
             };
         }
 

@@ -3,7 +3,6 @@
 
 @{
     ViewBag.Title = "Teacher";
-    var editMode = false;
 }
 
 <div class="container">
@@ -22,47 +21,7 @@
 
         <div class="row">
             <!--Table of courses-->
-            @if (editMode)
-            {
-
-            }
-            else
-            {
-                <div class="col-md-12">
-                    <div class="table-responsive" style="font-family: Raleway, sans-serif;">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Code</th>
-                                <th>Responsible</th>
-                                <th>Term</th>
-                                <th>Period</th>
-                                <th>Total budget</th>
-                                <th>Total allocated hours</th>
-                                <th>@Model.Name hours</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach (var course in Model.CurrentCourseOfferings)
-                            {
-                                <tr>
-                                    <td><a href="#" data-toggle="modal" data-target="#course-modal">@Html.ActionLink(course.CourseName, "CourseDetails", "Course", new {id = course.Id}, null)</a></td>
-                                    <td>@course.Code</td>
-                                    <td>@Html.ActionLink(course.CourseResponsible.Name, "TeacherDetails", "Teacher", new {id = course.CourseResponsible.Id}, null)</td>
-                                    <td>@course.TermYear.ToString()</td>
-                                    <td>@course.Period</td>
-                                    <td>@course.TotalHours</td>
-                                    <td>@course.AllocatedHours</td>
-                                    <td>@course.TeacherAssignedHours</td>
-                                    <td><span class="label label-warning pull-right">status </span></td>
-                                </tr>
-                            }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            }
+            @Html.Action("CourseList", "Teacher", new {teacherId = Model.Id})
         </div>
         <div class="col-md-12">
             <button class="btn btn-primary pull-left" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">

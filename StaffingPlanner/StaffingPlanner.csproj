@@ -251,6 +251,7 @@
     <Content Include="Views\Course\_courseDetailsTop.cshtml" />
     <Content Include="Views\Course\_CourseTeacherList.cshtml" />
     <Content Include="Views\Teacher\_TeacherDetailsTop.cshtml" />
+    <Content Include="Views\Teacher\_TeacherCourseList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

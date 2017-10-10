@@ -2,7 +2,6 @@
 using System.Linq;
 using StaffingPlanner.Models;
 using StaffingPlanner.DAL;
-using System.Collections.Generic;
 
 namespace StaffingPlanner.ViewModels
 {
@@ -19,7 +18,6 @@ namespace StaffingPlanner.ViewModels
         public int AllocatedHoursSpring { get; set; }
 		public string StatusSpring { get; set; }
         public int TotalRemainingHours { get; set; }
-        
 	}
 
     public class DetailedTeacherViewModel
@@ -36,10 +34,6 @@ namespace StaffingPlanner.ViewModels
         //The hours actually allocated on differnt periods
         public TeacherPeriodWorkload FallPeriodWorkload { get; set; }
         public TeacherPeriodWorkload SpringPeriodWorkload { get; set; }
-
-        public List<TeacherCourseViewModel> CurrentCourseOfferings { get; set; }
-        public List<TeacherCourseViewModel> OtherCourseOfferings { get; set; }
-
     }
 
     public class TeacherCourseViewModel
