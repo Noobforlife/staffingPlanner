@@ -14,10 +14,21 @@
     </div>
     <div class="modal-body">
         <div id ="courseDetails" class="row well background-white">
-            @Html.Partial("_courseDetailsTop", Model)
+            @Html.Partial("_CourseDetailsTop", Model)
         </div>        
         <div class="row">
-            @Html.Action("RenderTeacherList", "Course", new { Courseid = Model.Id})
+            <div class="col-md-12">
+                <h4>Staff assigned</h4>
+                @Html.Action("RenderTeacherList", "Course", new { Courseid = Model.Id })
+            </div>
+            <div class="col-md-6">
+                <button class="btn btn-primary pull-left" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    Course History
+                </button>
+            </div>
+            <div class="col-md-6">
+                <button class="btn btn-default pull-right" type="button"> add staff<i class="icon-plus" style="margin:2px;margin-left:3px;"></i></button>
+            </div> 
         </div>
 
         <!--Course history table-->

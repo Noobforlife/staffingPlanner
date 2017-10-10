@@ -29,9 +29,9 @@ namespace StaffingPlanner.Models
 			get
 			{
 				var db = StaffingPlanContext.GetContext();
-				return db.Workloads
-					.Where(w => w.Course.Id.Equals(Id))
-					.Sum(w => w.Workload);
+                var workloads = db.Workloads.Where(w => w.Course.Id.Equals(Id)).ToList();
+                if (workloads.Count == 0) { return 0; }
+                return workloads.Select(x => x.Workload).Sum();
 			}
 		}
         public string Status => CourseController.GetStatus(TotalHours,AllocatedHours);
