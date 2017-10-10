@@ -48,7 +48,7 @@
                     <div class="table-responsive" style="font-family: Raleway, sans-serif;">
                         <table class="table">
                             <thead>
-                                <tr>@Model.FallBudget.TermYear.ToString(): Allocated hours by period</tr>
+                                <tr>@Model.FallBudget.TermYear.ToString() Workload (h)</tr>
                             </thead>
                             <tbody>
                                 <tr>
@@ -72,7 +72,7 @@
                     <div class="table-responsive" style="font-family: Raleway, sans-serif;">
                         <table class="table">
                             <thead>
-                                <tr>@Model.SpringBudget.TermYear.ToString(): Allocated hours by period</tr>
+                                <tr>@Model.SpringBudget.TermYear.ToString() Workload (h)</tr>
                             </thead>
                             <tbody>
                                 <tr>
@@ -128,7 +128,7 @@
                 </div>
 
                 <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-                    <p>Total allocated hours</p>
+                    <p>Total workload hours</p>
                     <p class="numbers red-border">@(Model.FallPeriodWorkload.TotalTermWorkload + @Model.SpringPeriodWorkload.TotalTermWorkload)</p>
                 </div>
 
