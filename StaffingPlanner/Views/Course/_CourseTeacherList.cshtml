@@ -1,8 +1,7 @@
 ﻿@using StaffingPlanner.ViewModels;
-@model List<SimpleTeacherViewModel>
+@model List<CourseTeacherViewModel>
 
-<div class="col-md-12">
-    <h4>Staff assigned</h4>
+
     <div class="table-responsive" style="font-family:Raleway, sans-serif;">
         <table class="table table-hover">
             <thead>
@@ -12,30 +11,32 @@
                     <th>Total Hours</th>
                     <th>HT work</th>
                     <th>VT work</th>
-                    <th>Remaining(Hrs)</th>
+                    <th>Allocated to course(Hrs)</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var teacher in Model)
                 {
-                    <tr>
+                    <tr id="@teacher.WorkloadId">
                         <td>@Html.ActionLink(teacher.Name, "TeacherDetails", "Teacher", new { id = teacher.Id }, null)</td>
                         <td>@teacher.Title</td>
-                        <td>500</td>
-                        <td>@teacher.FallTermAvailability</td>
-                        <td>@teacher.SpringTermAvailability</td>
-                        <td>@teacher.TotalRemainingHours<span class="label label-success pull-right">status </span></td>
+                        <td>700</td>
+                        <td>@teacher.WorkloadFall</td>
+                        <td>@teacher.WorkloadSpring</td>
+                        <td>@teacher.CourseWorkload 
+                               <button value ="@teacher.WorkloadId" data-toggle="tooltip" title="Édit Allocation" class="btn btn-default edit-button" onclick="EditTeacher(this)" style="margin-left: 80px" type="button"> 
+                                    <i class="material-icons">edit</i>
+                               </button>
+                               <span class="label label-success pull-right">status </span>
+                        </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
-</div>
-<div class="col-md-6">
-    <button class="btn btn-primary pull-left" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-        Course History
-    </button>
-</div>
-<div class="col-md-6">
-    <button class="btn btn-default pull-right" type="button"> add staff<i class="icon-plus" style="margin:2px;margin-left:3px;"></i></button>
-</div> 
+<script>
+    function EditTeacher(btn) {
+        $('#' + btn.value).load('@Url.Action("EditTeacher","Course")/'+ btn.value); 
+        }
+</script>
+

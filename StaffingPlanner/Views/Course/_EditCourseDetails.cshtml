@@ -32,7 +32,7 @@
     </div>
 </div>
 <div class="col-md-6 col-sm-6">
-@using (Html.BeginForm("SaveChanges", "Course", FormMethod.Post))
+@using (Html.BeginForm("SaveCourseChanges", "Course", FormMethod.Post))
 {   <input type="hidden" value="@Model.Item1.Id" name="CourseId" id="CourseId" />
     <div class="table-responsive">
         <table class="table borderless">

@@ -39,17 +39,12 @@ namespace StaffingPlanner.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-            //Get the matching course offering and all teacher who have assigned hours to the offering
+
             var db = StaffingPlanContext.GetContext();
             var offering = db.CourseOfferings.Where(c => c.Id == id).ToList().First();
-            var teachers = db.Workloads.Where(w => w.Course.Course.Code == offering.Course.Code).Select(x => x.Teacher).ToList();
-
-            //Terms for current year
-            var fallTerm = db.TermYears.Where(ty => ty.Term == Term.Fall && ty.Year == 2017).FirstOrDefault();
-            var springTerm = db.TermYears.Where(ty => ty.Term == Term.Spring && ty.Year == 2018).FirstOrDefault();
 
             //Generate viewmodel
-            var vm = GenerateCourseDetailViewModel(offering, teachers, fallTerm, springTerm);
+            var vm = GenerateCourseDetailViewModel(offering);
 
             return View(vm);
         }
@@ -60,13 +55,9 @@ namespace StaffingPlanner.Controllers
             var db = StaffingPlanContext.GetContext();
             var teachers = db.Workloads.Where(w => w.Course.Id == Courseid).Select(x => x.Teacher).ToList();
 
-            //Terms for current year
-            var fallTerm = db.TermYears.Where(ty => ty.Term == Term.Fall && ty.Year == 2017).FirstOrDefault();
-            var springTerm = db.TermYears.Where(ty => ty.Term == Term.Spring && ty.Year == 2018).FirstOrDefault();
-
-            var teacherList = TeacherController.GenerateTeacherViewModelList(teachers, fallTerm, springTerm);
-
-            return PartialView("~/Views/Course/_CourseTeacherList.cshtml", teacherList);
+            var CourseTeacherList = GenerateCourseTeacherViewModelList(teachers, Courseid);
+            
+            return PartialView("~/Views/Course/_CourseTeacherList.cshtml", CourseTeacherList);
         }
 
         [ChildActionOnly]
@@ -88,11 +79,34 @@ namespace StaffingPlanner.Controllers
             var model = new Tuple<CourseOffering, List<Teacher>>(c, teachers);
 
             return PartialView("~/Views/Course/_EditCourseDetails.cshtml", model);
+        }
 
+        public ActionResult DeleteTeacher(Guid id, Guid workloadId)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var workload = db.Workloads.Where(x => x.Id == workloadId).ToList().FirstOrDefault();
+            db.Workloads.Remove(workload);
+            db.SaveChanges();
+
+            return RedirectToAction("CourseDetails", "Course", new { id = id });
+        }
+
+        public ActionResult CancelChanges(Guid id) {
+            return RedirectToAction("CourseDetails", "Course", new { id = id });
+        }
+
+        [HttpGet]
+        public PartialViewResult EditTeacher(string Id)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var work = db.Workloads.Where(w => w.Id.ToString() == Id).ToList().FirstOrDefault();
+            var model = GenerateCourseTeacherViewModel(work.Teacher, work.Course.Id);
+
+            return PartialView("~/Views/Course/_EditCourseTeacher.cshtml", model);
         }
 
         [HttpPost]
-        public ActionResult SaveChanges(string Responsible, string CourseId)
+        public ActionResult SaveCourseChanges(string Responsible, string CourseId)
         {
             var db = StaffingPlanContext.GetContext();
             var teacher = db.Teachers.Where(x => x.Id.ToString() == Responsible).ToList().First();
@@ -104,6 +118,18 @@ namespace StaffingPlanner.Controllers
             db.SaveChanges();
 
             return RedirectToAction("CourseDetails", "Course", new { id = course.Id });
+        }
+
+        [HttpPost]
+        public ActionResult SaveTeacherChanges(string Id, string workloadId, string Allocated)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var Workload = db.Workloads.Where(x => x.Id.ToString() == workloadId).ToList().First();
+
+            Workload.Workload = int.Parse(Allocated);
+            db.SaveChanges();
+
+            return RedirectToAction("CourseDetails", "Course", new { id = Guid.Parse(Id) });
         }
 
         #endregion
@@ -172,6 +198,36 @@ namespace StaffingPlanner.Controllers
 			    Status = o.Status
 		    })
 		    .ToList();
+        }
+
+        public static List<CourseTeacherViewModel> GenerateCourseTeacherViewModelList(List<Teacher> teachers, Guid CourseId) {
+            List<CourseTeacherViewModel> list = new List<CourseTeacherViewModel>();
+            foreach (var teacher in teachers) {
+                var vm = GenerateCourseTeacherViewModel(teacher, CourseId);
+                list.Add(vm);
+            }
+            return list;
+        }
+               
+        public static CourseTeacherViewModel GenerateCourseTeacherViewModel(Teacher teacher, Guid CourseId) {
+
+            var db = StaffingPlanContext.GetContext();
+            var work = db.Workloads.Where(w => w.Course.Id == CourseId && w.Teacher.Id == teacher.Id).ToList().First();
+            var FallWork = db.Workloads.Where(w => w.Teacher.Id == teacher.Id && w.Course.TermYear.Term == Term.Fall).ToList().Select(c => c.Workload).Sum();
+            var SpringWork = db.Workloads.Where(w => w.Teacher.Id == teacher.Id && w.Course.TermYear.Term == Term.Spring).ToList().Select(c => c.Workload).Sum();
+
+            var vm = new CourseTeacherViewModel
+            {
+                Id = teacher.Id,
+                Name = teacher.Name,
+                Title = teacher.AcademicTitle,
+                WorkloadId = work.Id,
+                CourseId = work.Course.Id,
+                WorkloadFall = FallWork,
+                WorkloadSpring = SpringWork,
+                CourseWorkload = work.Workload,
+            };
+            return vm;
         }
 
         #endregion

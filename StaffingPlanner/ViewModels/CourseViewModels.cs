@@ -41,12 +41,14 @@ namespace StaffingPlanner.ViewModels
 
     public class CourseTeacherViewModel
     {
-        public Guid Id { get; set; }
+        public Guid Id {get; set; }
+        public Guid WorkloadId { get; set; }
+        public Guid CourseId { get; set; }
         public string Name { get; set; }
         public AcademicTitle Title { get; set; }
+        public int TotalHours { get; set; }        
         public int WorkloadFall { get; set; }
         public int WorkloadSpring { get; set; }
-        public int RemainingTeachingHours { get; set; }
-        public int AllocatedCourse { get; set; }
+        public int CourseWorkload { get; set; }
     }
 }

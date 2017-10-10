@@ -246,9 +246,9 @@
     <Content Include="Views\Shared\Error500.cshtml" />
     <Content Include="Views\Course\_CourseHistory.cshtml" />
     <Content Include="Views\Teacher\_TeacherCourseHistory.cshtml" />
-    <Content Include="Views\Course\_EditTeacherList.cshtml" />
+    <Content Include="Views\Course\_EditCourseTeacher.cshtml" />
     <Content Include="Views\Course\_EditCourseDetails.cshtml" />
-    <Content Include="Views\Course\_courseDetailsTop.cshtml" />
+    <Content Include="Views\Course\_CourseDetailsTop.cshtml" />
     <Content Include="Views\Course\_CourseTeacherList.cshtml" />
   </ItemGroup>
   <ItemGroup>
