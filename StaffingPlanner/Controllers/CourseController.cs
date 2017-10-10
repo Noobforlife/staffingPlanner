@@ -81,6 +81,26 @@ namespace StaffingPlanner.Controllers
             return PartialView("~/Views/Course/_EditCourseDetails.cshtml", model);
         }
 
+        [HttpGet]
+        public PartialViewResult EditTeacher(string Id)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var work = db.Workloads.Where(w => w.Id.ToString() == Id).ToList().FirstOrDefault();
+            var model = GenerateCourseTeacherViewModel(work.Teacher, work.Course.Id);
+
+            return PartialView("~/Views/Course/_EditCourseTeacher.cshtml", model);
+        }
+
+        [ChildActionOnly]
+        public PartialViewResult RenderAddCourseTeacher(Guid courseId)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var teachers = db.Teachers.ToList();
+            var model = new Tuple<List<Teacher>, Guid>(teachers, courseId);
+
+            return PartialView("~/Views/Course/_AddCourseTeacher.cshtml", model);
+        }
+
         public ActionResult DeleteTeacher(Guid id, Guid workloadId)
         {
             var db = StaffingPlanContext.GetContext();
@@ -93,17 +113,7 @@ namespace StaffingPlanner.Controllers
 
         public ActionResult CancelChanges(Guid id) {
             return RedirectToAction("CourseDetails", "Course", new { id = id });
-        }
-
-        [HttpGet]
-        public PartialViewResult EditTeacher(string Id)
-        {
-            var db = StaffingPlanContext.GetContext();
-            var work = db.Workloads.Where(w => w.Id.ToString() == Id).ToList().FirstOrDefault();
-            var model = GenerateCourseTeacherViewModel(work.Teacher, work.Course.Id);
-
-            return PartialView("~/Views/Course/_EditCourseTeacher.cshtml", model);
-        }
+        }        
 
         [HttpPost]
         public ActionResult SaveCourseChanges(string Responsible, string CourseId)
@@ -129,6 +139,29 @@ namespace StaffingPlanner.Controllers
             Workload.Workload = int.Parse(Allocated);
             db.SaveChanges();
 
+            return RedirectToAction("CourseDetails", "Course", new { id = Guid.Parse(Id) });
+        }
+
+        [HttpPost]
+        public ActionResult SaveNewTeacher(string Id, string teacherId, string Allocated)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var teacher = db.Teachers.Where(t => t.Id.ToString() == teacherId).ToList().FirstOrDefault();
+            var offering = db.CourseOfferings.Where(o => o.Id.ToString() == Id).ToList().FirstOrDefault();
+            var duplicate = db.Workloads.Where(x => x.Course.Id.ToString() == Id & x.Teacher.Id.ToString() == teacherId).ToList();
+
+            if (duplicate.Count == 0) {
+                var teacherworkload = new TeacherCourseWorkload
+                {
+                    Id = Guid.NewGuid(),
+                    Course = offering,
+                    Teacher = teacher,
+                    Workload = int.Parse(Allocated)
+                };
+
+                db.Workloads.Add(teacherworkload);
+                db.SaveChanges();
+            }
             return RedirectToAction("CourseDetails", "Course", new { id = Guid.Parse(Id) });
         }
 
