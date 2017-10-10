@@ -27,7 +27,7 @@
                 </button>
             </div>
             <div class="col-md-6">
-                <button class="btn btn-default pull-right" type="button"> add staff<i class="icon-plus" style="margin:2px;margin-left:3px;"></i></button>
+                <button class="btn btn-default pull-right" data-toggle="modal" data-target="#addstaffModal" type="button"> add staff<i class="icon-plus" style="margin:2px;margin-left:3px;"></i></button>
             </div> 
         </div>
 
@@ -39,6 +39,10 @@
             </div>
         </div>
     </div>
+    <div id="addstaffModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        @Html.Action("RenderAddCourseTeacher", "Course",new { courseId = Model.Id });
+    </div>
+    
     <script>
         function EditCourse(evt) {
             $('#courseDetails').load('@Url.Action("EditCourse", "Course", new { course = Model.Id})');
