@@ -385,7 +385,7 @@ namespace StaffingPlanner.DAL
                     CourseState.Ongoing, CurrentYear.StartTerm);
                 context.CourseOfferings.Add(offering);
             }
-            //Populating the database with course offering for past school
+            //Populating the database with course offering for past school year
             foreach (var c in courses)
             {
                 List<TermYear> terms = new List<TermYear>();
@@ -416,8 +416,8 @@ namespace StaffingPlanner.DAL
             //Populating database with workloads
             foreach (var c in context.CourseOfferings)
             {
-                var workload1 = DataGen.CreateWorkload(teachers[DataGen.Rnd.Next(0, teachers.Count)], c);
-                var workload2 = DataGen.CreateWorkload(teachers[DataGen.Rnd.Next(0, teachers.Count)], c);
+                var workload1 = DataGen.CreateWorkload(teachers[DataGen.Rnd.Next(0, teachers.Count/2)], c);
+                var workload2 = DataGen.CreateWorkload(teachers[DataGen.Rnd.Next(teachers.Count/2, teachers.Count)], c);
                 context.Workloads.Add(workload1);
                 context.Workloads.Add(workload2);
             }            
