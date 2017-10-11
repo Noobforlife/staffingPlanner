@@ -28,41 +28,45 @@ namespace StaffingPlanner.Controllers
 			return View(teachers);
         }
 
-		public ActionResult AlterTeacherAllocation(Guid teacherId, List<Guid> offeringId, List<int> hours)
+		[HttpPost]
+		public void AlterTeacherAllocation(Guid teacherId, Guid offeringId, Guid workloadId, string hours)
 		{
-			for (var i = 0; i < offeringId.Count; i++)
-			{  
+			try
+			{
+				var numHours = int.Parse(hours);
 				var db = StaffingPlanContext.GetContext();
 				var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
-				var offering = db.CourseOfferings.FirstOrDefault(co => co.Id == offeringId[i]);
+				var offering = db.CourseOfferings.FirstOrDefault(o => o.Id == offeringId);
 				var existingWorkload = db.Workloads
-					.FirstOrDefault(w => w.Teacher.Id == teacher.Id && w.Course.Id == offering.Id);
-				if (existingWorkload == null)
+					.FirstOrDefault(w => w.Id == workloadId);
+
+				if (existingWorkload == null && numHours > 0)
 				{
-					if (hours[i] == 0) continue;
-					var newWorkload = new TeacherCourseWorkload
+					var newWorkLoad = new TeacherCourseWorkload
 					{
 						Id = Guid.NewGuid(),
-						Course = offering,
 						Teacher = teacher,
-						Workload = hours[i]
+						Course = offering,
+						Workload = numHours
 					};
-					db.Workloads.Add(newWorkload);
+					db.Workloads.Add(newWorkLoad);
+					db.SaveChanges();
 				}
-				else
+				else if (existingWorkload != null)
 				{
-					if (hours[i] == 0)
+					if (numHours <= 0)
 					{
 						db.Workloads.Remove(existingWorkload);
+						db.SaveChanges();
 					}
 					else
 					{
-						existingWorkload.Workload = hours[i];
+						existingWorkload.Workload = numHours;
+						db.SaveChanges();
 					}
 				}
 			}
-
-			return TeacherDetails(teacherId);
+			catch { }
 		}
 
         // GET: /Teacher/TeacherDetails/{id}
@@ -103,18 +107,28 @@ namespace StaffingPlanner.Controllers
 			var db = StaffingPlanContext.GetContext();
 
 			var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
+			var courses = new List<TeacherCourseViewModel>();
+			var name = "";
+			if (teacher != null)
+			{
+				var taughtByTeacher = db.Workloads
+					.Where(w => w.Teacher.Id == teacher.Id &&
+					             ((w.Course.TermYear.Term == Term.Fall && w.Course.TermYear.Year == 2017) ||
+					              (w.Course.TermYear.Term == Term.Spring && w.Course.TermYear.Year == 2018)))
+					.Select(w => w.Course.Id)
+					.ToList();
 
-			var allOfferings = db.Workloads.Where(t => t.Teacher.Id == teacher.Id).Select(l => l.Course).ToList();
-			var pastOfferings = allOfferings.Where(co => co.State == CourseState.Completed).ToList();
-			var currentOfferings = allOfferings.Except(pastOfferings).ToList();
+				var offerings = db.CourseOfferings
+					.Where(co => ((co.TermYear.Term == Term.Fall && co.TermYear.Year == 2017) ||
+						(co.TermYear.Term == Term.Spring && co.TermYear.Year == 2018)) &&
+						taughtByTeacher.Contains(co.Id))
+					.ToList();
 
-			var courses = teacher != null
-				? GenerateTeacherCourseList(teacher, currentOfferings)
-				: new List<TeacherCourseViewModel>();
+				courses = GenerateTeacherCourseList(teacher, offerings);
+				name = teacher.Name;
+			}
 
-			ViewBag.Name = teacher != null 
-				? teacher.Name
-				: "";
+			ViewBag.Name = name;
 
 			return PartialView("~/Views/Teacher/_TeacherCourseList.cshtml", courses);
 		}
@@ -124,37 +138,41 @@ namespace StaffingPlanner.Controllers
 		{
 			var db = StaffingPlanContext.GetContext();
 
-			var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
+			var teacher = db.Teachers.First(t => t.Id == teacherId);
+			var otherCourses = new List<TeacherCourseViewModel>();
+			var name = teacher.Name;
+			var courses = db.Workloads
+					.Where(w => w.Teacher.Id == teacherId && 
+						((w.Course.TermYear.Term == Term.Fall && w.Course.TermYear.Year == 2017) ||
+					    (w.Course.TermYear.Term == Term.Spring && w.Course.TermYear.Year == 2018)))
+					.ToList();
 
-			var allOfferings = db.CourseOfferings;
-			var allOfferingsForTeacher = db.Workloads.Where(t => t.Teacher.Id == teacher.Id).Select(l => l.Course).ToList();
-			var pastOfferings = allOfferingsForTeacher.Where(co => co.State == CourseState.Completed).ToList();
-			var currentOfferings = allOfferingsForTeacher.Except(pastOfferings).ToList();
-			var currentOfferingIds = currentOfferings.Select(o => o.Id);
-
-			var otherOfferings = allOfferings
-				.Where(co => ((co.TermYear.Year == 2017 && co.TermYear.Term == Term.Fall) ||
-				             (co.TermYear.Year == 2018 && co.TermYear.Term == Term.Spring)) &&
-							 !currentOfferingIds.Contains(co.Id))
+			var offerings = courses.OrderBy(o => o.Course.TermYear.Year)
+				.ThenBy(o => o.Course.TermYear.Term)
+				.ThenBy(o => o.Course.Periods)
+				.Select(o => new TeacherCourseViewModel
+				{
+					TeacherId = teacher.Id,
+					OfferingId = o.Course.Id,
+					WorkloadId = o.Id,
+					Code = o.Course.Course.Code,
+					CourseName = o.Course.TruncatedName,
+					TermYear = o.Course.TermYear,
+					Period = EnumToString.PeriodToString(o.Course.Periods),
+					CourseResponsible = o.Course.CourseResponsible,
+					TotalHours = o.Course.TotalHours,
+					AllocatedHours = o.Course.AllocatedHours,
+					RemainingHours = o.Course.RemainingHours,
+					TeacherAssignedHours = teacher.GetAllocatedHoursForOffering(o.Course)
+				})
 				.ToList();
 
-			var currentCourses = teacher != null
-				? GenerateTeacherCourseList(teacher, currentOfferings)
-				: new List<TeacherCourseViewModel>();
-			var otherCourses = GenerateOtherOfferingsViewModel(otherOfferings);
-			var model = new Tuple<List<TeacherCourseViewModel>, List<TeacherCourseViewModel>>(currentCourses, otherCourses);
+			var model = new Tuple<List<TeacherCourseViewModel>, List<TeacherCourseViewModel>>(offerings, otherCourses);
 
-			ViewBag.Name = teacher != null
-				? teacher.Name
-				: "";
+
+			ViewBag.Name = name;
 
 			return PartialView("~/Views/Teacher/_EditableTeacherCourseList.cshtml", model);
-		}
-
-		[HttpPost]
-		public void SaveHours(Guid id, int hours)
-		{
-			
 		}
 
         //Helper methods
@@ -189,27 +207,6 @@ namespace StaffingPlanner.Controllers
             };
         }
 
-		public static List<TeacherCourseViewModel> GenerateOtherOfferingsViewModel(List<CourseOffering> offerings)
-		{
-			return offerings.OrderBy(o => o.TermYear.Year)
-				.ThenBy(o => o.TermYear.Term)
-				.ThenBy(o => o.Periods)
-				.Select(o => new TeacherCourseViewModel
-				{
-					Id = o.Id,
-					Code = o.Course.Code,
-					CourseName = o.Course.TruncatedName,
-					TermYear = o.TermYear,
-					Period = EnumToString.PeriodToString(o.Periods),
-					CourseResponsible = o.CourseResponsible,
-					TotalHours = o.TotalHours,
-					AllocatedHours = o.AllocatedHours,
-					RemainingHours = o.RemainingHours,
-					TeacherAssignedHours = 0
-				})
-				.ToList();
-		}
-
         public static List<TeacherCourseViewModel> GenerateTeacherCourseList(Teacher teacher, List<CourseOffering> offerings)
         {
             return offerings.OrderBy(o => o.TermYear.Year)
@@ -217,7 +214,8 @@ namespace StaffingPlanner.Controllers
                 .ThenBy(o => o.Periods)
                 .Select(o => new TeacherCourseViewModel
             {
-                Id = o.Id,
+				TeacherId = teacher.Id,
+                OfferingId = o.Id,
                 Code = o.Course.Code,
                 CourseName = o.Course.TruncatedName,
                 TermYear = o.TermYear,

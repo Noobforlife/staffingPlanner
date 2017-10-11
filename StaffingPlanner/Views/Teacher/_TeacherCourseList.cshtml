@@ -20,7 +20,7 @@
             @foreach (var course in Model)
             {
                 <tr>
-                    <td><a href="#" data-toggle="modal" data-target="#course-modal">@Html.ActionLink(course.CourseName, "CourseDetails", "Course", new {id = course.Id}, null)</a></td>
+                    <td><a href="#" data-toggle="modal" data-target="#course-modal">@Html.ActionLink(course.CourseName, "CourseDetails", "Course", new {id = course.OfferingId}, null)</a></td>
                     <td>@course.Code</td>
                     <td>@Html.ActionLink(course.CourseResponsible.Name, "TeacherDetails", "Teacher", new {id = course.CourseResponsible.Id}, null)</td>
                     <td>@course.TermYear.ToString()</td>
