@@ -40,12 +40,13 @@ namespace StaffingPlanner.Controllers
 
             //Find any teachers with matching names
             var matchingTeachers = db.Teachers.Where(t => nameParts.All(np => t.Name.ToLower().Contains(np))).Select(t => new { t.Name, t.Id, Director = t.DirectorOfStudies });
-
+            var academicYear = db.AcademicYears.Where(y => y.StartTerm.Year == 2017).ToList().FirstOrDefault();
             if (matchingTeachers.Any()) //If there are any teachers who match any name we are sufficiently satisfied
             {
                 authResult = true;
                 Globals.User = matchingTeachers.First().Name;
 	            Globals.UserId = matchingTeachers.First().Id;
+                Globals.academicyear = academicYear;
             }
             else
             {
