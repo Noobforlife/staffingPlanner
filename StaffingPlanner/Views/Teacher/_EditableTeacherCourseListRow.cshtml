@@ -10,11 +10,11 @@
     <td>@Model.TotalHours</td>
     <td>@Model.AllocatedHours</td>
     <td>
-        <div id="teacherHours" contenteditable="true" style="background-color: white; display: inline-block; height: 100%; width: 50%" class="hours">
+        <div id="@Model.WorkloadId" contenteditable="true" style="background-color: white; display: inline-block; height: 100%; width: 50%" class="hours">
             @Model.TeacherAssignedHours
         </div>
         <div style="display: inline-block; float: right;">
-            <span class="glyphicon glyphicon-ok-circle" style="cursor: pointer; color: green;" onclick="FuckingSaveEdit()"/>
+            <span class="glyphicon glyphicon-ok-circle" style="cursor: pointer; color: green;" onclick="FuckingSaveEdit(this)" data-offering="@Model.OfferingId" data-workload="@Model.WorkloadId" data-teacher="@Model.TeacherId"/>
             <span class="glyphicon glyphicon-remove-circle" style="cursor: pointer; color: red;" onclick="DiscardEdit()"/>
         </div>
     </td>
@@ -25,24 +25,30 @@
     function SaveEdit() {
         alert("hello");
     }
-    function FuckingSaveEdit() {
-        var hours = $('#teacherHours').text();
+    function FuckingSaveEdit(elem) {
+        var teacherId = $(elem).data('teacher');
+        var offeringId = $(elem).data('offering');
+        var workloadId = $(elem).data('workload');
+        var hours = $('#' + workloadId).text();
+        console.log(hours);
         $.ajax({
             type: "POST",
             url: '@Url.Action("AlterTeacherAllocation", "Teacher")',
             contentType: "application/json",
             data: JSON.stringify({
-                teacherId: '@Model.TeacherId',
-                offeringId: '@Model.OfferingId',
-                workloadId: '@Model.WorkloadId',
+                teacherId: teacherId,
+                offeringId: offeringId,
+                workloadId: workloadId,
                 hours: hours
             }),
             dataType: "json",
             success: function() {
                 console.log("success");
+                location.reload();
             },
             error: function() {
                 console.log("error");
+                location.reload();
             }
         });
     }
