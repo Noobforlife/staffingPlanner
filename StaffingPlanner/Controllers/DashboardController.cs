@@ -14,7 +14,7 @@ namespace StaffingPlanner.Controllers
         {
             if (Globals.User == null)
             {
-                RedirectToAction("Login", "Account");
+                return RedirectToAction("Login", "Account");
             }
             // TODO: Get this shit working
             //Get all offerings for fall and spring
@@ -99,7 +99,7 @@ namespace StaffingPlanner.Controllers
 			
 			foreach (var teacher in teachers)
 			{
-				var teachingHours = teacher.GetHourBudget(fallTerm, springTerm).TeachingHours;
+				var teachingHours = teacher.GetHourBudget(fallTerm).TeachingHours + teacher.GetHourBudget(springTerm).TeachingHours;
 				model.TotalRemaining += teachingHours;
 
 				switch (teacher.AcademicTitle)

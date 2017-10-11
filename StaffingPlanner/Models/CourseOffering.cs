@@ -21,15 +21,17 @@ namespace StaffingPlanner.Models
 		public virtual Teacher CourseResponsible { get; set; }
 		public float HST { get; set; }
 		public int NumStudents { get; set; }
-		public int RemainingHours => TotalHours - AllocatedHours;
+        public int RegisteredStudents { get; set; }
+        public int PassedStudents { get; set; }
+        public int RemainingHours => TotalHours - AllocatedHours;
 		public int AllocatedHours
 		{
 			get
 			{
 				var db = StaffingPlanContext.GetContext();
-				return db.Workloads
-					.Where(w => w.Course.Id.Equals(Id))
-					.Sum(w => w.Workload);
+                var workloads = db.Workloads.Where(w => w.Course.Id.Equals(Id)).ToList();
+                if (workloads.Count == 0) { return 0; }
+                return workloads.Select(x => x.Workload).Sum();
 			}
 		}
         public string Status => CourseController.GetStatus(TotalHours,AllocatedHours);

@@ -5,6 +5,7 @@ using StaffingPlanner.DAL;
 using StaffingPlanner.ViewModels;
 using StaffingPlanner.Models;
 using System.Collections.Generic;
+using System.Web.Services;
 
 namespace StaffingPlanner.Controllers
 {
@@ -12,8 +13,8 @@ namespace StaffingPlanner.Controllers
 	{
         private static readonly Random Rnd = new Random();
 
-        //Methods handling returning of View
-
+        #region ViewResult and PartialView Result Methods 
+        
         // GET: /Course/Courses
         public ActionResult Courses()
         {
@@ -38,30 +39,142 @@ namespace StaffingPlanner.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-            //Get the matching course offering and all teacher who have assigned hours to the offering
+
             var db = StaffingPlanContext.GetContext();
             var offering = db.CourseOfferings.Where(c => c.Id == id).ToList().First();
-            var teachers = db.Workloads.Where(w => w.Course.Course.Code == offering.Course.Code).Select(x => x.Teacher).ToList();
-
-            //Terms for current year
-            var fallTerm = db.TermYears.Where(ty => ty.Term == Term.Fall && ty.Year == 2017).FirstOrDefault();
-            var springTerm = db.TermYears.Where(ty => ty.Term == Term.Spring && ty.Year == 2018).FirstOrDefault();
 
             //Generate viewmodel
-            var vm = GenerateCourseDetailViewModel(offering, teachers, fallTerm, springTerm);
+            var vm = GenerateCourseDetailViewModel(offering);
 
             return View(vm);
         }
 
+        [ChildActionOnly]
+        public PartialViewResult RenderTeacherList(Guid Courseid)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var teachers = db.Workloads.Where(w => w.Course.Id == Courseid).Select(x => x.Teacher).ToList();
 
-        //Methods to generate view models
-        
-        //Generates a detailed course view model
+            var CourseTeacherList = GenerateCourseTeacherViewModelList(teachers, Courseid);
+            
+            return PartialView("~/Views/Course/_CourseTeacherList.cshtml", CourseTeacherList);
+        }
+
+        [ChildActionOnly]
+        public PartialViewResult RenderCourseHistory(Guid courseid)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var courses = db.CourseOfferings.Where(x => x.Id == courseid && x.TermYear.Year < DateTime.Now.Year).ToList();
+
+            return PartialView("~/Views/Course/_CourseHistory.cshtml", courses);
+        }
+
+        [HttpGet]
+        public PartialViewResult EditCourse(Guid course)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var teachers = db.Teachers.Where(x => x.Id != null).ToList();
+            var c = db.CourseOfferings.Where(x => x.Id == course).ToList().First();
+
+            var model = new Tuple<CourseOffering, List<Teacher>>(c, teachers);
+
+            return PartialView("~/Views/Course/_EditCourseDetails.cshtml", model);
+        }
+
+        [HttpGet]
+        public PartialViewResult EditTeacher(string Id)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var work = db.Workloads.Where(w => w.Id.ToString() == Id).ToList().FirstOrDefault();
+            var model = GenerateCourseTeacherViewModel(work.Teacher, work.Course.Id);
+
+            return PartialView("~/Views/Course/_EditCourseTeacher.cshtml", model);
+        }
+
+        [ChildActionOnly]
+        public PartialViewResult RenderAddCourseTeacher(Guid courseId)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var teachers = db.Teachers.ToList();
+            var model = new Tuple<List<Teacher>, Guid>(teachers, courseId);
+
+            return PartialView("~/Views/Course/_AddCourseTeacher.cshtml", model);
+        }
+
+        public ActionResult DeleteTeacher(Guid id, Guid workloadId)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var workload = db.Workloads.Where(x => x.Id == workloadId).ToList().FirstOrDefault();
+            db.Workloads.Remove(workload);
+            db.SaveChanges();
+
+            return RedirectToAction("CourseDetails", "Course", new { id = id });
+        }
+
+        public ActionResult CancelChanges(Guid id) {
+            return RedirectToAction("CourseDetails", "Course", new { id = id });
+        }        
+
+        [HttpPost]
+        public ActionResult SaveCourseChanges(string Responsible, string CourseId)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var teacher = db.Teachers.Where(x => x.Id.ToString() == Responsible).ToList().First();
+            var course = db.CourseOfferings.Where(x => x.Id.ToString() == CourseId).ToList().First();
+            var vm = GenerateCourseDetailViewModel(course);
+
+            course.CourseResponsible = teacher;
+            var t = course;
+            db.SaveChanges();
+
+            return RedirectToAction("CourseDetails", "Course", new { id = course.Id });
+        }
+
+        [HttpPost]
+        public ActionResult SaveTeacherChanges(string Id, string workloadId, string Allocated)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var Workload = db.Workloads.Where(x => x.Id.ToString() == workloadId).ToList().First();
+
+            Workload.Workload = int.Parse(Allocated);
+            db.SaveChanges();
+
+            return RedirectToAction("CourseDetails", "Course", new { id = Guid.Parse(Id) });
+        }
+
+        [HttpPost]
+        public ActionResult SaveNewTeacher(string Id, string teacherId, string Allocated)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var teacher = db.Teachers.Where(t => t.Id.ToString() == teacherId).ToList().FirstOrDefault();
+            var offering = db.CourseOfferings.Where(o => o.Id.ToString() == Id).ToList().FirstOrDefault();
+            var duplicate = db.Workloads.Where(x => x.Course.Id.ToString() == Id & x.Teacher.Id.ToString() == teacherId).ToList();
+
+            if (duplicate.Count == 0) {
+                var teacherworkload = new TeacherCourseWorkload
+                {
+                    Id = Guid.NewGuid(),
+                    Course = offering,
+                    Teacher = teacher,
+                    Workload = int.Parse(Allocated)
+                };
+
+                db.Workloads.Add(teacherworkload);
+                db.SaveChanges();
+            }
+            return RedirectToAction("CourseDetails", "Course", new { id = Guid.Parse(Id) });
+        }
+
+        #endregion
+
+        #region Methods for generating View Models 
+
         private static DetailedCourseViewModel GenerateCourseDetailViewModel(CourseOffering offering, List<Teacher> teachers, TermYear fallTerm, TermYear springTerm)
         {
             var teacherList = TeacherController.GenerateTeacherViewModelList(teachers, fallTerm, springTerm);
             var vm = new DetailedCourseViewModel
             {
+                Id = offering.Id,
                 Code = offering.Course.Code,
                 Name = offering.Course.Name,
                 TermYear = offering.TermYear,
@@ -70,15 +183,37 @@ namespace StaffingPlanner.Controllers
                 CourseResponsible = offering.CourseResponsible,
                 HST = offering.HST,
                 NumStudents = offering.NumStudents,
+                RegisteredStudents = offering.RegisteredStudents,
+                PassedStudents = offering.PassedStudents,
                 TotalHours = offering.TotalHours,
                 AllocatedHours = offering.AllocatedHours,
-                RemainingHours = offering.RemainingHours,
-                Teachers = teacherList                
+                RemainingHours = offering.RemainingHours
             };
             return vm;
         }
 
-        //Generates a list of simple course view models
+        private static DetailedCourseViewModel GenerateCourseDetailViewModel(CourseOffering offering)
+        {
+           var vm = new DetailedCourseViewModel
+            {
+                Id = offering.Id,
+                Code = offering.Course.Code,
+                Name = offering.Course.Name,
+                TermYear = offering.TermYear,
+                Period = EnumToString.PeriodToString(offering.Periods),
+                Credits = offering.Credits,
+                CourseResponsible = offering.CourseResponsible,
+                HST = offering.HST,
+                NumStudents = offering.NumStudents,
+                RegisteredStudents = offering.RegisteredStudents,
+                PassedStudents = offering.PassedStudents,
+                TotalHours = offering.TotalHours,
+                AllocatedHours = offering.AllocatedHours,
+                RemainingHours = offering.RemainingHours
+            };
+            return vm;
+        }
+
         public static List<SimpleCourseViewModel> GenerateCourseViewModelList(List<CourseOffering> offerings)
         {
             return offerings.Select(o => new SimpleCourseViewModel
@@ -97,7 +232,40 @@ namespace StaffingPlanner.Controllers
 		    })
 		    .ToList();
         }
-        
+
+        public static List<CourseTeacherViewModel> GenerateCourseTeacherViewModelList(List<Teacher> teachers, Guid CourseId) {
+            List<CourseTeacherViewModel> list = new List<CourseTeacherViewModel>();
+            foreach (var teacher in teachers) {
+                var vm = GenerateCourseTeacherViewModel(teacher, CourseId);
+                list.Add(vm);
+            }
+            return list;
+        }
+               
+        public static CourseTeacherViewModel GenerateCourseTeacherViewModel(Teacher teacher, Guid CourseId) {
+
+            var db = StaffingPlanContext.GetContext();
+            var work = db.Workloads.Where(w => w.Course.Id == CourseId && w.Teacher.Id == teacher.Id).ToList().First();
+            var FallWork = db.Workloads.Where(w => w.Teacher.Id == teacher.Id && w.Course.TermYear.Term == Term.Fall).ToList().Select(c => c.Workload).Sum();
+            var SpringWork = db.Workloads.Where(w => w.Teacher.Id == teacher.Id && w.Course.TermYear.Term == Term.Spring).ToList().Select(c => c.Workload).Sum();
+
+            var vm = new CourseTeacherViewModel
+            {
+                Id = teacher.Id,
+                Name = teacher.Name,
+                Title = teacher.AcademicTitle,
+                WorkloadId = work.Id,
+                CourseId = work.Course.Id,
+                WorkloadFall = FallWork,
+                WorkloadSpring = SpringWork,
+                CourseWorkload = work.Workload,
+            };
+            return vm;
+        }
+
+        #endregion
+
+        //helpers
         public static string GetStatus() {
             var credits = new List<string> {"warning","success","danger"};
             return credits[Rnd.Next(credits.Count)];
@@ -115,7 +283,8 @@ namespace StaffingPlanner.Controllers
                 return "warning";
             }
             return "danger";
-        }
+        }               
 
     }
+    
 }

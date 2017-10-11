@@ -31,9 +31,24 @@ namespace StaffingPlanner.ViewModels
         public int AllocatedHours { get; set; }
         public int RemainingHours { get; set; }
         public int NumStudents { get; set; }
+        public int RegisteredStudents { get; set; }
+        public int PassedStudents { get; set; }
         public Teacher CourseResponsible { get; set; }
         public float HST { get; set; }
-        public List<SimpleTeacherViewModel> Teachers { get; set; }
+        public List<CourseTeacherViewModel> Teachers { get; set; }
         public string Status { get; set; }
+    }
+
+    public class CourseTeacherViewModel
+    {
+        public Guid Id {get; set; }
+        public Guid WorkloadId { get; set; }
+        public Guid CourseId { get; set; }
+        public string Name { get; set; }
+        public AcademicTitle Title { get; set; }
+        public int TotalHours { get; set; }        
+        public int WorkloadFall { get; set; }
+        public int WorkloadSpring { get; set; }
+        public int CourseWorkload { get; set; }
     }
 }

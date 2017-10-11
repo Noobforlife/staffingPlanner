@@ -1,4 +1,4 @@
-﻿ using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -28,8 +28,44 @@ namespace StaffingPlanner.Controllers
 			return View(teachers);
         }
 
+		public ActionResult AlterTeacherAllocation(Guid teacherId, List<Guid> offeringId, List<int> hours)
+		{
+			for (var i = 0; i < offeringId.Count; i++)
+			{
+				var db = StaffingPlanContext.GetContext();
+				var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
+				var offering = db.CourseOfferings.FirstOrDefault(co => co.Id == offeringId[i]);
+				var existingWorkload = db.Workloads
+					.FirstOrDefault(w => w.Teacher.Id == teacher.Id && w.Course.Id == offering.Id);
+				if (existingWorkload == null)
+				{
+					if (hours[i] == 0) continue;
+					var newWorkload = new TeacherCourseWorkload
+					{
+						Id = Guid.NewGuid(),
+						Course = offering,
+						Teacher = teacher,
+						Workload = hours[i]
+					};
+					db.Workloads.Add(newWorkload);
+				}
+				else
+				{
+					if (hours[i] == 0)
+					{
+						db.Workloads.Remove(existingWorkload);
+					}
+					else
+					{
+						existingWorkload.Workload = hours[i];
+					}
+				}
+			}
+
+			return TeacherDetails(teacherId);
+		}
+
         // GET: /Teacher/TeacherDetails/{id}
-        [HandleError]
         public ActionResult TeacherDetails(Guid id)
         {
             if (Globals.User == null)
@@ -38,32 +74,88 @@ namespace StaffingPlanner.Controllers
             }
             var db = StaffingPlanContext.GetContext();
             //Get the teacher with the same Id as the parameter id
-            var teacher = db.Teachers.First(t => t.Id == id);
+            var teacher = db.Teachers.FirstOrDefault(t => t.Id == id);
 
             //Get the terms, right now we simple use HT17 and VT18
-            var fallTerm = db.TermYears.Where(ty => ty.Term == Term.Fall && ty.Year == 2017).FirstOrDefault();
-            var springTerm = db.TermYears.Where(ty => ty.Term == Term.Spring && ty.Year == 2018).FirstOrDefault();
-            HourBudget teacherBugdet = teacher.GetHourBudget(fallTerm, springTerm);
-
-            //Get availability for the teacher for the terms above
-            int fallAvailability = GetTermAvailability(teacher, fallTerm);
-            int springAvailability = GetTermAvailability(teacher, springTerm);
-
-            //Get all offerings for this teacher and divide them into past and current
-            List<CourseOffering> allOfferings = db.Workloads.Where(t => t.Teacher.Id == teacher.Id).Select(l => l.Course).ToList();
-            var pastOfferings = allOfferings.Where(co => co.State == CourseState.Completed).ToList();
-            var currentOfferings = allOfferings.Except(pastOfferings).ToList();
-
-            //Generate viewmodel for both sets of offerings
-            var currentCoursesViewModel = GenerateTeacherCourseList(teacher, currentOfferings);
-            var pastCoursesViewModel = GenerateTeacherCourseList(teacher, pastOfferings);
+            var fallTerm = db.TermYears.FirstOrDefault(ty => ty.Term == Term.Fall && ty.Year == 2017);
+            var springTerm = db.TermYears.FirstOrDefault(ty => ty.Term == Term.Spring && ty.Year == 2018);
+            var fallBudget = teacher.GetHourBudget(fallTerm);
+            var springBudget = teacher.GetHourBudget(springTerm);
 
             //Generate final viewmodel
-            var teacherModel = GenerateTeacherViewModel(teacher, teacherBugdet, currentCoursesViewModel, pastCoursesViewModel);
+            var teacherModel = GenerateTeacherViewModel(teacher, fallBudget, springBudget);
 
             return View(teacherModel);
         }
 
+        [ChildActionOnly]
+        public PartialViewResult CourseHistory(Guid teacherid)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var courses = db.Workloads.Where(x => x.Teacher.Id == teacherid && x.Course.TermYear.Year < DateTime.Now.Year).ToList();
+            
+            return PartialView("~/Views/Teacher/_TeacherCourseHistory.cshtml", courses);
+        }
+
+		[HttpGet]
+		public PartialViewResult CourseList(Guid teacherId)
+		{
+			var db = StaffingPlanContext.GetContext();
+
+			var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
+
+			var allOfferings = db.Workloads.Where(t => t.Teacher.Id == teacher.Id).Select(l => l.Course).ToList();
+			var pastOfferings = allOfferings.Where(co => co.State == CourseState.Completed).ToList();
+			var currentOfferings = allOfferings.Except(pastOfferings).ToList();
+
+			var courses = teacher != null
+				? GenerateTeacherCourseList(teacher, currentOfferings)
+				: new List<TeacherCourseViewModel>();
+
+			ViewBag.Name = teacher != null 
+				? teacher.Name
+				: "";
+
+			return PartialView("~/Views/Teacher/_TeacherCourseList.cshtml", courses);
+		}
+
+		[HttpGet]
+		public PartialViewResult EditableCourseList(Guid teacherId)
+		{
+			var db = StaffingPlanContext.GetContext();
+
+			var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
+
+			var allOfferings = db.CourseOfferings;
+			var allOfferingsForTeacher = db.Workloads.Where(t => t.Teacher.Id == teacher.Id).Select(l => l.Course).ToList();
+			var pastOfferings = allOfferingsForTeacher.Where(co => co.State == CourseState.Completed).ToList();
+			var currentOfferings = allOfferingsForTeacher.Except(pastOfferings).ToList();
+			var currentOfferingIds = currentOfferings.Select(o => o.Id);
+
+			var otherOfferings = allOfferings
+				.Where(co => ((co.TermYear.Year == 2017 && co.TermYear.Term == Term.Fall) ||
+				             (co.TermYear.Year == 2018 && co.TermYear.Term == Term.Spring)) &&
+							 !currentOfferingIds.Contains(co.Id))
+				.ToList();
+
+			var currentCourses = teacher != null
+				? GenerateTeacherCourseList(teacher, currentOfferings)
+				: new List<TeacherCourseViewModel>();
+			var otherCourses = GenerateOtherOfferingsViewModel(otherOfferings);
+			var model = new Tuple<List<TeacherCourseViewModel>, List<TeacherCourseViewModel>>(currentCourses, otherCourses);
+
+			ViewBag.Name = teacher != null
+				? teacher.Name
+				: "";
+
+			return PartialView("~/Views/Teacher/_EditableTeacherCourseList.cshtml", model);
+		}
+
+		[HttpPost]
+		public void SaveHours(Guid id, int hours)
+		{
+			
+		}
 
         //Helper methods
 
@@ -71,7 +163,7 @@ namespace StaffingPlanner.Controllers
         {
             var db = StaffingPlanContext.GetContext();
             var teacherAvailability = db.TeacherTermAvailability.Where(tta => tta.Teacher.Id == teacher.Id);
-            int termAvailability = teacherAvailability.
+            var termAvailability = teacherAvailability.
                 Where(tta => tta.TermYear.Year == termYear.Year && tta.TermYear.Term == termYear.Term)
                 .Select(tta => tta.Availability)
                 .FirstOrDefault();
@@ -80,9 +172,7 @@ namespace StaffingPlanner.Controllers
        
         //Methods to generate view models
 
-        public static DetailedTeacherViewModel GenerateTeacherViewModel(Teacher teacher, HourBudget teacherBudget,
-            List<TeacherCourseViewModel> currentCourseOfferings,
-            List<TeacherCourseViewModel> pastCourseOfferings)
+        public static DetailedTeacherViewModel GenerateTeacherViewModel(Teacher teacher, HourBudget fallBudget, HourBudget springBudget)
         {
             return new DetailedTeacherViewModel
             {
@@ -90,17 +180,38 @@ namespace StaffingPlanner.Controllers
                 Name = teacher.Name,
                 Email = teacher.Email,
                 Title = teacher.AcademicTitle,
-                RemainingHours = teacherBudget.TotalHours - teacher.GetAllocatedHoursForTerm(teacherBudget.FallTerm) - teacher.GetAllocatedHoursForTerm(teacherBudget.SpringTerm),
-                HourBudget = teacherBudget,
-                CurrentCourseOfferings = currentCourseOfferings,
-                PastCourseOfferings = pastCourseOfferings
+
+                FallBudget = fallBudget,
+                SpringBudget = springBudget,
+
+                FallPeriodWorkload = new TeacherPeriodWorkload(teacher, fallBudget.TermYear),
+                SpringPeriodWorkload = new TeacherPeriodWorkload(teacher, springBudget.TermYear)
             };
         }
 
+		public static List<TeacherCourseViewModel> GenerateOtherOfferingsViewModel(List<CourseOffering> offerings)
+		{
+			return offerings.OrderBy(o => o.TermYear.Year)
+				.ThenBy(o => o.TermYear.Term)
+				.ThenBy(o => o.Periods)
+				.Select(o => new TeacherCourseViewModel
+				{
+					Id = o.Id,
+					Code = o.Course.Code,
+					CourseName = o.Course.TruncatedName,
+					TermYear = o.TermYear,
+					Period = EnumToString.PeriodToString(o.Periods),
+					CourseResponsible = o.CourseResponsible,
+					TotalHours = o.TotalHours,
+					AllocatedHours = o.AllocatedHours,
+					RemainingHours = o.RemainingHours,
+					TeacherAssignedHours = 0
+				})
+				.ToList();
+		}
+
         public static List<TeacherCourseViewModel> GenerateTeacherCourseList(Teacher teacher, List<CourseOffering> offerings)
         {
-            var db = StaffingPlanContext.GetContext();
-
             return offerings.OrderBy(o => o.TermYear.Year)
                 .ThenBy(o => o.TermYear.Term)
                 .ThenBy(o => o.Periods)
@@ -122,25 +233,26 @@ namespace StaffingPlanner.Controllers
 
         public static List<SimpleTeacherViewModel> GenerateTeacherViewModelList(List<Teacher> teachersList, TermYear fallTerm, TermYear springTerm)
         {
-            //FIX!!! /Simon
-	        var db = StaffingPlanContext.GetContext();
 	        var output = new List<SimpleTeacherViewModel>();
 
 	        foreach (var teacher in teachersList)
 	        {
-				var allocatedFall = db.Workloads.Where(w => w.Teacher.Id == teacher.Id && w.Course.TermYear.Term == fallTerm.Term && w.Course.TermYear.Year == fallTerm.Year).ToList().Sum(w => w.Workload);
-		        var allocatedSpring = db.Workloads.Where(w => w.Teacher.Id == teacher.Id && w.Course.TermYear.Term == springTerm.Term && w.Course.TermYear.Year == springTerm.Year).ToList().Sum(w => w.Workload); 
-		        var teacherHourBudget = teacher.GetHourBudget(fallTerm, springTerm);
-		        var totalRemaining = teacherHourBudget.TeachingHours - allocatedFall - allocatedSpring;
-		        var allocationWarnings = GenerateAllocationWarning(teacherHourBudget, allocatedFall, allocatedSpring);
+                var fallBudget = teacher.GetHourBudget(fallTerm);
+                var springBudget = teacher.GetHourBudget(springTerm);
 
-				output.Add(new SimpleTeacherViewModel
-				{
-					Id = teacher.Id,
-					Name = teacher.Name,
-					Title = teacher.AcademicTitle,
-					FallTermAvailability = teacherHourBudget.FallAvailability,
-					SpringTermAvailability = teacherHourBudget.SpringAvailability,
+                var allocatedFall = teacher.GetAllocatedHoursForTerm(fallTerm);
+                var allocatedSpring = teacher.GetAllocatedHoursForTerm(springTerm);
+
+		        var totalRemaining = fallBudget.TeachingHours + springBudget.TeachingHours - allocatedFall - allocatedSpring;
+		        var allocationWarnings = GenerateAllocationWarning(fallBudget, springBudget, allocatedFall, allocatedSpring);
+
+                output.Add(new SimpleTeacherViewModel
+                {
+                    Id = teacher.Id,
+                    Name = teacher.Name,
+                    Title = teacher.AcademicTitle,
+                    FallTermAvailability = fallBudget.TermAvailability,
+					SpringTermAvailability = springBudget.TermAvailability,
 					AllocatedHoursFall = allocatedFall,
 					StatusFall = allocationWarnings.Item1,
 					AllocatedHoursSpring = allocatedSpring,
@@ -154,13 +266,13 @@ namespace StaffingPlanner.Controllers
         }
 
 		// Feel free to replace "warning" with "status" if it makes more sense for its intended use
-		private static Tuple<string, string> GenerateAllocationWarning(HourBudget budget, int allocatedFall, int allocatedSpring)
+		public static Tuple<string, string> GenerateAllocationWarning(HourBudget fallBudget, HourBudget springBudget, int allocatedFall, int allocatedSpring)
 		{
 			var fallWarning = "";
 			var springWarning = "";
 
-			var fallAllocationShouldBe = budget.TeachingHours / 2 * budget.FallAvailability;
-			var springAllocationShouldBe = budget.TeachingHours / 2 * budget.SpringAvailability;
+			var fallAllocationShouldBe = fallBudget.TeachingHours;
+			var springAllocationShouldBe = springBudget.TeachingHours;
 
 			// Set the fall warning attribute according to allocation status
 			if (allocatedFall >= fallAllocationShouldBe * 1.5)

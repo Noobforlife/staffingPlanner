@@ -1,0 +1,42 @@
+﻿@using StaffingPlanner.ViewModels;
+@model List<CourseTeacherViewModel>
+
+
+    <div class="table-responsive" style="font-family:Raleway, sans-serif;">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Name </th>
+                    <th>Title </th>
+                    <th>Total Hours</th>
+                    <th>HT work</th>
+                    <th>VT work</th>
+                    <th>Allocated to course(Hrs)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var teacher in Model)
+                {
+                    <tr id="@teacher.WorkloadId">
+                        <td>@Html.ActionLink(teacher.Name, "TeacherDetails", "Teacher", new { id = teacher.Id }, null)</td>
+                        <td>@teacher.Title</td>
+                        <td>700</td>
+                        <td>@teacher.WorkloadFall</td>
+                        <td>@teacher.WorkloadSpring</td>
+                        <td>@teacher.CourseWorkload 
+                               <button value ="@teacher.WorkloadId" data-toggle="tooltip" title="Édit Allocation" class="btn btn-default edit-button" onclick="EditTeacher(this)" style="margin-left: 80px" type="button"> 
+                                    <i class="material-icons">edit</i>
+                               </button>
+                               <span class="label label-success pull-right">status </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+<script>
+    function EditTeacher(btn) {
+        $('#' + btn.value).load('@Url.Action("EditTeacher","Course")/'+ btn.value); 
+        }
+</script>
+

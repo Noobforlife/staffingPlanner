@@ -1,0 +1,19 @@
+﻿@using StaffingPlanner.ViewModels
+@model TeacherCourseViewModel
+    
+<tr>
+    <td>@Model.CourseName</td>
+    <td>@Model.Code</td>
+    <td>@Model.CourseResponsible.Name</td>
+    <td>@Model.TermYear.ToString()</td>
+    <td>@Model.Period</td>
+    <td>@Model.TotalHours</td>
+    <td>@Model.AllocatedHours</td>
+    <td>
+        <div contenteditable="true" style="background-color: white; display: inline-block; height: 100%; width: 50%" class="hours">
+            @Model.TeacherAssignedHours
+        </div>
+        <button style="float: right;">save</button>
+    </td>
+    <td><span class="label label-warning pull-right">status </span></td>
+</tr>

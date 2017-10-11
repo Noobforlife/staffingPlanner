@@ -1,0 +1,36 @@
+﻿@using StaffingPlanner.Models;
+@model List<CourseOffering> 
+<div class="card card-block">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name </th>
+                <th>Term </th>
+                <th>Year</th>
+                <th>Total Budget</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.Count == 0)
+                {
+                    <tr>
+                        <td colspan="4" class="text-center">No course History available</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var course in Model)
+                    {
+                        <tr>
+                            <td>@course.Course.Name</td>
+                            <td>@course.TermYear.Term</td>
+                            <td>@course.TermYear.Year</td>
+                            <td>@course.TotalHours<span class="label label-success pull-right">Completed</span></td>
+                        </tr>
+                    }
+                }
+            }          
+        </tbody>
+    </table>
+</div>
