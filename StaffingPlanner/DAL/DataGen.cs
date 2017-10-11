@@ -30,12 +30,13 @@ namespace StaffingPlanner.DAL
             15.0
         };
 
-        public static CourseOffering CreateOffering(Teacher courseResponsible, Course course, TermYear termyear, CourseState state)
+        public static CourseOffering CreateOffering(Teacher courseResponsible, Course course, AcademicYear academicYear, CourseState state,TermYear term)
         {
             return new CourseOffering {
                 Id =Guid.NewGuid(),
                 Course = course,
-                TermYear = termyear,
+                AcademicYear = academicYear,
+                TermYear = term,
                 Credits = Credits[Rnd.Next(0, Credits.Count)],
                 Periods = RandomPeriod(),
                 TotalHours = Rnd.Next(300, 800),

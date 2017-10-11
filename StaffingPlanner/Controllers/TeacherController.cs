@@ -31,7 +31,7 @@ namespace StaffingPlanner.Controllers
 		public ActionResult AlterTeacherAllocation(Guid teacherId, List<Guid> offeringId, List<int> hours)
 		{
 			for (var i = 0; i < offeringId.Count; i++)
-			{
+			{  
 				var db = StaffingPlanContext.GetContext();
 				var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
 				var offering = db.CourseOfferings.FirstOrDefault(co => co.Id == offeringId[i]);

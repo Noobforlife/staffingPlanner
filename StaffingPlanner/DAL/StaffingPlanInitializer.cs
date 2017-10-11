@@ -9,16 +9,27 @@ namespace StaffingPlanner.DAL
         protected override void Seed(StaffingPlanContext context)
         {
             //Populating database with TermYears
+            var HT16 = new TermYear { Id = Guid.NewGuid(), Term = Term.Spring, Year = 2016 };
             var VT17 = new TermYear { Id = Guid.NewGuid(), Term = Term.Spring, Year = 2017 };
             var HT17 = new TermYear { Id = Guid.NewGuid(), Term = Term.Fall, Year = 2017 };
             var VT18 = new TermYear { Id = Guid.NewGuid(), Term = Term.Spring, Year = 2018 };
             var termYears = new List<TermYear> {
                 HT17,
                 VT18,
+                HT16,
                 VT17
             };
             termYears.ForEach(c => context.TermYears.Add(c));
             context.SaveChanges();
+
+            var LastYear = new AcademicYear { Id = Guid.NewGuid(), StartTerm = HT16, EndTerm = VT17 };
+            var CurrentYear = new AcademicYear { Id = Guid.NewGuid(), StartTerm = HT17, EndTerm = VT18 };
+            context.AcademicYears.Add(LastYear);
+            context.AcademicYears.Add(CurrentYear);
+            context.SaveChanges();
+         
+        
+
 
             //Populating database with teachers
             var teachers = new List<Teacher>
@@ -367,31 +378,35 @@ namespace StaffingPlanner.DAL
             context.SaveChanges();
 
 
-            //Populating database with ongoing offerings
-            foreach (var c in courses)
+            //Populating database with Course offerings for current academic year
+            foreach (var c in courses.GetRange(0,12))
             {
-                var offering = DataGen.CreateOffering(teachers[DataGen.Rnd.Next(0, teachers.Count)], c, termYears[0],
-                    CourseState.Ongoing);
+                var offering = DataGen.CreateOffering(teachers[DataGen.Rnd.Next(0, teachers.Count)], c, CurrentYear,
+                    CourseState.Ongoing, CurrentYear.StartTerm);
                 context.CourseOfferings.Add(offering);
             }
-            //Populating the database with planned offerings
+            //Populating the database with course offering for past school
             foreach (var c in courses)
             {
+                List<TermYear> terms = new List<TermYear>();
+                terms.Add(LastYear.StartTerm);
+                terms.Add(LastYear.EndTerm);
+
                 if (DataGen.Rnd.Next(3) > 0)
                 {
-                    var offering = DataGen.CreateOffering(teachers[DataGen.Rnd.Next(0, teachers.Count)], c, termYears[1],
-                    CourseState.Planned);
+                    var offering = DataGen.CreateOffering(teachers[DataGen.Rnd.Next(0, teachers.Count)], c, LastYear,
+                    CourseState.Completed, terms[DataGen.Rnd.Next(0, terms.Count)]);
                     context.CourseOfferings.Add(offering);
                 }
             }
-            //Populating the database with completed offerings
+            //Populating the database with Planned offerings for current year
+            
             foreach (var c in courses)
-            {
-                
+            {                
                 if (DataGen.Rnd.Next(2) == 0)
                 {
-                    var offering = DataGen.CreateOffering(teachers[DataGen.Rnd.Next(0, teachers.Count)], c, VT17,
-                    CourseState.Completed);
+                    var offering = DataGen.CreateOffering(teachers[DataGen.Rnd.Next(0, teachers.Count)], c, CurrentYear,
+                    CourseState.Planned, CurrentYear.EndTerm); 
                     context.CourseOfferings.Add(offering);
                 }
 

@@ -9,9 +9,10 @@ using StaffingPlanner.DAL;
 namespace StaffingPlanner.Models
 {
     public class CourseOffering
-	{
-		public Guid Id { get; set; }
+    {
+        public Guid Id { get; set; }
         public virtual Course Course { get; set; }
+        public virtual AcademicYear AcademicYear { get; set; }
         public virtual TermYear TermYear { get; set; }
 		public double Credits { get; set; }
         public CourseState State { get; set; }
