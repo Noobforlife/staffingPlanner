@@ -167,12 +167,9 @@ namespace StaffingPlanner.Controllers
 				})
 				.ToList();
 
-			var model = new Tuple<List<TeacherCourseViewModel>, List<TeacherCourseViewModel>>(offerings, otherCourses);
-
-
 			ViewBag.Name = name;
 
-			return PartialView("~/Views/Teacher/_EditableTeacherCourseList.cshtml", model);
+			return PartialView("~/Views/Teacher/_EditableTeacherCourseList.cshtml", offerings);
 		}
 
         //Helper methods
