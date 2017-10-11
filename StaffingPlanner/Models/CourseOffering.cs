@@ -37,7 +37,9 @@ namespace StaffingPlanner.Models
 		}
         public string Status => CourseController.GetStatus(TotalHours,AllocatedHours);
 
-        public override bool Equals(object obj)
+	    public string TruncatedName => Course.TruncatedName;
+
+	    public override bool Equals(object obj)
 		{
 			var ce = obj as CourseOffering;
 			return ce != null && ce.Id == Id;

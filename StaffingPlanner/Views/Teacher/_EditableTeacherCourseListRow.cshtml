@@ -2,18 +2,56 @@
 @model TeacherCourseViewModel
     
 <tr>
-    <td>@Model.CourseName</td>
+    <td><a href="#" data-toggle="modal" data-target="#course-modal">@Html.ActionLink(Model.CourseName, "CourseDetails", "Course", new {id = Model.OfferingId}, null)</a></td>
     <td>@Model.Code</td>
-    <td>@Model.CourseResponsible.Name</td>
+    <td>@Html.ActionLink(Model.CourseResponsible.Name, "TeacherDetails", "Teacher", new {id = Model.CourseResponsible.Id}, null)</td>
     <td>@Model.TermYear.ToString()</td>
     <td>@Model.Period</td>
     <td>@Model.TotalHours</td>
     <td>@Model.AllocatedHours</td>
     <td>
-        <div contenteditable="true" style="background-color: white; display: inline-block; height: 100%; width: 50%" class="hours">
+        <div id="teacherHours" contenteditable="true" style="background-color: white; display: inline-block; height: 100%; width: 50%" class="hours">
             @Model.TeacherAssignedHours
         </div>
-        <button style="float: right;">save</button>
+        <div style="display: inline-block; float: right;">
+            <span class="glyphicon glyphicon-ok-circle" style="cursor: pointer; color: green;" onclick="FuckingSaveEdit()"/>
+            <span class="glyphicon glyphicon-remove-circle" style="cursor: pointer; color: red;" onclick="DiscardEdit()"/>
+        </div>
     </td>
     <td><span class="label label-warning pull-right">status </span></td>
 </tr>
+
+<script>
+    function SaveEdit() {
+        alert("hello");
+    }
+    function FuckingSaveEdit() {
+        var hours = $('#teacherHours').text();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("AlterTeacherAllocation", "Teacher")',
+            contentType: "application/json",
+            data: JSON.stringify({
+                teacherId: '@Model.TeacherId',
+                offeringId: '@Model.OfferingId',
+                workloadId: '@Model.WorkloadId',
+                hours: hours
+            }),
+            dataType: "json",
+            success: function() {
+                console.log("success");
+            },
+            error: function() {
+                console.log("error");
+            }
+        });
+    }
+
+    function GetHours() {
+        return $('#teacherHours').text();
+    }
+
+    function DiscardEdit() {
+
+    }
+</script>
