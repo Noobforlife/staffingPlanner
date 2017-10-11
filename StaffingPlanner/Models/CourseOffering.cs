@@ -9,9 +9,10 @@ using StaffingPlanner.DAL;
 namespace StaffingPlanner.Models
 {
     public class CourseOffering
-	{
-		public Guid Id { get; set; }
+    {
+        public Guid Id { get; set; }
         public virtual Course Course { get; set; }
+        public virtual AcademicYear AcademicYear { get; set; }
         public virtual TermYear TermYear { get; set; }
 		public double Credits { get; set; }
         public CourseState State { get; set; }
@@ -36,7 +37,9 @@ namespace StaffingPlanner.Models
 		}
         public string Status => CourseController.GetStatus(TotalHours,AllocatedHours);
 
-        public override bool Equals(object obj)
+	    public string TruncatedName => Course.TruncatedName;
+
+	    public override bool Equals(object obj)
 		{
 			var ce = obj as CourseOffering;
 			return ce != null && ce.Id == Id;

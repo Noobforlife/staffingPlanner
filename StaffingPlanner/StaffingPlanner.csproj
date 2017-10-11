@@ -177,6 +177,7 @@
     <Compile Include="Models\CourseEnums.cs" />
     <Compile Include="Models\HourBudget.cs" />
     <Compile Include="Models\TeacherTermAvailability.cs" />
+    <Compile Include="Models\AcademicYear.cs" />
     <Compile Include="Models\TermYear.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="Models\Course.cs" />

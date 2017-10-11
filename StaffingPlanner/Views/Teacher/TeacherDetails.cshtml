@@ -1,4 +1,5 @@
-﻿@using StaffingPlanner.ViewModels;
+﻿@using StaffingPlanner.DAL
+@using StaffingPlanner.ViewModels;
 @model DetailedTeacherViewModel
 
 @{
@@ -10,7 +11,6 @@
         <h3 class="modal-title" style="display:inline-block">@Model.Name</h3>
         <div style="float: right; display:inline-block">
             <button class="btn btn-default" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("Teachers", "Teacher")'">Back to Teachers List</button>
-            <button class="btn btn-primary" onclick="EditTeacher()" type="button" id="EditTeacherButton">Edit</button>
         </div>
     </div>
     <div class="modal-body">
@@ -21,7 +21,9 @@
 
         <div class="row" id="courseList">
             <!--Table of courses-->
-            @Html.Action("CourseList", "Teacher", new {teacherId = Model.Id})
+            @(Globals.UserRole == Role.DirectorOfStudies 
+                ? Html.Action("EditableCourseList", "Teacher", new {teacherId = Model.Id}) 
+                : Html.Action("CourseList", "Teacher", new {teacherId = Model.Id}))
         </div>
         <div class="col-md-12">
             <button class="btn btn-primary pull-left" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
@@ -35,19 +37,4 @@
             </div>
         </div>
     </div>
-    <script>
-        function EditTeacher() {
-            $('#courseList').load('@Url.Action("EditableCourseList", "Teacher", new { teacherId = Model.Id})');
-            var editButton = $('#EditTeacherButton');
-            editButton.attr("onclick", "CancelEdit()");
-            editButton.html("Cancel");
-        }
-
-        function CancelEdit() {
-            $('#courseList').load('@Url.Action("CourseList", "Teacher", new { teacherId = Model.Id})');
-            var editButton = $('#EditTeacherButton');
-            editButton.attr("onclick", "EditTeacher()");
-            editButton.html("Edit");
-        }
-    </script>
 </div>

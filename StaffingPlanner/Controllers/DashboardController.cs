@@ -21,11 +21,11 @@ namespace StaffingPlanner.Controllers
             //Todo: Get only current courses, not everything in database
             var db = StaffingPlanContext.GetContext();
 	        var fallOfferings = db.CourseOfferings
-				.Where(co => co.TermYear.Term == Term.Fall)
+				.Where(co => co.TermYear.Term == Term.Fall && co.AcademicYear.Id == Globals.CurrentAcademicYear.Id)
 				.OrderBy(co => co.Periods)
 				.ToList();
 	        var springOfferings = db.CourseOfferings
-				.Where(co => co.TermYear.Term == Term.Spring)
+				.Where(co => co.TermYear.Term == Term.Spring && co.AcademicYear.Id == Globals.CurrentAcademicYear.Id)
 				.OrderBy(co => co.Periods)
 				.ToList();
 

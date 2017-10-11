@@ -8,7 +8,7 @@
 {
     // TODO: Add "show-all" button to show data for more types of employees
     <div class="row well background-white">
-        <h4 style="margin-left: 15px;">Remaining hours</h4>
+        <h6 style="margin-left: 15px;">Remaining hours</h6>
         <div class="col-md-3 col-sm-3 col-xs-3 statictic-container">
             <div class="statistic">
                 <div class="capsule-side background-grey"></div>
@@ -64,7 +64,7 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" role="tabpanel" id="tab-1">
-                    <div class="table-responsive">
+                    <div id="course-plan" class="table-responsive">
                         <table class="table borderless">
                             <colgroup>
                                 <col class="period-col">
@@ -89,8 +89,8 @@
                                             <td></td>
 }
                                         <td colspan=@item.PeriodsDuration>
-                                            <div class="progress">
-                                                <a class="progress-bar progress-bar-@item.Status" role="button" data-toggle="popover" data-placement="top" title="Course responsible" data-content="@item.CourseResponsible.Name" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">@item.Name</a>
+                                            <div class="progress" data-toggle="popover" data-trigger="hover" data-placement="top" title="Course responsible" data-content="@item.CourseResponsible.Name" >
+                                                <a class="progress-bar progress-bar-@item.Status" role="button"  aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" href="@Url.Action("CourseDetails","Course",new {Id = item.Id })" style="width: 100%">@item.Name</a>
                                             </div>
                                         </td>
                                         @for (var i = 0; i < item.PeriodsAfter; i++)
@@ -103,7 +103,7 @@
                     </div>
                 </div>
                 <div class="tab-pane" role="tabpanel" id="tab-2">
-                    <div class="table-responsive">
+                    <div id="course-plan" class="table-responsive">
                         <table class="table borderless">
                             <colgroup>
                                 <col class="period-col">
@@ -128,8 +128,8 @@
                                             <td></td>
 }
                                         <td colspan=@("" + item.PeriodsDuration)>
-                                            <div class="progress">
-                                                <a class="progress-bar progress-bar-@item.Status" role="button" data-toggle="popover" data-placement="top" title="Course responsible" data-content="@item.CourseResponsible.Name" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">@item.Name</a>
+                                            <div class="progress" data-toggle="popover" data-trigger="hover" data-placement="top" title="Course responsible" data-content="@item.CourseResponsible.Name">
+                                                <a class="progress-bar progress-bar-@item.Status" role="button" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" href="@Url.Action("CourseDetails","Course",new {Id = item.Id })" style="width: 100%">@item.Name</a>
                                             </div>
                                         </td>
                                         @for (var i = 0; i < item.PeriodsAfter; i++)

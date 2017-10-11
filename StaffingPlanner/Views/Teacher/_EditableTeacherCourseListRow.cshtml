@@ -2,18 +2,62 @@
 @model TeacherCourseViewModel
     
 <tr>
-    <td>@Model.CourseName</td>
+    <td><a href="#" data-toggle="modal" data-target="#course-modal">@Html.ActionLink(Model.CourseName, "CourseDetails", "Course", new {id = Model.OfferingId}, null)</a></td>
     <td>@Model.Code</td>
-    <td>@Model.CourseResponsible.Name</td>
+    <td>@Html.ActionLink(Model.CourseResponsible.Name, "TeacherDetails", "Teacher", new {id = Model.CourseResponsible.Id}, null)</td>
     <td>@Model.TermYear.ToString()</td>
     <td>@Model.Period</td>
     <td>@Model.TotalHours</td>
     <td>@Model.AllocatedHours</td>
     <td>
-        <div contenteditable="true" style="background-color: white; display: inline-block; height: 100%; width: 50%" class="hours">
+        <div id="@Model.WorkloadId" contenteditable="true" style="background-color: white; display: inline-block; height: 100%; width: 50%" class="hours">
             @Model.TeacherAssignedHours
         </div>
-        <button style="float: right;">save</button>
+        <div style="display: inline-block; float: right;">
+            <span class="glyphicon glyphicon-ok-circle" style="cursor: pointer; color: green;" onclick="FuckingSaveEdit(this)" data-offering="@Model.OfferingId" data-workload="@Model.WorkloadId" data-teacher="@Model.TeacherId"/>
+            <span class="glyphicon glyphicon-remove-circle" style="cursor: pointer; color: red;" onclick="DiscardEdit()"/>
+        </div>
     </td>
     <td><span class="label label-warning pull-right">status </span></td>
 </tr>
+
+<script>
+    function SaveEdit() {
+        alert("hello");
+    }
+    function FuckingSaveEdit(elem) {
+        var teacherId = $(elem).data('teacher');
+        var offeringId = $(elem).data('offering');
+        var workloadId = $(elem).data('workload');
+        var hours = $('#' + workloadId).text();
+        console.log(hours);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("AlterTeacherAllocation", "Teacher")',
+            contentType: "application/json",
+            data: JSON.stringify({
+                teacherId: teacherId,
+                offeringId: offeringId,
+                workloadId: workloadId,
+                hours: hours
+            }),
+            dataType: "json",
+            success: function() {
+                console.log("success");
+                location.reload();
+            },
+            error: function() {
+                console.log("error");
+                location.reload();
+            }
+        });
+    }
+
+    function GetHours() {
+        return $('#teacherHours').text();
+    }
+
+    function DiscardEdit() {
+
+    }
+</script>

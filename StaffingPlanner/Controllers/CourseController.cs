@@ -61,11 +61,10 @@ namespace StaffingPlanner.Controllers
         }
 
         [ChildActionOnly]
-        public PartialViewResult RenderCourseHistory(Guid courseid)
+        public PartialViewResult RenderCourseHistory(string courseCode)
         {
             var db = StaffingPlanContext.GetContext();
-            var courses = db.CourseOfferings.Where(x => x.Id == courseid && x.TermYear.Year < DateTime.Now.Year).ToList();
-
+            var courses = db.CourseOfferings.Where(x => x.Course.Code == courseCode && x.State == CourseState.Completed).ToList();
             return PartialView("~/Views/Course/_CourseHistory.cshtml", courses);
         }
 
@@ -209,7 +208,9 @@ namespace StaffingPlanner.Controllers
                 PassedStudents = offering.PassedStudents,
                 TotalHours = offering.TotalHours,
                 AllocatedHours = offering.AllocatedHours,
-                RemainingHours = offering.RemainingHours
+                RemainingHours = offering.RemainingHours,
+                Status = GetStatus(offering.TotalHours,offering.AllocatedHours),
+                State = offering.State
             };
             return vm;
         }

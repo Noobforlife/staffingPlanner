@@ -37,6 +37,7 @@ namespace StaffingPlanner.ViewModels
         public float HST { get; set; }
         public List<CourseTeacherViewModel> Teachers { get; set; }
         public string Status { get; set; }
+        public CourseState State { get; set; }
     }
 
     public class CourseTeacherViewModel

@@ -38,7 +38,9 @@ namespace StaffingPlanner.ViewModels
 
     public class TeacherCourseViewModel
     {
-        public Guid Id { get; set; }
+		public Guid TeacherId { get; set; }
+        public Guid OfferingId { get; set; }
+		public Guid WorkloadId { get; set; }
         public string CourseName { get; set; }
         public string Code { get; set; }
         public TermYear TermYear { get; set; }

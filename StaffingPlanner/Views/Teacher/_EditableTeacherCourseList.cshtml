@@ -28,29 +28,15 @@
                 <option value="none">Select a course to add</option>
                 @foreach (var course in Model.Item2)
                 {
-                    <option value="@course.Id">@course.CourseName</option>
+                    <option value="@course.OfferingId">@course.CourseName</option>
                 }
             </select>
         </div>
-        <button class="btn btn-primary" style="float: right;" onclick="SaveEdits()">Save edits</button>
     </div>
     <script>
         function DropDownChanged() {
             var dropdown = $('#dropdown option:selected').val();
-        }
-
-        function SaveEdits() {
-            // *** When changing hours ***
-            // Add id as data to assignment td
-            // When editable div loses focus, save course id and hours to two lists
-            // on save, send lists to controller method
-
-            // *** When adding courses ***
-            // 
-            var hours = $('.hours');
-            for (var i = 0; i < hours.length; i++) {
-                alert(hours[i].text());
-            }
+            // TODO: Fix!
         }
     </script>
 </div>
