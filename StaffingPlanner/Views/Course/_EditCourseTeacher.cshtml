@@ -1,19 +1,21 @@
 ﻿@using StaffingPlanner.ViewModels;
 @model CourseTeacherViewModel
 
-@using (Html.BeginForm("SaveTeacherChanges", "Course", FormMethod.Post))
-{
-    <input type="hidden" id ="workloadId" name="workloadId" value ="@Model.WorkloadId">
-    <input type="hidden" id ="Id" name="Id" value ="@Model.CourseId">
+
+    
     <td>@Html.ActionLink(Model.Name, "TeacherDetails", "Teacher", new { id = Model.Id }, null)</td>
     <td>@Model.Title</td>
     <td>700</td>
     <td>@Model.WorkloadFall</td>
     <td>@Model.WorkloadSpring</td>
     <td>
+@using (Html.BeginForm("SaveTeacherChanges", "Course", FormMethod.Post, new { id = "MyForm" }))
+{
+        <input type="hidden" id="workloadId" name="workloadId" value="@Model.WorkloadId">
+        <input type="hidden" id="Id" name="Id" value="@Model.CourseId">
         <input type="text" style ="width: 60px" id ="Allocated" name="Allocated" value="@Model.CourseWorkload">    
             <button class="btn btn-default save-button pull-right" data-toggle="tooltip" title="Save Changes" type="submit">save </button>
+}
             <button class="btn btn-default edit-button pull-right" data-toggle="tooltip" title="Delete Teacher"type="button" onclick="location.href='@Url.Action("DeleteTeacher", "Course", new { id = Model.CourseId, workloadId = Model.WorkloadId })'"> <i class="glyphicon glyphicon-minus" style="font-size:23px;color:rgb(203,40,40);"></i></button>
             <button class="btn btn-default edit-button pull-right" data-toggle="tooltip" title="Cancel Changes"type="button" onclick="location.href='@Url.Action("CancelChanges", "Course", new { id = Model.CourseId })'"> <i class="fa fa-remove" style="color:rgb(149,148,148);"></i></button>
      </td>
-}
