@@ -8,7 +8,7 @@ namespace StaffingPlanner.DAL
         public static Role UserRole;
         public static string User;
 	    public static Guid UserId;
-        public static AcademicYear academicyear; 
+        public static AcademicYear CurrentAcademicYear; 
     }
 
     public enum Role

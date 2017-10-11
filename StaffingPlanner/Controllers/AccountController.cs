@@ -46,7 +46,7 @@ namespace StaffingPlanner.Controllers
                 authResult = true;
                 Globals.User = matchingTeachers.First().Name;
 	            Globals.UserId = matchingTeachers.First().Id;
-                Globals.academicyear = academicYear;
+                Globals.CurrentAcademicYear = academicYear;
             }
             else
             {
