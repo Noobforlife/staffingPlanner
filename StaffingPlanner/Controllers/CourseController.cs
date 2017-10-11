@@ -250,6 +250,8 @@ namespace StaffingPlanner.Controllers
             var FallWork = db.Workloads.Where(w => w.Teacher.Id == teacher.Id && w.Course.TermYear.Term == Term.Fall).ToList().Select(c => c.Workload).Sum();
             var SpringWork = db.Workloads.Where(w => w.Teacher.Id == teacher.Id && w.Course.TermYear.Term == Term.Spring).ToList().Select(c => c.Workload).Sum();
 
+            var teachingHours = teacher.GetHourBudget(Globals.CurrentAcademicYear.StartTerm).TeachingHours + teacher.GetHourBudget(Globals.CurrentAcademicYear.EndTerm).TeachingHours;
+            var remaining = teachingHours - FallWork - SpringWork;
             var vm = new CourseTeacherViewModel
             {
                 Id = teacher.Id,
@@ -260,6 +262,7 @@ namespace StaffingPlanner.Controllers
                 WorkloadFall = FallWork,
                 WorkloadSpring = SpringWork,
                 CourseWorkload = work.Workload,
+                RemainingHours = remaining
             };
             return vm;
         }

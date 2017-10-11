@@ -1,5 +1,5 @@
 ﻿@using StaffingPlanner.ViewModels
-@model Tuple<List<TeacherCourseViewModel>, List<TeacherCourseViewModel>>
+@model List<TeacherCourseViewModel>
 
 <div class="col-md-12">
     <div class="table-responsive" style="font-family: Raleway, sans-serif;">
@@ -17,26 +17,11 @@
             </tr>
             </thead>
             <tbody>
-            @foreach (var course in Model.Item1)
+            @foreach (var course in Model)
             {
                 @Html.Partial("_EditableTeacherCourseListRow", course)
             }
             </tbody>
         </table>
-        <div>
-            <select id="dropdown" onchange="DropDownChanged()">
-                <option value="none">Select a course to add</option>
-                @foreach (var course in Model.Item2)
-                {
-                    <option value="@course.OfferingId">@course.CourseName</option>
-                }
-            </select>
-        </div>
     </div>
-    <script>
-        function DropDownChanged() {
-            var dropdown = $('#dropdown option:selected').val();
-            // TODO: Fix!
-        }
-    </script>
 </div>

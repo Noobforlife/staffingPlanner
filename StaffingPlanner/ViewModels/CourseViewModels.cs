@@ -51,5 +51,6 @@ namespace StaffingPlanner.ViewModels
         public int WorkloadFall { get; set; }
         public int WorkloadSpring { get; set; }
         public int CourseWorkload { get; set; }
+        public int RemainingHours { get; set; }
     }
 }
