@@ -6,3 +6,5 @@ StaffingPlanner.Tests/obj/
 
 .vs/
 *.suo
+
+.idea/
