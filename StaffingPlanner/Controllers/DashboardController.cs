@@ -16,7 +16,6 @@ namespace StaffingPlanner.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-            // TODO: Get this shit working
             //Get all offerings for fall and spring
             //Todo: Get only current courses, not everything in database
             var db = StaffingPlanContext.GetContext();

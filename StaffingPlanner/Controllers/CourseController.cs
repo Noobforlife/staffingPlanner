@@ -33,12 +33,16 @@ namespace StaffingPlanner.Controllers
         }
 
         // GET: /Course/CourseDetails/{id}
-        public ActionResult CourseDetails(Guid id)
+        public ActionResult CourseDetails(Guid? id)
         {
             if (Globals.User == null)
             {
                 return RedirectToAction("Login", "Account");
             }
+	        if (id == null)
+	        {
+		        return RedirectToAction("Courses", "Course");
+	        }
 
             var db = StaffingPlanContext.GetContext();
             var offering = db.CourseOfferings.Where(c => c.Id == id).ToList().First();

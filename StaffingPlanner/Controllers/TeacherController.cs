@@ -70,12 +70,17 @@ namespace StaffingPlanner.Controllers
 		}
 
         // GET: /Teacher/TeacherDetails/{id}
-        public ActionResult TeacherDetails(Guid id)
+        public ActionResult TeacherDetails(Guid? id)
         {
             if (Globals.User == null)
             {
                 return RedirectToAction("Login", "Account");
             }
+			if (id == null)
+			{
+				return RedirectToAction("Teachers", "Teacher");
+			}
+
             var db = StaffingPlanContext.GetContext();
             //Get the teacher with the same Id as the parameter id
             var teacher = db.Teachers.FirstOrDefault(t => t.Id == id);
