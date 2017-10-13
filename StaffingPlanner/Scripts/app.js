@@ -1,3 +1,10 @@
 ﻿//Code to search for data in course table table
-$('#courseListTable').DataTable();
-$('#teacherListTable').DataTable();
+$('#courseListTable').DataTable(
+    {
+    "pageLength": 20
+});
+
+$('#teacherListTable').DataTable(
+    {
+        "pageLength": 25
+    });

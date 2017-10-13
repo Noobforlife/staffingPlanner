@@ -1,0 +1,44 @@
+﻿@using StaffingPlanner.Models;
+@using StaffingPlanner.DAL;
+@model Tuple<List<CourseOffering>, Guid>
+<div class="modal-dialog" role="document">
+@using (Html.BeginForm("SaveNewCourse", "Teacher", FormMethod.Post))
+{
+    <div class="modal-content pull-right" style=" width: 50%">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Add Course to Teacher's workload</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="Id" name="Id" value="@Model.Item2">
+            <div class="form-group">
+                <label for="teacher">Select Course to Add:  </label>
+                <select id="teacherId" name="courseId" data-style="btn-primary" class="teacher-selector" style="margin-left: 15px; width: 300px; height: 30px">
+                    <optgroup label="Fall @Globals.CurrentAcademicYear.StartTerm.Year">
+                        @foreach (var offering in Model.Item1.Where(x => x.TermYear.Term == Term.Fall))
+                        {
+                            <option value="@offering.Id">@offering.Course.Name           @offering.Periods </option>
+                        }
+                     </optgroup>
+                    <optgroup label="Spring @Globals.CurrentAcademicYear.EndTerm.Year">
+                        @foreach (var offering in Model.Item1.Where(x => x.TermYear.Term == Term.Spring))
+                        {
+                            <option value="@offering.Id">@offering.Course.Name           @offering.Periods</option>
+                        }
+                    </optgroup>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Allocated">Allocate Teaching Hours:  </label>
+                <input id="Allocated" name="Allocated" data-style="btn-primary" value="0" style="margin-left: 15px; width: 100px; height: 30px" />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Add Course</button>
+        </div>
+    </div>
+}    
+</div>
