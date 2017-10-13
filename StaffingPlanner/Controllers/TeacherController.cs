@@ -163,7 +163,9 @@ namespace StaffingPlanner.Controllers
 					TotalHours = o.Course.TotalHours,
 					AllocatedHours = o.Course.AllocatedHours,
 					RemainingHours = o.Course.RemainingHours,
-					TeacherAssignedHours = teacher.GetAllocatedHoursForOffering(o.Course)
+					TeacherAssignedHours = teacher.GetAllocatedHoursForOffering(o.Course),
+                    CourseState = o.Course.State,
+                    CourseStatus = o.Course.Status
 				})
 				.ToList();
 
@@ -221,8 +223,10 @@ namespace StaffingPlanner.Controllers
                 TotalHours = o.TotalHours,
                 AllocatedHours = o.AllocatedHours,
                 RemainingHours = o.RemainingHours,
-                TeacherAssignedHours = teacher.GetAllocatedHoursForOffering(o)
-            })
+                TeacherAssignedHours = teacher.GetAllocatedHoursForOffering(o),
+                CourseState = o.State,
+                CourseStatus = o.Status
+                })
             .ToList();
         }
 

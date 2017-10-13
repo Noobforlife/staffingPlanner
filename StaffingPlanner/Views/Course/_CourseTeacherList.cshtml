@@ -1,5 +1,6 @@
 ﻿@using StaffingPlanner.DAL
 @using StaffingPlanner.ViewModels;
+@using StaffingPlanner.Models;
 @model List<CourseTeacherViewModel>
 
 
@@ -18,7 +19,14 @@
             <tbody>
                 @foreach (var teacher in Model)
                 {
-                    <tr id="@teacher.WorkloadId">
+                    if (Globals.UserRole == Role.DirectorOfStudies && teacher.CourseState != CourseState.Completed)
+                    {
+                        <tr id="@teacher.WorkloadId">
+                            @Html.Partial("_EditCourseTeacher",teacher);
+                         </tr>
+                    }
+                    else { 
+                        <tr id="@teacher.WorkloadId">
                         <td>@Html.ActionLink(teacher.Name, "TeacherDetails", "Teacher", new { id = teacher.Id }, null)</td>
                         <td>@teacher.Title</td>
                         <td>@teacher.RemainingHours</td>
@@ -31,9 +39,9 @@
                                     <i class="material-icons">edit</i>
                                 </button>
                             }
-                               <span class="label label-success pull-right">status </span>
                         </td>
                     </tr>
+                    }
                 }
             </tbody>
         </table>
