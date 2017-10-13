@@ -174,6 +174,39 @@ namespace StaffingPlanner.Controllers
 			return PartialView("~/Views/Teacher/_EditableTeacherCourseList.cshtml", offerings);
 		}
 
+        [ChildActionOnly]
+        public PartialViewResult RenderAddTeacherCourse(Guid Id)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var courses = db.CourseOfferings.Where(c => c.AcademicYear.Id == Globals.CurrentAcademicYear.Id && c.State != CourseState.Completed).ToList();
+            var model = new Tuple<List<CourseOffering>, Guid>(courses, Id);
+
+            return PartialView("~/Views/Teacher/_AddTeacherCourse.cshtml", model);
+        }
+
+        [HttpPost]
+        public ActionResult SaveNewCourse(string Id, string courseId, string Allocated)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var teacher = db.Teachers.Where(t => t.Id.ToString() == Id).ToList().FirstOrDefault();
+            var offering = db.CourseOfferings.Where(o => o.Id.ToString() == courseId).ToList().FirstOrDefault();
+            var duplicate = db.Workloads.Where(x => x.Course.Id.ToString() == courseId & x.Teacher.Id.ToString() == Id).ToList();
+
+            if (duplicate.Count == 0)
+            {
+                var teacherworkload = new TeacherCourseWorkload
+                {
+                    Id = Guid.NewGuid(),
+                    Course = offering,
+                    Teacher = teacher,
+                    Workload = int.Parse(Allocated)
+                };
+
+                db.Workloads.Add(teacherworkload);
+                db.SaveChanges();
+            }
+            return RedirectToAction("TeacherDetails", "Teacher", new { id = Guid.Parse(Id) });
+        }
         //Helper methods
 
         public static int GetTermAvailability(Teacher teacher, TermYear termYear)

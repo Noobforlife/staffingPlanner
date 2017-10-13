@@ -19,6 +19,7 @@
                 <th>Course responsible</th>
                 <th>Allocated hours</th>
                 <th>Remaining hours</th>
+                <th name="State"></th>
             </tr>
         </thead>
         <tbody>
@@ -32,7 +33,8 @@
                     <td>@course.Period</td>
                     <td>@course.CourseResponsible.Name</td>
                     <td>@course.AllocatedHours</td>
-                    <td>@course.RemainingHours<span class="label label-@course.Status pull-right">@course.State </span></td>
+                    <td>@course.RemainingHours</td>
+                    <td><span class="label label-@course.Status pull-right">@course.State </span></td>
                 </tr>
             }
 
