@@ -50,6 +50,8 @@ namespace StaffingPlanner.ViewModels
         public int AllocatedHours { get; set; }
         public int RemainingHours { get; set; }
         public int TeacherAssignedHours { get; set; }
+        public CourseState CourseState { get; set; }
+        public string CourseStatus { get; set; }
     }
 
     public class TeacherPeriodWorkload
