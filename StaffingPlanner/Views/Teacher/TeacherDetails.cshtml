@@ -25,10 +25,19 @@
                 ? Html.Action("EditableCourseList", "Teacher", new {teacherId = Model.Id}) 
                 : Html.Action("CourseList", "Teacher", new {teacherId = Model.Id}))
         </div>
-        <div class="col-md-12">
+        <div class="col-md-6">
             <button class="btn btn-primary pull-left" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 View teaching History
             </button>
+        </div>
+        @if (Globals.UserRole == Role.DirectorOfStudies)
+            {
+            <div class="col-md-6">
+                <button class="btn btn-default pull-right" data-toggle="modal" data-target="#addCourseModal" type="button"> Add Course<i class="icon-plus" style="margin: 2px; margin-left: 3px;"></i></button>
+            </div>
+        }
+        <div id="addCourseModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            @Html.Action("RenderAddTeacherCourse", "Teacher", new { Id = Model.Id });
         </div>
         <!--Course history table-->
         <div class="row">

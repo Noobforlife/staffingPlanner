@@ -266,7 +266,8 @@ namespace StaffingPlanner.Controllers
                 WorkloadFall = FallWork,
                 WorkloadSpring = SpringWork,
                 CourseWorkload = work.Workload,
-                RemainingHours = remaining
+                RemainingHours = remaining,
+                CourseState = work.Course.State
             };
             return vm;
         }
