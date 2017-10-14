@@ -1,51 +1,51 @@
 ﻿@using StaffingPlanner.DAL
-@using StaffingPlanner.ViewModels;
-@using StaffingPlanner.Models;
+@using StaffingPlanner.ViewModels
+@using StaffingPlanner.Models
 @model List<CourseTeacherViewModel>
 
 
-    <div class="table-responsive">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Name </th>
-                    <th>Title </th>
-                    <th>Teaching Hours Remaining</th>
-                    <th>HT work</th>
-                    <th>VT work</th>
-                    <th>Allocated to course(Hrs)</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var teacher in Model)
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name </th>
+                <th>Title </th>
+                <th>Remaining (h)</th>
+                <th>HT work</th>
+                <th>VT work</th>
+                <th>Allocated to course (h)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var teacher in Model)
+            {
+                if (Globals.UserRole == Role.DirectorOfStudies && teacher.CourseState != CourseState.Completed)
                 {
-                    if (Globals.UserRole == Role.DirectorOfStudies && teacher.CourseState != CourseState.Completed)
-                    {
-                        <tr id="@teacher.WorkloadId">
-                            @Html.Partial("_EditCourseTeacher",teacher);
-                         </tr>
-                    }
-                    else { 
-                        <tr id="@teacher.WorkloadId">
-                        <td>@Html.ActionLink(teacher.Name, "TeacherDetails", "Teacher", new { id = teacher.Id }, null)</td>
-                        <td>@teacher.Title</td>
-                        <td>@teacher.RemainingHours</td>
-                        <td>@teacher.WorkloadFall</td>
-                        <td>@teacher.WorkloadSpring</td>
-                        <td>@teacher.CourseWorkload
-                            @if (Globals.UserRole == Role.DirectorOfStudies)
-                            {
-                                <button value="@teacher.WorkloadId" data-toggle="tooltip" title="Édit Allocation" class="btn btn-default edit-button pull-right" onclick="EditTeacher(this)" style="margin-left: 80px" type="button">
-                                    <i class="material-icons">edit</i>
-                                </button>
-                            }
-                        </td>
-                    </tr>
-                    }
+                    <tr id="@teacher.WorkloadId">
+                        @Html.Partial("_EditCourseTeacher",teacher);
+                        </tr>
                 }
-            </tbody>
-        </table>
-    </div>
+                else { 
+                    <tr id="@teacher.WorkloadId">
+                    <td>@Html.ActionLink(teacher.Name, "TeacherDetails", "Teacher", new { id = teacher.Id }, null)</td>
+                    <td>@teacher.Title</td>
+                    <td>@teacher.RemainingHours</td>
+                    <td>@teacher.WorkloadFall</td>
+                    <td>@teacher.WorkloadSpring</td>
+                    <td>@teacher.CourseWorkload
+                        @if (Globals.UserRole == Role.DirectorOfStudies)
+                        {
+                            <button value="@teacher.WorkloadId" data-toggle="tooltip" title="Édit Allocation" class="btn btn-default edit-button pull-right" onclick="EditTeacher(this)" style="margin-left: 80px" type="button">
+                                <i class="material-icons">edit</i>
+                            </button>
+                        }
+                    </td>
+                </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
 <script>
     function EditTeacher(btn) {
         $('#' + btn.value).load('@Url.Action("EditTeacher","Course")/'+ btn.value); 

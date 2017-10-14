@@ -2,7 +2,7 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand navbar-link" href="#">Staffing Planner <img src="~/Content/img/uppsala.png"></a>
+            <a class="navbar-brand navbar-link" href="~/Dashboard/Index">Staffing Planner <img src="~/Content/img/uppsala.png"></a>
             <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
         </div>
         <div class="collapse navbar-collapse" id="navcol-1">
@@ -14,7 +14,7 @@
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#">@Globals.User<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li role="presentation">@Html.ActionLink("Logout", "Login", "Account")</li>
+                        <li role="presentation">@Html.ActionLink("Logout", "LogOff", "Account")</li>
                     </ul>
                 </li>
             </ul>

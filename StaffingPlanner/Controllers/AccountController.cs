@@ -13,7 +13,12 @@ namespace StaffingPlanner.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            ViewBag.ReturnUrl = returnUrl;
+	        if (Globals.User != null)
+	        {
+		        return RedirectToAction("Index", "Dashboard");
+	        }
+        
+			ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
