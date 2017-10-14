@@ -1,5 +1,4 @@
 ﻿@using StaffingPlanner.ViewModels
-@using System.Collections.Generic
 @model List<SimpleCourseViewModel>
 @{
     ViewBag.Title = "Courses";
@@ -23,7 +22,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (SimpleCourseViewModel course in Model)
+            @foreach (var course in Model)
             {
                 <tr>
                     <td>@Html.ActionLink(course.Name, "CourseDetails", "Course", new { id = course.Id }, null)</td>
@@ -31,7 +30,7 @@
                     <td>@course.Credits</td>
                     <td>@course.TermYear.ToString()</td>
                     <td>@course.Period</td>
-                    <td>@course.CourseResponsible.Name</td>
+                    <td>@Html.ActionLink(course.CourseResponsible.Name, "TeacherDetails", "Teacher", new { id = course.CourseResponsible.Id }, null)</td>
                     <td>@course.AllocatedHours</td>
                     <td>@course.RemainingHours</td>
                     <td><span class="label label-@course.Status pull-right">@course.State </span></td>
