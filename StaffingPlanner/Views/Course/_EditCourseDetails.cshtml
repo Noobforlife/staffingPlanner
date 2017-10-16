@@ -2,6 +2,8 @@
 @using StaffingPlanner.Models;
 @model Tuple<CourseOffering, List<Teacher>>
 
+@using (Html.BeginForm("SaveCourseChanges", "Course", FormMethod.Post))
+{
 
 <div class="col-md-6 col-sm-6">
     <div class="table-responsive">
@@ -44,25 +46,34 @@
 </div>
 <div><span class="label label-@Model.Item1.Status pull-right">@Model.Item1.State</span></div>
 <div class="col-md-6 col-sm-6">
-@using (Html.BeginForm("SaveCourseChanges", "Course", FormMethod.Post))
-{   <input type="hidden" value="@Model.Item1.Id" name="CourseId" id="CourseId" />
+  <input type="hidden" value="@Model.Item1.Id" name="CourseId" id="CourseId" />
     <div class="table-responsive">
         <table class="table borderless">
             <tbody>
                 <tr id="courseResponsible">
                     <th>Course responsible:</th>
-                       <td>
-                          
+                       <td>                          
                             <select id="Responsible" name="Responsible" class="teacher-selector" id="Responsible" name="Responsible" data-style="btn-primary">
                                 <option value="@Model.Item1.CourseResponsible.Id">@Model.Item1.CourseResponsible.Name</option>
                                 @foreach (var teacher in Model.Item2)
                                 {
                                     <option value="@teacher.Id">@teacher.Name</option>
                                 }
-                            </select>
-                            <button class="btn btn-default" onclick="SaveChanges(this)" type="submit" id="SaveChanges">Save</button>
+                            </select>                            
                         </td>
                    </tr>
+                <tr>
+                <tr id="Course State">
+                    <th>Course State:</th>
+                    <td>
+                        <select id="state" name="state" class="teacher-selector" id="Responsible" name="Responsible" data-style="btn-primary">
+                            <option value="@Model.Item1.State">@Model.Item1.State</option>
+                            <option value="@CourseState.Completed">@CourseState.Completed</option>
+                            <option value="@CourseState.Ongoing">@CourseState.Ongoing</option>
+                            <option value="@CourseState.Planned">@CourseState.Planned</option>
+                        </select>
+                    </td>
+                </tr>
                 <tr>
                     <th>HST:</th>
                     <td>@Model.Item1.HST</td>
@@ -70,7 +81,7 @@
             </tbody>
         </table>
     </div>
-}
+
     <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
         <p>Total Budget(hrs)</p>
         <p class="numbers blue-border">@Model.Item1.TotalHours</p>
@@ -83,4 +94,6 @@
         <p>Remaining(hrs)</p>
         <p class="numbers orange-border">@Model.Item1.RemainingHours</p>
     </div>
+    <button class="btn btn-default pull-right" onclick="SaveChanges(this)" type="submit" id="SaveChanges">Save</button>
 </div>
+}
