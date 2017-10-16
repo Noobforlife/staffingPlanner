@@ -8,14 +8,14 @@ namespace StaffingPlanner.DAL
     {
         public static Random Rnd = new Random();
 
-        public static TeacherTermAvailability GetTeacherTermAvailability(Teacher teacher, TermYear termyear, int employmentLevel)
+        public static TeacherTermEmployment GetTeacherTermEmployment(Teacher teacher, TermYear termyear, int employmentLevel)
         {
-            return new TeacherTermAvailability
+            return new TeacherTermEmployment
             {
                 Id = Guid.NewGuid(),
                 Teacher = teacher,
                 TermYear = termyear,
-                Availability = employmentLevel
+                Employment = employmentLevel
             };
         }
 

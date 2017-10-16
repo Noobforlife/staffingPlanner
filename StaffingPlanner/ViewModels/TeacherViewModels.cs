@@ -11,8 +11,8 @@ namespace StaffingPlanner.ViewModels
 		public Guid Id { get; set; }
         public string Name { get; set; }
 		public AcademicTitle Title { get; set; }
-        public int FallTermAvailability { get; set; }
-        public int SpringTermAvailability { get; set; }
+        public int FallTermEmployment { get; set; }
+        public int SpringTermEmployment { get; set; }
 		public int AllocatedHoursFall { get; set; }
 		public string StatusFall { get; set; }
         public int AllocatedHoursSpring { get; set; }
@@ -28,8 +28,8 @@ namespace StaffingPlanner.ViewModels
         public AcademicTitle Title { get; set; }
 
         //The total hours available for different tasks
-        public HourBudget FallBudget { get; set; }
-        public HourBudget SpringBudget { get; set; }
+        public TeacherTermAvailability FallBudget { get; set; }
+        public TeacherTermAvailability SpringBudget { get; set; }
 
         //The hours actually allocated on differnt periods
         public TeacherPeriodWorkload FallPeriodWorkload { get; set; }
