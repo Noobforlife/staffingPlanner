@@ -24,6 +24,7 @@ namespace StaffingPlanner.Models
 		public int NumStudents { get; set; }
         public int RegisteredStudents { get; set; }
         public int PassedStudents { get; set; }
+        public bool IsApproved { get; set; }
         public int RemainingHours => TotalHours - AllocatedHours;
 		public int AllocatedHours
 		{
