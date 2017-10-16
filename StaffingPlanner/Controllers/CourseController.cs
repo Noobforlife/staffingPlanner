@@ -119,16 +119,21 @@ namespace StaffingPlanner.Controllers
         }        
 
         [HttpPost]
-        public ActionResult SaveCourseChanges(string Responsible, string CourseId, string state)
+        public ActionResult SaveCourseChanges(string Responsible, string CourseId, string state, string registeredStudents, string passedStudents)
         {
             var db = StaffingPlanContext.GetContext();
             var teacher = db.Teachers.Where(x => x.Id.ToString() == Responsible).ToList().First();
             var course = db.CourseOfferings.Where(x => x.Id.ToString() == CourseId).ToList().First();
             var vm = GenerateCourseDetailViewModel(course);
+
             var coursestate = matchState(state);
             course.CourseResponsible = teacher;
             course.State = coursestate;
-            var t = course;
+            if (int.Parse(registeredStudents) <= course.NumStudents && int.Parse(passedStudents) <= course.NumStudents) {
+                course.PassedStudents = int.Parse(passedStudents);
+                course.RegisteredStudents = int.Parse(registeredStudents);
+            }
+
             db.SaveChanges();
 
             return RedirectToAction("CourseDetails", "Course", new { id = course.Id });
