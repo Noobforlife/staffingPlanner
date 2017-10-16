@@ -478,6 +478,18 @@ namespace StaffingPlanner.DAL
                 context.AcademicProfiles.Add(profile);
             }
             context.SaveChanges();
+
+            var andreas = teachers.Find(t => t.Name.Contains("Andreas"));
+            context.TeacherTaskShare.Add(new TeacherTaskShare
+            {
+                Teacher = andreas,
+                AcademicYear = CurrentYear,
+                AdminShare = 0.0m,
+                TeachingShare = 0.4m,
+                OtherShare = 0.0m,
+                ResearchShare = 0.6m,
+                Comment = "Extra teaching"
+            });
         }
     }
 }
