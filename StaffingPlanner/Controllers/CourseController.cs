@@ -119,14 +119,15 @@ namespace StaffingPlanner.Controllers
         }        
 
         [HttpPost]
-        public ActionResult SaveCourseChanges(string Responsible, string CourseId)
+        public ActionResult SaveCourseChanges(string Responsible, string CourseId, string state)
         {
             var db = StaffingPlanContext.GetContext();
             var teacher = db.Teachers.Where(x => x.Id.ToString() == Responsible).ToList().First();
             var course = db.CourseOfferings.Where(x => x.Id.ToString() == CourseId).ToList().First();
             var vm = GenerateCourseDetailViewModel(course);
-
+            var coursestate = matchState(state);
             course.CourseResponsible = teacher;
+            course.State = coursestate;
             var t = course;
             db.SaveChanges();
 
@@ -292,8 +293,21 @@ namespace StaffingPlanner.Controllers
                 return "warning";
             }
             return "danger";
-        }               
+        }
 
-    }
-    
+        public static CourseState matchState(string state) {
+            switch (state) {
+                case "Ongoing":
+                    return CourseState.Ongoing;
+                    break;
+                case "Planned":
+                    return CourseState.Planned;
+                    break;
+                case "Completed":
+                    return CourseState.Ongoing;
+                    break;
+            }
+            return CourseState.Planned;
+        }
+    }    
 }
