@@ -8,7 +8,15 @@ namespace StaffingPlanner.DAL
         public static Role UserRole;
         public static string User;
 	    public static Guid UserId;
-        public static AcademicYear CurrentAcademicYear; 
+        public static AcademicYear CurrentAcademicYear;
+        public static TermYear CurrentTerm;
+
+        public static string isActiveTerm(Term term, TermYear current) {
+            if (current.Term == term) {
+                return "active";
+            }
+                return null;
+        }
     }
 
     public enum Role
