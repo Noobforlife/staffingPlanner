@@ -10,7 +10,7 @@
     <td>@Model.TotalHours</td>
     <td>@Model.AllocatedHours</td>
     <td>
-        <input type="text" id="@Model.WorkloadId" style="border:none; display: inline-block; height: 100%; width: 50%" class="hours" value="@Model.TeacherAssignedHours">           
+        <input type="number" id="@Model.WorkloadId" style="border:none; display: inline-block; height: 100%; width: 50%" class="hours" value="@Model.TeacherAssignedHours">           
         <div style="display: inline-block; float: right;">
             <button class="btn btn-default save-button" data-toggle="tooltip" title="Save Changes" type="button" onclick="FuckingSaveEdit(this)" data-offering="@Model.OfferingId" data-workload="@Model.WorkloadId" data-teacher="@Model.TeacherId">save</button>
             <span class="fa fa-remove" style="font-size:23px;color:rgb(149,148,148);cursor: pointer" data-toggle="tooltip" title="Cancel Changes" onclick="DiscardEdit()"></span>

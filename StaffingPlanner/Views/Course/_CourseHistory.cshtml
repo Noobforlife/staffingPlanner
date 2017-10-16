@@ -23,10 +23,10 @@
                     foreach (var course in Model)
                     {
                         <tr>
-                            <td>@course.Course.Name</td>
+                            <td>@Html.ActionLink(course.Course.Name, "CourseDetails", "Course", new { id = course.Id }, null)</td>
                             <td>@course.TermYear.Term</td>
                             <td>@course.TermYear.Year</td>
-                            <td>@course.TotalHours<span class="label label-success pull-right">Completed</span></td>
+                            <td>@course.TotalHours<span class="label label-@course.Status pull-right">@course.State</span></td>
                         </tr>
                     }
                 }
