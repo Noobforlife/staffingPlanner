@@ -24,7 +24,7 @@ namespace StaffingPlanner.Controllers
             }
             //Get all course offerings
             var db = StaffingPlanContext.GetContext();
-            var offerings = db.CourseOfferings.Where(c => c.Course != null).ToList();
+            var offerings = db.CourseOfferings.Where(c => c.Course != null && c.AcademicYear.Id == Globals.CurrentAcademicYear.Id).ToList();
 
             //Generate course
             var courses = GenerateCourseViewModelList(offerings);
@@ -304,7 +304,7 @@ namespace StaffingPlanner.Controllers
                     return CourseState.Planned;
                     break;
                 case "Completed":
-                    return CourseState.Ongoing;
+                    return CourseState.Completed;
                     break;
             }
             return CourseState.Planned;
