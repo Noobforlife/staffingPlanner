@@ -239,6 +239,7 @@ namespace StaffingPlanner.Controllers
                 FallBudget = fallBudget,
                 SpringBudget = springBudget,
 
+
                 FallPeriodWorkload = new TeacherPeriodWorkload(teacher, fallBudget.TermYear),
                 SpringPeriodWorkload = new TeacherPeriodWorkload(teacher, springBudget.TermYear)
             };

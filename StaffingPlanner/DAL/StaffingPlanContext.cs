@@ -22,6 +22,7 @@ namespace StaffingPlanner.DAL
         public DbSet<TeacherTermAvailability> TeacherTermAvailability { get; set; }
         public DbSet<AcademicProfile> AcademicProfiles { get; set; }
         public DbSet<AcademicYear> AcademicYears { get; set; }
+        public DbSet<TeacherTaskShare> TeacherTaskShare { get; set; }
 
     }
 }
