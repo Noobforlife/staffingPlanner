@@ -11,6 +11,10 @@
         <h3 class="modal-title" style="display:inline-block">@Model.Name</h3>
         <div style="float: right; display:inline-block">
             <button class="btn btn-default" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("Teachers", "Teacher")'">Back to Teachers List</button>
+            @if (Globals.UserRole == Role.DirectorOfStudies)
+            {
+                <button class="btn btn-primary" onclick="" type="button" id="EditTeacherButton">Edit</button>
+            }
         </div>
     </div>
     <div class="modal-body">

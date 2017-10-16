@@ -24,7 +24,7 @@ namespace StaffingPlanner.Controllers
             }
             //Get all course offerings
             var db = StaffingPlanContext.GetContext();
-            var offerings = db.CourseOfferings.Where(c => c.Course != null).ToList();
+            var offerings = db.CourseOfferings.Where(c => c.Course != null && c.AcademicYear.Id == Globals.CurrentAcademicYear.Id).ToList();
 
             //Generate course
             var courses = GenerateCourseViewModelList(offerings);
@@ -119,15 +119,21 @@ namespace StaffingPlanner.Controllers
         }        
 
         [HttpPost]
-        public ActionResult SaveCourseChanges(string Responsible, string CourseId)
+        public ActionResult SaveCourseChanges(string Responsible, string CourseId, string state, string registeredStudents, string passedStudents)
         {
             var db = StaffingPlanContext.GetContext();
             var teacher = db.Teachers.Where(x => x.Id.ToString() == Responsible).ToList().First();
             var course = db.CourseOfferings.Where(x => x.Id.ToString() == CourseId).ToList().First();
             var vm = GenerateCourseDetailViewModel(course);
 
+            var coursestate = matchState(state);
             course.CourseResponsible = teacher;
-            var t = course;
+            course.State = coursestate;
+            if (int.Parse(registeredStudents) <= course.NumStudents && int.Parse(passedStudents) <= course.NumStudents) {
+                course.PassedStudents = int.Parse(passedStudents);
+                course.RegisteredStudents = int.Parse(registeredStudents);
+            }
+
             db.SaveChanges();
 
             return RedirectToAction("CourseDetails", "Course", new { id = course.Id });
@@ -292,8 +298,21 @@ namespace StaffingPlanner.Controllers
                 return "warning";
             }
             return "danger";
-        }               
+        }
 
-    }
-    
+        public static CourseState matchState(string state) {
+            switch (state) {
+                case "Ongoing":
+                    return CourseState.Ongoing;
+                    break;
+                case "Planned":
+                    return CourseState.Planned;
+                    break;
+                case "Completed":
+                    return CourseState.Completed;
+                    break;
+            }
+            return CourseState.Planned;
+        }
+    }    
 }
