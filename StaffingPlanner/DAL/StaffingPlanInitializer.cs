@@ -482,12 +482,13 @@ namespace StaffingPlanner.DAL
             var andreas = teachers.Find(t => t.Name.Contains("Andreas"));
             context.TeacherTaskShare.Add(new TeacherTaskShare
             {
+                Id = Guid.NewGuid(),
                 Teacher = andreas,
                 AcademicYear = CurrentYear,
                 AdminShare = 0.0m,
-                TeachingShare = 0.4m,
+                TeachingShare = 0.6m,
                 OtherShare = 0.0m,
-                ResearchShare = 0.6m,
+                ResearchShare = 0.4m,
                 Comment = "Extra teaching"
             });
         }
