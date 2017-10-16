@@ -359,21 +359,21 @@ namespace StaffingPlanner.DAL
             //Populating database with term employment
             foreach (var t in teachers)
             {
-                TeacherTermAvailability tteFall;
-                TeacherTermAvailability tteSpring;
+                TeacherTermEmployment tteFall;
+                TeacherTermEmployment tteSpring;
 
                 if (t.AcademicTitle == AcademicTitle.Amanuens)
                 {
-                    tteFall = DataGen.GetTeacherTermAvailability(t, HT17, 25);
-                    tteSpring = DataGen.GetTeacherTermAvailability(t, VT18, 25);
+                    tteFall = DataGen.GetTeacherTermEmployment(t, HT17, 25);
+                    tteSpring = DataGen.GetTeacherTermEmployment(t, VT18, 25);
                 }
                 else
                 {
-                    tteFall = DataGen.GetTeacherTermAvailability(t, HT17, 100);
-                    tteSpring = DataGen.GetTeacherTermAvailability(t, VT18, 100);
+                    tteFall = DataGen.GetTeacherTermEmployment(t, HT17, 100);
+                    tteSpring = DataGen.GetTeacherTermEmployment(t, VT18, 100);
                 }
-                context.TeacherTermAvailability.Add(tteFall);
-                context.TeacherTermAvailability.Add(tteSpring);
+                context.TeacherTermEmployment.Add(tteFall);
+                context.TeacherTermEmployment.Add(tteSpring);
             }
             context.SaveChanges();
 
