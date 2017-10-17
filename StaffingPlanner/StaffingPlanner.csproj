@@ -260,7 +260,6 @@
     <Content Include="Views\Teacher\_EditableTeacherCourseList.cshtml" />
     <Content Include="Views\Teacher\_EditableTeacherCourseListRow.cshtml" />
     <Content Include="Views\Teacher\_AddTeacherCourse.cshtml" />
-    <Content Include="Views\Dashboard\_DropDown.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
