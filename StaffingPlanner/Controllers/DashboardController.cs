@@ -110,7 +110,7 @@ namespace StaffingPlanner.Controllers
 			
 			foreach (var teacher in teachers)
 			{
-				var teachingHours = teacher.GetHourBudget(fallTerm).TeachingHours + teacher.GetHourBudget(springTerm).TeachingHours;
+				var teachingHours = teacher.GetTermAvailability(fallTerm).TeachingHours + teacher.GetTermAvailability(springTerm).TeachingHours;
 				model.TotalRemaining += teachingHours;
 
 				switch (teacher.AcademicTitle)
