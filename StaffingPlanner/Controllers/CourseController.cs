@@ -65,11 +65,26 @@ namespace StaffingPlanner.Controllers
         }
 
         [ChildActionOnly]
-        public PartialViewResult RenderCourseHistory(string courseCode)
+        public PartialViewResult RenderCourseHistory(string courseCode, Guid CourseId)
         {
             var db = StaffingPlanContext.GetContext();
             var courses = db.CourseOfferings.Where(x => x.Course.Code == courseCode && x.State == CourseState.Completed).ToList();
-            return PartialView("~/Views/Course/_CourseHistory.cshtml", courses);
+            var currentCourse = db.CourseOfferings.Where(c => c.Id == CourseId).ToList().FirstOrDefault();
+            var model = new Tuple<List<CourseOffering>, CourseOffering>(courses, currentCourse);
+            return PartialView("~/Views/Course/_CourseHistory.cshtml", model );
+        }
+
+        [HttpGet]
+        public PartialViewResult RenderTemplatingModal(string id, string parentid)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var templateWorkloads = db.Workloads.Where(c => c.Course.Id.ToString() == id).ToList();
+            var draftWorkloads = db.Workloads.Where(c => c.Course.Id.ToString() == parentid ).ToList();
+            var draft = db.CourseOfferings.Where(c => c.Id.ToString() == parentid).ToList().FirstOrDefault();
+
+            var model = new Tuple<List<TeacherCourseWorkload>, List<TeacherCourseWorkload>,CourseOffering>(templateWorkloads, draftWorkloads, draft);
+
+            return PartialView("~/Views/Course/_UseTemplateModal.cshtml", model);
         }
 
         [HttpGet]
@@ -172,6 +187,33 @@ namespace StaffingPlanner.Controllers
                 db.SaveChanges();
             }
             return RedirectToAction("CourseDetails", "Course", new { id = Guid.Parse(Id) });
+        }
+
+        [HttpPost]
+        public ActionResult Applytemplate(Guid templateid, Guid draftid)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var draft = db.CourseOfferings.Where(w => w.Id == draftid).ToList().FirstOrDefault();
+            var draftwork = db.Workloads.Where(w => w.Course.Id == draftid).ToList();
+            var templateWork = db.Workloads.Where(w => w.Course.Id == templateid).ToList();
+            draftwork.ForEach(x => db.Workloads.Remove(x));
+            db.SaveChanges();
+
+            List<TeacherCourseWorkload> workloadList = new List<TeacherCourseWorkload>();
+            foreach (var item in templateWork) {
+                var work = new TeacherCourseWorkload
+                {
+                    Id = Guid.NewGuid(),
+                    Course = draft,
+                    Teacher = item.Teacher,
+                    Workload = item.Workload,
+                    IsApproved = false
+                };
+                workloadList.Add(work);
+            }
+            workloadList.ForEach(w => db.Workloads.Add(w));
+            db.SaveChanges();
+            return RedirectToAction("CourseDetails", "Course", new { id = draftid });
         }
 
         #endregion
@@ -310,6 +352,9 @@ namespace StaffingPlanner.Controllers
                     break;
                 case "Completed":
                     return CourseState.Completed;
+                    break;
+                case "Draft":
+                    return CourseState.Draft;
                     break;
             }
             return CourseState.Planned;

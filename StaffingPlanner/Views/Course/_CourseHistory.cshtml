@@ -1,5 +1,5 @@
 ﻿@using StaffingPlanner.Models;
-@model List<CourseOffering> 
+@model Tuple<List<CourseOffering>, CourseOffering>
 <div class="card card-block">
     <table class="table table-hover">
         <thead>
@@ -15,7 +15,7 @@
         </thead>
         <tbody>
             @{
-                if (Model.Count == 0)
+                if (Model.Item1.Count == 0)
                 {
                     <tr>
                         <td colspan="4" class="text-center">No course History available</td>
@@ -23,7 +23,7 @@
                 }
                 else
                 {
-                    foreach (var course in Model)
+                    foreach (var course in Model.Item1)
                     {
                         <tr>
                             <td>@Html.ActionLink(course.Course.Name, "CourseDetails", "Course", new { id = course.Id }, null)</td>
@@ -33,11 +33,32 @@
                             <td>@course.RegisteredStudents</td>
                             <td>@course.PassedStudents</td>
                             <td>@course.TotalHours<span class="label label-@course.Status pull-right">@course.State</span></td>
-                            <td><button class="btn btn-default" pull-right">Use Template</button></td>
+                            <td>
+                                @{
+                                    if (Model.Item2.State == CourseState.Draft)
+                                    {                                       
+                                        <button class="btn btn-default pull-right" value="@course.Id" id="@Model.Item2.Id" type="button" onclick="ViewComparison(this)">Use Template</button>                                        
+                                    }
+                                }
+                            </td>
                         </tr>
                     }
                 }
             }          
         </tbody>
     </table>
+
+    <div id="compareModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        
+    </div>
 </div>
+
+<script type="text/javascript">
+    function ViewComparison(btn) {
+        $('#compareModal').load('@Url.Action("RenderTemplatingModal", "Course")/' + btn.value + '/' + btn.id);
+        $('#compareModal').modal('toggle');
+     }
+</script>
+
+
+@*+ btn.value*@
