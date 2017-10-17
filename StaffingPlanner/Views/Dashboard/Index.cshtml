@@ -52,20 +52,36 @@
 <div class="row year-plan">
     <div class="col-md-12">
         <div class="dropdown pull-right">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">2017/2018 <span class="caret"></span></button>
-            <ul class="dropdown-menu" role="menu">
-                <li role="presentation"><a href="#">2016/2017</a></li>
-                <li role="presentation"><a href="#">2016/2015</a></li>
-                <li role="presentation"><a href="#">2015/2014</a></li>
-            </ul>
+            @switch (Model.Year)
+            {
+                case 2016:
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">2016/2017 <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="presentation">@Html.ActionLink("2017/2018", "Index", "Dashboard", new { year = 2017 }, null)</li>
+                        <li role="presentation">@Html.ActionLink("2015/2016", "Index", "Dashboard", new { year = 2015 }, null)</li>
+                    </ul>break;
+                case 2015:
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">2015/2016 <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="presentation">@Html.ActionLink("2017/2018", "Index", "Dashboard", new { year = 2017 }, null)</li>
+                        <li role="presentation">@Html.ActionLink("2016/2017", "Index", "Dashboard", new { year = 2016 }, null)</li>
+                    </ul>break;
+                default:
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">2017/2018 <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="presentation">@Html.ActionLink("2016/2017", "Index", "Dashboard", new { year = 2016 }, null)</li>
+                        <li role="presentation">@Html.ActionLink("2015/2016", "Index", "Dashboard", new { year = 2015 }, null)</li>
+                    </ul>break;
+            }
+
         </div>
         <div>
             <ul class="nav nav-tabs">
-                <li class="@Globals.isActiveTerm(StaffingPlanner.Models.Term.Fall, Globals.CurrentTerm)"><a href="#tab-1" role="tab" data-toggle="tab">Fall</a></li>
-                <li class="@Globals.isActiveTerm(StaffingPlanner.Models.Term.Spring, Globals.CurrentTerm)"><a href="#tab-2" role="tab" data-toggle="tab">Spring</a></li>
+                <li class="@Globals.isActiveTerm(Term.Fall, Globals.CurrentTerm)"><a href="#tab-1" role="tab" data-toggle="tab">Fall</a></li>
+                <li class="@Globals.isActiveTerm(Term.Spring, Globals.CurrentTerm)"><a href="#tab-2" role="tab" data-toggle="tab">Spring</a></li>
             </ul>
             <div class="tab-content">
-                <div class="tab-pane @Globals.isActiveTerm(StaffingPlanner.Models.Term.Fall, Globals.CurrentTerm) " role="tabpanel" id="tab-1">
+                <div class="tab-pane @Globals.isActiveTerm(Term.Fall, Globals.CurrentTerm) " role="tabpanel" id="tab-1">
                     <div id="course-plan" class="table-responsive">
                         <table class="table borderless">
                             <colgroup>
@@ -75,7 +91,7 @@
                                 <col class="period-col">
                             </colgroup>
                             <thead>
-                                <tr style=" border-bottom: 2px solid #000000; border-top: 0px">
+                                <tr style=" border-bottom: 2px solid #000000; border-top: 0">
                                     <th style="text-align: center;">Period 1</th>
                                     <th style="text-align: center;">Period 2</th>
                                     <th style="text-align: center;">Period 3</th>
@@ -91,8 +107,8 @@
                                             <td></td>
 }
                                         <td colspan=@item.PeriodsDuration>
-                                            <div class="progress" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" data-content="<b>Course responsible</b><br>@item.CourseResponsible.Name<br><br><b>Course state</b><br>@item.State" >
-                                                <a class="progress-bar progress-bar-@item.Status" role="button"  aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" href="@Url.Action("CourseDetails","Course",new {Id = item.Id })" style="width: 100%; text-decoration: none;">@item.Name</a>
+                                            <div class="progress" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" data-content="<b>Course responsible</b><br>@item.CourseResponsible.Name<br><br><b>Course state</b><br>@item.State">
+                                                <a class="progress-bar progress-bar-@item.Status" role="button" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" href="@Url.Action("CourseDetails","Course",new {Id = item.Id })" style="width: 100%; text-decoration: none;">@item.Name</a>
                                             </div>
                                         </td>
                                         @for (var i = 0; i < item.PeriodsAfter; i++)
@@ -104,7 +120,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="tab-pane @Globals.isActiveTerm(StaffingPlanner.Models.Term.Spring, Globals.CurrentTerm)" role="tabpanel" id="tab-2">
+                <div class="tab-pane @Globals.isActiveTerm(Term.Spring, Globals.CurrentTerm)" role="tabpanel" id="tab-2">
                     <div id="course-plan" class="table-responsive">
                         <table class="table borderless">
                             <colgroup>
@@ -114,7 +130,7 @@
                                 <col class="period-col">
                             </colgroup>
                             <thead>
-                                <tr style=" border-bottom: 2px solid #000000; border-top: 0px">
+                                <tr style=" border-bottom: 2px solid #000000; border-top: 0">
                                     <th style="text-align: center;">Period 1</th>
                                     <th style="text-align: center;">Period 2</th>
                                     <th style="text-align: center;">Period 3</th>
