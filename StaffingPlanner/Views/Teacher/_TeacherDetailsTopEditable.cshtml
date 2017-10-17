@@ -37,6 +37,7 @@
                     <th>P2</th>
                     <th>P3</th>
                     <th>P4</th>
+                    <th>Other</th>
                     <th>Total</th>
                 </tr>
                 <tr>
@@ -44,6 +45,9 @@
                     <td>@Model.FallWorkload.Period2Workload</td>
                     <td>@Model.FallWorkload.Period3Workload</td>
                     <td>@Model.FallWorkload.Period4Workload</td>
+                    <td>
+                        <input type="number" name="fallNonCourseWorkload" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallWorkload.NonCourseWorkload">
+                    </td>
                     <td>@Model.FallWorkload.TotalTermWorkload</td>
                 </tr>
                 </tbody>
@@ -61,6 +65,7 @@
                     <th>P2</th>
                     <th>P3</th>
                     <th>P4</th>
+                    <th>Other</th>
                     <th>Total</th>
                 </tr>
                 <tr>
@@ -68,6 +73,9 @@
                     <td>@Model.SpringWorkload.Period2Workload</td>
                     <td>@Model.SpringWorkload.Period3Workload</td>
                     <td>@Model.SpringWorkload.Period4Workload</td>
+                    <td>
+                        <input type="number" name="springNonCourseWorkload" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.SpringWorkload.NonCourseWorkload">
+                    </td>
                     <td>@Model.SpringWorkload.TotalTermWorkload</td>
                 </tr>
                 </tbody>
@@ -130,6 +138,7 @@
             <p class="detail-label">Other: </p><span class="badge pull-right">@Model.FallBudget.OtherShare%</span>
         </div>
     </div>
+    <input type="hidden" value="@Model.Id" name="teacherId" id="teacherId" />
     <button class="btn btn-default pull-right" onclick="SaveChanges(this)" type="submit" id="SaveChanges">Save</button>
 </div>
 }
