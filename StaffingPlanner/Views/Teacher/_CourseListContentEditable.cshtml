@@ -1,0 +1,61 @@
+﻿@using StaffingPlanner.ViewModels
+@model List<TeacherCourseViewModel>
+
+@foreach (var course in Model)
+{
+    <tr>
+        <td><a href="#" data-toggle="modal" data-target="#course-modal">@Html.ActionLink(course.CourseName, "CourseDetails", "Course", new { id = course.OfferingId }, null)</a></td>
+        <td>@course.Code</td>
+        <td>@Html.ActionLink(course.CourseResponsible.Name, "TeacherDetails", "Teacher", new { id = course.CourseResponsible.Id }, null)</td>
+        <td>@course.TermYear.ToString()</td>
+        <td>@course.Period</td>
+        <td>@course.TotalHours</td>
+        <td>@course.AllocatedHours</td>
+        <td>
+            <input type="number" id="@course.WorkloadId" style="border:none; display: inline-block; height: 100%; width: 30%" class="hours" value="@course.TeacherAssignedHours">
+            <div style="display: inline-block; float: right;">
+                <button class="btn btn-default save-button" data-toggle="tooltip" title="Save Changes" type="button" onclick="SaveEdit(this)" data-offering="@course.OfferingId" data-workload="@course.WorkloadId" data-teacher="@course.TeacherId">save</button>
+                <span class="fa fa-remove" style="font-size:23px;color:rgb(149,148,148);cursor: pointer" data-toggle="tooltip" title="Cancel Changes" onclick="DiscardEdit()"></span>
+            </div>
+        </td>
+        <td><span class="label label-@course.CourseStatus pull-right">@course.CourseState </span></td>
+    </tr>
+}
+
+<script>
+    function SaveEdit(elem) {
+        var teacherId = $(elem).data('teacher');
+        var offeringId = $(elem).data('offering');
+        var workloadId = $(elem).data('workload');
+        var hours = $('#' + workloadId).val();
+        console.log(hours);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("AlterTeacherAllocation", "Teacher")',
+            contentType: "application/json",
+            data: JSON.stringify({
+                teacherId: teacherId,
+                offeringId: offeringId,
+                workloadId: workloadId,
+                hours: hours
+            }),
+            dataType: "json",
+            success: function() {
+                console.log("success");
+                location.reload();
+            },
+            error: function() {
+                console.log("error");
+                location.reload();
+            }
+        });
+    }
+
+    function GetHours() {
+        return $('#teacherHours').text();
+    }
+
+    function DiscardEdit() {
+        location.reload(false);
+    }
+</script>

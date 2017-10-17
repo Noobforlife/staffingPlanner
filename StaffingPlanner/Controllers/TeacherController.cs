@@ -120,6 +120,9 @@ namespace StaffingPlanner.Controllers
             //Generate final viewmodel
             var teacherModel = GenerateTeacherViewModel(teacher, fallBudget, springBudget);
 
+            ViewBag.Name = teacher.Name;
+            ViewBag.Firstname = teacher.Name.Split(' ')[0];
+
             return View(teacherModel);
         }
 
@@ -159,9 +162,7 @@ namespace StaffingPlanner.Controllers
 				name = teacher.Name;
 			}
 
-			ViewBag.Name = name;
-
-			return PartialView("~/Views/Teacher/_TeacherCourseList.cshtml", courses);
+			return PartialView("~/Views/Teacher/_CourseListContent.cshtml", courses);
 		}
 
 		[HttpGet]
@@ -200,9 +201,7 @@ namespace StaffingPlanner.Controllers
 				})
 				.ToList();
 
-			ViewBag.Name = name;
-
-			return PartialView("~/Views/Teacher/_EditableTeacherCourseList.cshtml", offerings);
+            return PartialView("~/Views/Teacher/_CourseListContentEditable.cshtml", offerings);
 		}
 
         [ChildActionOnly]

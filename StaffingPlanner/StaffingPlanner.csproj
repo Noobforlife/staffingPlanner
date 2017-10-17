@@ -257,9 +257,8 @@
     <Content Include="Views\Course\_CourseTeacherList.cshtml" />
     <Content Include="Views\Course\_AddCourseTeacher.cshtml" />
     <Content Include="Views\Teacher\_TeacherDetailsTop.cshtml" />
-    <Content Include="Views\Teacher\_TeacherCourseList.cshtml" />
-    <Content Include="Views\Teacher\_EditableTeacherCourseList.cshtml" />
-    <Content Include="Views\Teacher\_EditableTeacherCourseListRow.cshtml" />
+    <Content Include="Views\Teacher\_CourseListContent.cshtml" />
+    <Content Include="Views\Teacher\_CourseListContentEditable.cshtml" />
     <Content Include="Views\Teacher\_AddTeacherCourse.cshtml" />
   </ItemGroup>
   <ItemGroup>
