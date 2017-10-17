@@ -8,8 +8,10 @@ namespace StaffingPlanner.DAL
     {
         protected override void Seed(StaffingPlanContext context)
         {
-            //Populating database with TermYears
-            var HT16 = new TermYear { Id = Guid.NewGuid(), Term = Term.Spring, Year = 2016 };
+			//Populating database with TermYears
+			var HT15 = new TermYear { Id = Guid.NewGuid(), Term = Term.Fall, Year = 2015 };
+	        var VT16 = new TermYear { Id = Guid.NewGuid(), Term = Term.Spring, Year = 2016 };
+			var HT16 = new TermYear { Id = Guid.NewGuid(), Term = Term.Fall, Year = 2016 };
             var VT17 = new TermYear { Id = Guid.NewGuid(), Term = Term.Spring, Year = 2017 };
             var HT17 = new TermYear { Id = Guid.NewGuid(), Term = Term.Fall, Year = 2017 };
             var VT18 = new TermYear { Id = Guid.NewGuid(), Term = Term.Spring, Year = 2018 };
@@ -22,8 +24,10 @@ namespace StaffingPlanner.DAL
             termYears.ForEach(c => context.TermYears.Add(c));
             context.SaveChanges();
 
+	        var TheYearBeforeLast = new AcademicYear {Id = Guid.NewGuid(), StartTerm = HT15, EndTerm = VT16};
             var LastYear = new AcademicYear { Id = Guid.NewGuid(), StartTerm = HT16, EndTerm = VT17 };
             var CurrentYear = new AcademicYear { Id = Guid.NewGuid(), StartTerm = HT17, EndTerm = VT18 };
+	        context.AcademicYears.Add(TheYearBeforeLast);
             context.AcademicYears.Add(LastYear);
             context.AcademicYears.Add(CurrentYear);
             context.SaveChanges();
