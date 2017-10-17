@@ -273,8 +273,8 @@ namespace StaffingPlanner.Controllers
             //Get the teacher with the same Id as the parameter id
             var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
 
-            var fallBudget = teacher.GetHourBudget(year.StartTerm);
-            var springBudget = teacher.GetHourBudget(year.EndTerm);
+            var fallBudget = teacher.GetTermAvailability(year.StartTerm);
+            var springBudget = teacher.GetTermAvailability(year.EndTerm);
 
             return new DetailedTeacherViewModel
             {
@@ -322,8 +322,8 @@ namespace StaffingPlanner.Controllers
 
 	        foreach (var teacher in teachersList)
 	        {
-                var fallBudget = teacher.GetHourBudget(fallTerm);
-                var springBudget = teacher.GetHourBudget(springTerm);
+                var fallBudget = teacher.GetTermAvailability(fallTerm);
+                var springBudget = teacher.GetTermAvailability(springTerm);
 
                 var allocatedFall = teacher.GetAllocatedHoursForTerm(fallTerm);
                 var allocatedSpring = teacher.GetAllocatedHoursForTerm(springTerm);
