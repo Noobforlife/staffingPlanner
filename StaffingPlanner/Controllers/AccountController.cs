@@ -75,7 +75,7 @@ namespace StaffingPlanner.Controllers
             return year.StartTerm;
         }
 
-	    private static bool LoginUser(string input)
+	    protected static bool LoginUser(string input)
 	    {
 		    var db = StaffingPlanContext.GetContext();
 
