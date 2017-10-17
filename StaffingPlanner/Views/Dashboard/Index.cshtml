@@ -1,5 +1,4 @@
-﻿@using Microsoft.Ajax.Utilities
-@using StaffingPlanner.Models;
+﻿@using StaffingPlanner.Models;
 @using StaffingPlanner.DAL;
 @using StaffingPlanner.ViewModels;
 @model DashboardViewModel
@@ -78,11 +77,11 @@
         </div>
         <div>
             <ul class="nav nav-tabs">
-                <li class="@Globals.isActiveTerm(StaffingPlanner.Models.Term.Fall, Globals.CurrentTerm)"><a href="#tab-1" role="tab" data-toggle="tab">Fall</a></li>
-                <li class="@Globals.isActiveTerm(StaffingPlanner.Models.Term.Spring, Globals.CurrentTerm)"><a href="#tab-2" role="tab" data-toggle="tab">Spring</a></li>
+                <li class="@Globals.isActiveTerm(Term.Fall, Globals.CurrentTerm)"><a href="#tab-1" role="tab" data-toggle="tab">Fall</a></li>
+                <li class="@Globals.isActiveTerm(Term.Spring, Globals.CurrentTerm)"><a href="#tab-2" role="tab" data-toggle="tab">Spring</a></li>
             </ul>
             <div class="tab-content">
-                <div class="tab-pane @Globals.isActiveTerm(StaffingPlanner.Models.Term.Fall, Globals.CurrentTerm) " role="tabpanel" id="tab-1">
+                <div class="tab-pane @Globals.isActiveTerm(Term.Fall, Globals.CurrentTerm) " role="tabpanel" id="tab-1">
                     <div id="course-plan" class="table-responsive">
                         <table class="table borderless">
                             <colgroup>
@@ -92,7 +91,7 @@
                                 <col class="period-col">
                             </colgroup>
                             <thead>
-                                <tr style=" border-bottom: 2px solid #000000; border-top: 0px">
+                                <tr style=" border-bottom: 2px solid #000000; border-top: 0">
                                     <th style="text-align: center;">Period 1</th>
                                     <th style="text-align: center;">Period 2</th>
                                     <th style="text-align: center;">Period 3</th>
@@ -121,7 +120,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="tab-pane @Globals.isActiveTerm(StaffingPlanner.Models.Term.Spring, Globals.CurrentTerm)" role="tabpanel" id="tab-2">
+                <div class="tab-pane @Globals.isActiveTerm(Term.Spring, Globals.CurrentTerm)" role="tabpanel" id="tab-2">
                     <div id="course-plan" class="table-responsive">
                         <table class="table borderless">
                             <colgroup>
@@ -131,7 +130,7 @@
                                 <col class="period-col">
                             </colgroup>
                             <thead>
-                                <tr style=" border-bottom: 2px solid #000000; border-top: 0px">
+                                <tr style=" border-bottom: 2px solid #000000; border-top: 0">
                                     <th style="text-align: center;">Period 1</th>
                                     <th style="text-align: center;">Period 2</th>
                                     <th style="text-align: center;">Period 3</th>
