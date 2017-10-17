@@ -70,7 +70,7 @@ namespace StaffingPlanner.Controllers
 				        Code = c.Course.Code,
 				        Name = c.Course.Name,
 				        Periods = c.Periods,
-				        Status = c.Status,
+				        Status = GetColorForOffering(c),
 				        CourseResponsible = c.CourseResponsible,
 			        })
 			        .ToList();
@@ -162,6 +162,20 @@ namespace StaffingPlanner.Controllers
 			}
 
 			return model;
+		}
+
+		private static string GetColorForOffering(CourseOffering offering)
+		{
+			if (offering.State == CourseState.Draft)
+			{
+				return "progress-bar-" + CourseController.GetStatus();
+			}
+			if (offering.State == CourseState.Completed)
+			{
+				return "background-grey";
+			}
+
+			return "progress-bar-info";
 		}
 	}
 }
