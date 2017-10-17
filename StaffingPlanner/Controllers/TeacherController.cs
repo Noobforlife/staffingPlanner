@@ -126,6 +126,12 @@ namespace StaffingPlanner.Controllers
             return View(teacherModel);
         }
 
+        [HttpGet]
+        public PartialViewResult EditTeacher(DetailedTeacherViewModel teacherModel)
+        {
+            return PartialView("~/Views/Teacher/_TeacherDetailsTopEditable.cshtml", teacherModel);
+        }
+
         [ChildActionOnly]
         public PartialViewResult CourseHistory(Guid teacherid)
         {

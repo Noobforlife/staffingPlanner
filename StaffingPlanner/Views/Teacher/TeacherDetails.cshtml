@@ -13,7 +13,7 @@
             <button class="btn btn-default" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("Teachers", "Teacher")'">Back to Teachers List</button>
             @if (Globals.UserRole == Role.DirectorOfStudies)
             {
-                <button class="btn btn-primary" onclick="" type="button" id="EditTeacherButton">Edit</button>
+                <button class="btn btn-primary" onclick="EditCourse(this)" type="button" id="EditTeacherButton">Edit</button>
             }
         </div>
     </div>
@@ -79,4 +79,10 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function EditCourse(evt) {
+            $('#teacherDetails').load('@Url.Action("EditTeacher", "Teacher", new { teacher = Model})');
+        }
+    </script>
 </div>

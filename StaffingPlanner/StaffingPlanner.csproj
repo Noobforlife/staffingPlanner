@@ -260,6 +260,7 @@
     <Content Include="Views\Teacher\_CourseListContent.cshtml" />
     <Content Include="Views\Teacher\_CourseListContentEditable.cshtml" />
     <Content Include="Views\Teacher\_AddTeacherCourse.cshtml" />
+    <Content Include="Views\Teacher\_TeacherDetailsTopEditable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,135 @@
+﻿@using StaffingPlanner.DAL
+@using StaffingPlanner.ViewModels
+@model DetailedTeacherViewModel
+
+@using (Html.BeginForm("SaveTeacherChanges", "Teacher", FormMethod.Post))
+{
+<div class="col-md-5 col-sm-5">
+    <div class="table-responsive">
+        <table class="table borderless">
+            <tbody>
+            @if (Globals.UserRole == Role.DirectorOfStudies)
+            {
+                <tr>
+                    <th>Personal number :</th>
+                    <td>1234567890</td>
+                </tr>
+            }
+            <tr>
+                <th>Employed as :</th>
+                <td>@Model.Title</td>
+            </tr>
+            <tr>
+                <th>Email :</th>
+                <td>@Model.Email</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="table-responsive" style="font-family: Raleway, sans-serif;">
+            <table class="table">
+                <thead>
+                <tr>@Model.FallBudget.TermYear.ToString() Workload (h)</tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>P1</th>
+                    <th>P2</th>
+                    <th>P3</th>
+                    <th>P4</th>
+                    <th>Total</th>
+                </tr>
+                <tr>
+                    <td>@Model.FallWorkload.Period1Workload</td>
+                    <td>@Model.FallWorkload.Period2Workload</td>
+                    <td>@Model.FallWorkload.Period3Workload</td>
+                    <td>@Model.FallWorkload.Period4Workload</td>
+                    <td>@Model.FallWorkload.TotalTermWorkload</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-responsive" style="font-family: Raleway, sans-serif;">
+            <table class="table">
+                <thead>
+                <tr>@Model.SpringBudget.TermYear.ToString() Workload (h)</tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>P1</th>
+                    <th>P2</th>
+                    <th>P3</th>
+                    <th>P4</th>
+                    <th>Total</th>
+                </tr>
+                <tr>
+                    <td>@Model.SpringWorkload.Period1Workload</td>
+                    <td>@Model.SpringWorkload.Period2Workload</td>
+                    <td>@Model.SpringWorkload.Period3Workload</td>
+                    <td>@Model.SpringWorkload.Period4Workload</td>
+                    <td>@Model.SpringWorkload.TotalTermWorkload</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+<div class="col-md-6 col-sm-6">
+
+    <div class="hours">
+        <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+            <p>Base yearly hours</p>
+            <p class="numbers blue-border">@(Model.FallBudget.TotalTermHours + Model.SpringBudget.TotalTermHours)</p>
+        </div>
+        <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+            <p>@Model.FallBudget.TermYear.ToString()%</p>
+            <p class="numbers orange-border">@Model.FallBudget.TermEmployment%</p>
+        </div>
+        <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+            <p>@Model.SpringBudget.TermYear.ToString()%</p>
+            <p class="numbers green-border">@Model.SpringBudget.TermEmployment%</p>
+        </div>
+    </div>
+
+    <div class="hours">
+        <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+            <p>Total teaching hours</p>
+            <p class="numbers blue-border">@(Model.FallBudget.TeachingHours + Model.SpringBudget.TeachingHours)</p>
+        </div>
+        <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+            <p>@Model.FallBudget.TermYear.ToString() teaching hours</p>
+            <p class="numbers orange-border">@Model.FallBudget.TeachingHours</p>
+        </div>
+        <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+            <p>@Model.SpringBudget.TermYear.ToString() teaching hours</p>
+            <p class="numbers green-border">@Model.SpringBudget.TeachingHours</p>
+        </div>
+    </div>
+
+    <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+        <p>Total workload hours</p>
+        <p class="numbers red-border">@(Model.FallWorkload.TotalTermWorkload + @Model.SpringWorkload.TotalTermWorkload)</p>
+    </div>
+
+    <h5 class="details-h">Task share</h5>
+    <div class="time-allocation-div">
+        <div class="time-allocation detail-label">
+            <p class="detail-label">Teaching:</p><span class="badge pull-right">@Model.FallBudget.TeachingShare%</span>
+        </div>
+        <div class="time-allocation detail-label">
+            <p class="detail-label">Research:</p><span class="badge pull-right">@Model.FallBudget.ResearchShare%</span>
+        </div>
+    </div>
+    <div class="time-allocation-div">
+        <div class="time-allocation detail-label">
+            <p class="detail-label">Admin:</p><span class="badge pull-right">@Model.FallBudget.AdminShare%</span>
+        </div>
+        <div class="time-allocation detail-label">
+            <p class="detail-label">Other: </p><span class="badge pull-right">@Model.FallBudget.OtherShare%</span>
+        </div>
+    </div>
+    <button class="btn btn-default pull-right" onclick="SaveChanges(this)" type="submit" id="SaveChanges">Save</button>
+</div>
+}
