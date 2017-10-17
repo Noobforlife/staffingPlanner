@@ -35,39 +35,15 @@ namespace StaffingPlanner.Controllers
                 return View(model);
             }
 
-            var db = StaffingPlanContext.GetContext();
-
             //Define variable for whether the authorization was successful or not
-            bool authResult;
-
-            //The user provided name is split since we want to match any name
-            var lowerName = model.Name.Trim().ToLower();
-            var nameParts = lowerName.Split(' ');
-
-            //Find any teachers with matching names
-            var matchingTeachers = db.Teachers.Where(t => nameParts.All(np => t.Name.ToLower().Contains(np))).Select(t => new { t.Name, t.Id, Director = t.DirectorOfStudies });
-            var academicYear = db.AcademicYears.Where(y => y.StartTerm.Year == 2017).ToList().FirstOrDefault();
-            if (matchingTeachers.Any()) //If there are any teachers who match any name we are sufficiently satisfied
-            {
-                authResult = true;
-                Globals.User = matchingTeachers.First().Name;
-                Globals.UserId = matchingTeachers.First().Id;
-                Globals.CurrentAcademicYear = academicYear;
-                Globals.CurrentTerm = getCurrentTerm(academicYear);
-            }
-            else
-            {
-                authResult = false;
-            }
+	        var authResult = LoginUser(model.Name);      
 
             switch (authResult)
             {
                 case true:
-                    //If the matching teacher (in db) is the director of studies than set the user role to match
-                    Globals.UserRole = matchingTeachers.First().Director ? Role.DirectorOfStudies : Role.Teacher;
                     return RedirectToLocal(returnUrl);
                 default:
-                    Globals.UserRole = Role.Unauthorized;
+                    
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
             }
@@ -98,5 +74,33 @@ namespace StaffingPlanner.Controllers
             }
             return year.StartTerm;
         }
+
+	    protected static bool LoginUser(string input)
+	    {
+		    var db = StaffingPlanContext.GetContext();
+
+		    //The user provided name is split since we want to match any name
+		    var lowerName = input.Trim().ToLower();
+		    var nameParts = lowerName.Split(' ');
+
+		    //Find any teachers with matching names
+		    var matchingTeachers = db.Teachers.Where(t => nameParts.All(np => t.Name.ToLower().Contains(np))).Select(t => new { t.Name, t.Id, Director = t.DirectorOfStudies });
+		    var academicYear = db.AcademicYears.Where(y => y.StartTerm.Year == 2017).ToList().FirstOrDefault();
+		    if (matchingTeachers.Any()) //If there are any teachers who match any name we are sufficiently satisfied
+		    {
+			    Globals.User = matchingTeachers.First().Name;
+			    Globals.UserId = matchingTeachers.First().Id;
+			    Globals.CurrentAcademicYear = academicYear;
+			    Globals.CurrentTerm = getCurrentTerm(academicYear);
+
+			    //If the matching teacher (in db) is the director of studies than set the user role to match
+			    Globals.UserRole = matchingTeachers.First().Director ? Role.DirectorOfStudies : Role.Teacher;
+
+				return true;
+		    }
+
+		    Globals.UserRole = Role.Unauthorized;
+			return false;
+	    }
     }
 }
