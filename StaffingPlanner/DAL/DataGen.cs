@@ -30,7 +30,7 @@ namespace StaffingPlanner.DAL
             15.0
         };
 
-        public static CourseOffering CreateOffering(Teacher courseResponsible, Course course, AcademicYear academicYear, CourseState state,TermYear term)
+        public static CourseOffering CreateOffering(Teacher courseResponsible, Course course, AcademicYear academicYear, CourseState state,TermYear term, bool approval)
         {
             return new CourseOffering {
                 Id =Guid.NewGuid(),
@@ -45,7 +45,8 @@ namespace StaffingPlanner.DAL
                 NumStudents = Rnd.Next(10, 80),
                 RegisteredStudents = Rnd.Next(10,79),
                 PassedStudents = Rnd.Next(0,50),
-                HST = Hst[Rnd.Next(0, Hst.Count)]
+                HST = Hst[Rnd.Next(0, Hst.Count)],
+                IsApproved = approval
             };
         }
 
@@ -56,7 +57,7 @@ namespace StaffingPlanner.DAL
             return randomCredit;
         }
                
-        public static TeacherCourseWorkload CreateWorkload(Teacher teacher, CourseOffering course)
+        public static TeacherCourseWorkload CreateWorkload(Teacher teacher, CourseOffering course, bool approval)
         {
             int min = 50;
             int max = 300;
@@ -78,7 +79,8 @@ namespace StaffingPlanner.DAL
                 Id = Guid.NewGuid(),
                 Course = course,
                 Teacher = teacher,
-                Workload = Rnd.Next(min, max)
+                Workload = Rnd.Next(min, max),
+                IsApproved= approval
             };
         }
 

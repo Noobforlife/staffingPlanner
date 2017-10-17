@@ -9,5 +9,6 @@ namespace StaffingPlanner.Models
 		public virtual CourseOffering Course { get; set; }
 		public virtual Teacher Teacher { get; set; }
 		public int Workload { get; set; }
-	}
+        public bool IsApproved { get; set; }
+    }
 }
