@@ -41,7 +41,7 @@
         <!--Course history table-->
         <div class="row">
             <div class="collapse" id="collapseExample">
-                @Html.Action("RenderCourseHistory", "Course", new { courseCode = Model.Code })
+                @Html.Action("RenderCourseHistory", "Course", new { courseCode = Model.Code, CourseId = Model.Id })
             </div>
         </div>
     </div>

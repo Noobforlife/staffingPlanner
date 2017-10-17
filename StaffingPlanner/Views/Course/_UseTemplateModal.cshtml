@@ -1,0 +1,64 @@
+﻿@using StaffingPlanner.Models
+@model Tuple<List<TeacherCourseWorkload>, List<TeacherCourseWorkload>,CourseOffering>
+
+<div class="modal-content container">
+    <div class="modal-header">        
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="table-responsive" style="font-family: Raleway, sans-serif;">
+            <table class="table">
+                <thead>
+                    <th></th>
+                    <th>Template</th>
+                    <th>Draft Course</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>Course Responsible</th>
+                        <td>@Model.Item1.First().Course.CourseResponsible.Name</td>
+                        <td>@Model.Item3.CourseResponsible.Name</td>
+                    </tr>
+                    <tr>
+                        <th>Course Budget</th>
+                        <td>@Model.Item1.First().Course.TotalHours</td>
+                        <td>@Model.Item3.TotalHours</td>
+                    </tr>                    
+                    <tr>
+                        <th>Budget Hours Allocated</th>
+                        <td>@Model.Item1.First().Course.AllocatedHours</td>
+                        <td>@Model.Item3.AllocatedHours</td>
+                    </tr>
+                    <tr>
+                        <th>Teachers and Allocated Hours</th>
+                        <td>@foreach (var load in Model.Item1) {
+                            <p>@load.Teacher.Name : @load.Workload hours</p>
+                        }
+                        </td>
+                        <td>@if (Model.Item2 != null)
+                        {
+                              foreach (var load in Model.Item2)
+                              {
+                                <p>@load.Teacher.Name : @load.Workload hours</p>
+                              }
+                        }
+                        else
+                        {
+                            <p>No Teachers Added</p>
+                        }
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+@using (Html.BeginForm("Applytemplate", "Course", new { templateid = Model.Item1.First().Course.Id, draftid = Model.Item3.Id }, FormMethod.Post, null))
+{
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Apply Template</button>
+    </div>
+}
+</div>
