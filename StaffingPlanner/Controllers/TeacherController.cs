@@ -160,6 +160,7 @@ namespace StaffingPlanner.Controllers
 			}
 
 			ViewBag.Name = name;
+            ViewBag.Firstname = name.Split(' ')[0];
 
 			return PartialView("~/Views/Teacher/_TeacherCourseList.cshtml", courses);
 		}
@@ -201,8 +202,9 @@ namespace StaffingPlanner.Controllers
 				.ToList();
 
 			ViewBag.Name = name;
+            ViewBag.Firstname = name.Split(' ')[0];
 
-			return PartialView("~/Views/Teacher/_EditableTeacherCourseList.cshtml", offerings);
+            return PartialView("~/Views/Teacher/_EditableTeacherCourseList.cshtml", offerings);
 		}
 
         [ChildActionOnly]

@@ -11,9 +11,15 @@
                 <th>Responsible</th>
                 <th>Term</th>
                 <th>Period</th>
-                <th>Total budget</th>
-                <th>Total allocated hours</th>
-                <th>@ViewBag.Name hours</th>
+                <th data-toggle="tooltip" title="Total number of hours budgeted for the course">
+                    Budget
+                </th>
+                <th data-toggle="tooltip" title="Total number of hours allocated to this course">
+                    Allocated (Total)
+                </th>
+                <th data-toggle="tooltip" title="Hours allocated to this course for @ViewBag.Name">
+                    Allocated (@ViewBag.Firstname)
+                </th>
             </tr>
             </thead>
             <tbody>
