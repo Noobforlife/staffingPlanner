@@ -252,6 +252,8 @@ namespace StaffingPlanner.Controllers
                 };
                 db.NonCourseWorkloads.Add(newNonCourseWorkload);
                 db.SaveChanges();
+                //Why does this crash because of duplicate keys?
+                //Violation of PRIMARY KEY constraint 'PK_dbo.TermYears'. Cannot insert duplicate key in object 'dbo.TermYears'.
             }
             else if (existingNonCourseWorkload != null)
             {
