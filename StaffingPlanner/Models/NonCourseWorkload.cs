@@ -9,6 +9,7 @@ namespace StaffingPlanner.Models
     {
         public Guid Id { get; set; }
         public virtual Teacher Teacher { get; set; }
+        public virtual TermYear TermYear { get; set; }
         public int Workload { get; set; }
     }
 }
