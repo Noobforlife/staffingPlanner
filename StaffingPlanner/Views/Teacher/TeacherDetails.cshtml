@@ -25,9 +25,38 @@
 
         <div class="row" id="courseList">
             <!--Table of courses-->
-            @(Globals.UserRole == Role.DirectorOfStudies 
-                ? Html.Action("EditableCourseList", "Teacher", new {teacherId = Model.Id}) 
-                : Html.Action("CourseList", "Teacher", new {teacherId = Model.Id}))
+            <div class="col-md-12">
+                <div class="table-responsive" style="font-family: Raleway, sans-serif;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Code</th>
+                                <th>Responsible</th>
+                                <th>Term</th>
+                                <th>Period</th>
+                                <th data-toggle="tooltip" title="Total number of hours budgeted for the course">
+                                    Budget
+                                </th>
+                                <th data-toggle="tooltip" title="Total number of hours allocated to this course">
+                                    Allocated (Total)
+                                </th>
+                                <th data-toggle="tooltip" title="Hours allocated to this course for @ViewBag.Name">
+                                    Allocated (@ViewBag.Firstname)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @(Globals.UserRole == Role.DirectorOfStudies
+                            ? Html.Action("EditableCourseList", "Teacher", new { teacherId = Model.Id })
+                            : Html.Action("CourseList", "Teacher", new { teacherId = Model.Id }))
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
         <div class="col-md-6">
             <button class="btn btn-primary pull-left" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
