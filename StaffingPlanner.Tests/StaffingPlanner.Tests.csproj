@@ -97,6 +97,7 @@
   <ItemGroup>
     <Compile Include="Models\CourseTests.cs" />
     <Compile Include="Models\CourseEnumsTests.cs" />
+    <Compile Include="Models\TermYearTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
