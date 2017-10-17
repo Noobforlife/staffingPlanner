@@ -11,8 +11,8 @@ namespace StaffingPlanner.ViewModels
 		public Guid Id { get; set; }
         public string Name { get; set; }
 		public AcademicTitle Title { get; set; }
-        public int FallTermAvailability { get; set; }
-        public int SpringTermAvailability { get; set; }
+        public int FallTermEmployment { get; set; }
+        public int SpringTermEmployment { get; set; }
 		public int AllocatedHoursFall { get; set; }
 		public string StatusFall { get; set; }
         public int AllocatedHoursSpring { get; set; }
@@ -28,8 +28,8 @@ namespace StaffingPlanner.ViewModels
         public AcademicTitle Title { get; set; }
 
         //The total hours available for different tasks
-        public HourBudget FallBudget { get; set; }
-        public HourBudget SpringBudget { get; set; }
+        public TeacherTermAvailability FallBudget { get; set; }
+        public TeacherTermAvailability SpringBudget { get; set; }
 
         //The hours actually allocated on differnt periods
         public TeacherPeriodWorkload FallPeriodWorkload { get; set; }
@@ -57,6 +57,7 @@ namespace StaffingPlanner.ViewModels
     public class TeacherPeriodWorkload
     {
         public int TotalTermWorkload { get; set; }
+        public int NonCourseWorkload { get; set; }
         public int Period1Workload { get; set; }
         public int Period2Workload { get; set; }
         public int Period3Workload { get; set; }
@@ -64,12 +65,17 @@ namespace StaffingPlanner.ViewModels
 
         public TeacherPeriodWorkload(Teacher teacher, TermYear term)
         {
+            //Get the teachers workloads for the term
             var db = StaffingPlanContext.GetContext();
             var teacherWorkloads = db.Workloads.Where(wl => wl.Teacher.Id == teacher.Id 
             && wl.Course.TermYear.Year == term.Year
             && wl.Course.TermYear.Term == term.Term);
 
+            //Get the total of course workload hours
             TotalTermWorkload = teacherWorkloads.Select(wl => wl.Workload).DefaultIfEmpty(0).Sum(wl => wl);
+            //Add the non course workload hours
+            NonCourseWorkload = db.NonCourseWorkloads.Where(wl => wl.Teacher.Id == teacher.Id).Select(wl => wl.Workload).DefaultIfEmpty(0).First();
+            TotalTermWorkload += NonCourseWorkload;
 
             var allTermWorkload = teacherWorkloads.Where(wl => wl.Course.Periods == Period.AllPeriods)
                 .Select(wl => wl.Workload).DefaultIfEmpty(0).Sum(wl => wl);

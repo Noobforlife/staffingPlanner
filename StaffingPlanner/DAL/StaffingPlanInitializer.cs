@@ -359,21 +359,21 @@ namespace StaffingPlanner.DAL
             //Populating database with term employment
             foreach (var t in teachers)
             {
-                TeacherTermAvailability tteFall;
-                TeacherTermAvailability tteSpring;
+                TeacherTermEmployment tteFall;
+                TeacherTermEmployment tteSpring;
 
                 if (t.AcademicTitle == AcademicTitle.Amanuens)
                 {
-                    tteFall = DataGen.GetTeacherTermAvailability(t, HT17, 25);
-                    tteSpring = DataGen.GetTeacherTermAvailability(t, VT18, 25);
+                    tteFall = DataGen.GetTeacherTermEmployment(t, HT17, 25);
+                    tteSpring = DataGen.GetTeacherTermEmployment(t, VT18, 25);
                 }
                 else
                 {
-                    tteFall = DataGen.GetTeacherTermAvailability(t, HT17, 100);
-                    tteSpring = DataGen.GetTeacherTermAvailability(t, VT18, 100);
+                    tteFall = DataGen.GetTeacherTermEmployment(t, HT17, 100);
+                    tteSpring = DataGen.GetTeacherTermEmployment(t, VT18, 100);
                 }
-                context.TeacherTermAvailability.Add(tteFall);
-                context.TeacherTermAvailability.Add(tteSpring);
+                context.TeacherTermEmployment.Add(tteFall);
+                context.TeacherTermEmployment.Add(tteSpring);
             }
             context.SaveChanges();
 
@@ -382,7 +382,7 @@ namespace StaffingPlanner.DAL
             foreach (var c in courses.GetRange(0,12))
             {
                 var offering = DataGen.CreateOffering(teachers[DataGen.Rnd.Next(0, teachers.Count)], c, CurrentYear,
-                    CourseState.Ongoing, CurrentYear.StartTerm);
+                    CourseState.Ongoing, CurrentYear.StartTerm,true);
                 context.CourseOfferings.Add(offering);
             }
             //Populating the database with course offering for past school year
@@ -395,7 +395,7 @@ namespace StaffingPlanner.DAL
                 if (DataGen.Rnd.Next(3) > 0)
                 {
                     var offering = DataGen.CreateOffering(teachers[DataGen.Rnd.Next(0, teachers.Count)], c, LastYear,
-                    CourseState.Completed, terms[DataGen.Rnd.Next(0, terms.Count)]);
+                    CourseState.Completed, terms[DataGen.Rnd.Next(0, terms.Count)],true);
                     context.CourseOfferings.Add(offering);
                 }
             }
@@ -406,7 +406,7 @@ namespace StaffingPlanner.DAL
                 if (DataGen.Rnd.Next(2) == 0)
                 {
                     var offering = DataGen.CreateOffering(teachers[DataGen.Rnd.Next(0, teachers.Count)], c, CurrentYear,
-                    CourseState.Planned, CurrentYear.EndTerm); 
+                    CourseState.Planned, CurrentYear.EndTerm,false); 
                     context.CourseOfferings.Add(offering);
                 }
 
@@ -416,8 +416,8 @@ namespace StaffingPlanner.DAL
             //Populating database with workloads
             foreach (var c in context.CourseOfferings)
             {
-                var workload1 = DataGen.CreateWorkload(teachers[DataGen.Rnd.Next(0, teachers.Count/2)], c);
-                var workload2 = DataGen.CreateWorkload(teachers[DataGen.Rnd.Next(teachers.Count/2, teachers.Count)], c);
+                var workload1 = DataGen.CreateWorkload(teachers[DataGen.Rnd.Next(0, teachers.Count/2)], c, false);
+                var workload2 = DataGen.CreateWorkload(teachers[DataGen.Rnd.Next(teachers.Count/2, teachers.Count)], c,false);
                 context.Workloads.Add(workload1);
                 context.Workloads.Add(workload2);
             }            
@@ -478,6 +478,19 @@ namespace StaffingPlanner.DAL
                 context.AcademicProfiles.Add(profile);
             }
             context.SaveChanges();
+
+            var andreas = teachers.Find(t => t.Name.Contains("Andreas"));
+            context.TeacherTaskShare.Add(new TeacherTaskShare
+            {
+                Id = Guid.NewGuid(),
+                Teacher = andreas,
+                AcademicYear = CurrentYear,
+                AdminShare = 0.0m,
+                TeachingShare = 0.6m,
+                OtherShare = 0.0m,
+                ResearchShare = 0.4m,
+                Comment = "Extra teaching"
+            });
         }
     }
 }

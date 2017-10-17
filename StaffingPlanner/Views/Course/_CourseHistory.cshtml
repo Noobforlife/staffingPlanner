@@ -7,6 +7,9 @@
                 <th>Name </th>
                 <th>Term </th>
                 <th>Year</th>
+                <th>Course Responsible</th>
+                <th>Registered Students</th>
+                <th>Passed Students</th>
                 <th>Total Budget</th>
             </tr>
         </thead>
@@ -26,6 +29,9 @@
                             <td>@Html.ActionLink(course.Course.Name, "CourseDetails", "Course", new { id = course.Id }, null)</td>
                             <td>@course.TermYear.Term</td>
                             <td>@course.TermYear.Year</td>
+                            <td>@course.CourseResponsible.Name</td>
+                            <td>@course.RegisteredStudents</td>
+                            <td>@course.PassedStudents</td>
                             <td>@course.TotalHours<span class="label label-@course.Status pull-right">@course.State</span></td>
                         </tr>
                     }

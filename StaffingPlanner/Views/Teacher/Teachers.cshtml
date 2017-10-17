@@ -12,7 +12,7 @@
             <tr>
                 <th>Name </th>
                 <th>Title </th>
-                <th>Availability HT|VT</th>
+                <th>Employment HT|VT</th>
                 <th>Allocated hours (HT)</th>
                 <th>Allocated hours (VT)</th>
                 <th>Total remaining hours</th>
@@ -25,7 +25,7 @@
                 <tr>
                     <td>@Html.ActionLink(teacher.Name, "TeacherDetails", "Teacher", new { id = teacher.Id }, null)</td>
                     <td>@teacher.Title</td>
-                    <td class="text-center">@teacher.FallTermAvailability | @teacher.SpringTermAvailability</td>
+                    <td class="text-center">@teacher.FallTermEmployment | @teacher.SpringTermEmployment</td>
                     <td class="text-center">@teacher.AllocatedHoursFall</td>
                     <td class="text-center">@teacher.AllocatedHoursSpring</td>
                     <td class="text-center">@teacher.TotalRemainingHours</td>

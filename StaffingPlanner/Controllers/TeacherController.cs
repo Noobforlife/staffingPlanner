@@ -214,20 +214,20 @@ namespace StaffingPlanner.Controllers
         }
         //Helper methods
 
-        public static int GetTermAvailability(Teacher teacher, TermYear termYear)
+        public static int GetTermEmployment(Teacher teacher, TermYear termYear)
         {
             var db = StaffingPlanContext.GetContext();
-            var teacherAvailability = db.TeacherTermAvailability.Where(tta => tta.Teacher.Id == teacher.Id);
-            var termAvailability = teacherAvailability.
+            var teacherEmployment = db.TeacherTermEmployment.Where(tta => tta.Teacher.Id == teacher.Id);
+            var termEmployment = teacherEmployment.
                 Where(tta => tta.TermYear.Year == termYear.Year && tta.TermYear.Term == termYear.Term)
-                .Select(tta => tta.Availability)
+                .Select(tta => tta.Employment)
                 .FirstOrDefault();
-            return termAvailability;
+            return termEmployment;
         }
        
         //Methods to generate view models
 
-        public static DetailedTeacherViewModel GenerateTeacherViewModel(Teacher teacher, HourBudget fallBudget, HourBudget springBudget)
+        public static DetailedTeacherViewModel GenerateTeacherViewModel(Teacher teacher, TeacherTermAvailability fallBudget, TeacherTermAvailability springBudget)
         {
             return new DetailedTeacherViewModel
             {
@@ -238,6 +238,7 @@ namespace StaffingPlanner.Controllers
 
                 FallBudget = fallBudget,
                 SpringBudget = springBudget,
+
 
                 FallPeriodWorkload = new TeacherPeriodWorkload(teacher, fallBudget.TermYear),
                 SpringPeriodWorkload = new TeacherPeriodWorkload(teacher, springBudget.TermYear)
@@ -288,8 +289,8 @@ namespace StaffingPlanner.Controllers
                     Id = teacher.Id,
                     Name = teacher.Name,
                     Title = teacher.AcademicTitle,
-                    FallTermAvailability = fallBudget.TermAvailability,
-					SpringTermAvailability = springBudget.TermAvailability,
+                    FallTermEmployment = fallBudget.TermEmployment,
+					SpringTermEmployment = springBudget.TermEmployment,
 					AllocatedHoursFall = allocatedFall,
 					StatusFall = allocationWarnings.Item1,
 					AllocatedHoursSpring = allocatedSpring,
@@ -303,7 +304,7 @@ namespace StaffingPlanner.Controllers
         }
 
 		// Feel free to replace "warning" with "status" if it makes more sense for its intended use
-		public static Tuple<string, string> GenerateAllocationWarning(HourBudget fallBudget, HourBudget springBudget, int allocatedFall, int allocatedSpring)
+		public static Tuple<string, string> GenerateAllocationWarning(TeacherTermAvailability fallBudget, TeacherTermAvailability springBudget, int allocatedFall, int allocatedSpring)
 		{
 			var fallWarning = "";
 			var springWarning = "";

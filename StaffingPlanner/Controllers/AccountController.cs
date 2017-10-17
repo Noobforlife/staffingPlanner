@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using StaffingPlanner.ViewModels;
+using StaffingPlanner.Models;
 using StaffingPlanner.DAL;
 
 namespace StaffingPlanner.Controllers
@@ -13,12 +14,12 @@ namespace StaffingPlanner.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-	        if (Globals.User != null)
-	        {
-		        return RedirectToAction("Index", "Dashboard");
-	        }
-        
-			ViewBag.ReturnUrl = returnUrl;
+            if (Globals.User != null)
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
@@ -33,7 +34,7 @@ namespace StaffingPlanner.Controllers
             {
                 return View(model);
             }
-            
+
             var db = StaffingPlanContext.GetContext();
 
             //Define variable for whether the authorization was successful or not
@@ -50,8 +51,9 @@ namespace StaffingPlanner.Controllers
             {
                 authResult = true;
                 Globals.User = matchingTeachers.First().Name;
-	            Globals.UserId = matchingTeachers.First().Id;
+                Globals.UserId = matchingTeachers.First().Id;
                 Globals.CurrentAcademicYear = academicYear;
+                Globals.CurrentTerm = getCurrentTerm(academicYear);
             }
             else
             {
@@ -60,7 +62,7 @@ namespace StaffingPlanner.Controllers
 
             switch (authResult)
             {
-                case true:                  
+                case true:
                     //If the matching teacher (in db) is the director of studies than set the user role to match
                     Globals.UserRole = matchingTeachers.First().Director ? Role.DirectorOfStudies : Role.Teacher;
                     return RedirectToLocal(returnUrl);
@@ -77,7 +79,7 @@ namespace StaffingPlanner.Controllers
         {
             Globals.UserRole = Role.Unauthorized;
             Globals.User = null;
-	        Globals.UserId = Guid.Empty;
+            Globals.UserId = Guid.Empty;
             return RedirectToAction("Login", "Account");
         }
 
@@ -90,5 +92,11 @@ namespace StaffingPlanner.Controllers
             return RedirectToAction("Index", "Dashboard");
         }
 
+        private static TermYear getCurrentTerm(AcademicYear year) {
+            if (DateTime.Now.Month >= 1 && DateTime.Now.Month <= 6) {
+                return year.EndTerm;
+            }
+            return year.StartTerm;
+        }
     }
 }
