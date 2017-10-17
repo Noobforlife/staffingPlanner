@@ -19,6 +19,12 @@ namespace StaffingPlanner
 				defaults: new { controller = "Account", action = "Login", id = UrlParameter.Optional }
 			);
 
-		}
+            routes.MapRoute(
+                name: "MultipleIds",
+                url: "{controller}/{action}/{id}/{parentid}",
+                defaults: new { controller = "Account", action = "Login", id = UrlParameter.Optional, parentid = UrlParameter.Optional }
+            );
+
+        }
 	}
 }
