@@ -10,6 +10,7 @@ namespace StaffingPlanner.Controllers
 {
 	public class TeacherController : Controller
 	{
+
         // GET: /Teacher/Teachers
         public ActionResult Teachers()
         {
@@ -26,73 +27,6 @@ namespace StaffingPlanner.Controllers
             var teachers = GenerateTeacherViewModelList(db.Teachers.ToList(), fallTerm, springTerm);            
 
 			return View(teachers);
-        }
-
-		[HttpPost]
-		public void AlterTeacherAllocation(Guid teacherId, Guid offeringId, Guid workloadId, string hours)
-		{
-			try
-			{
-				var numHours = int.Parse(hours);
-				var db = StaffingPlanContext.GetContext();
-				var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
-				var offering = db.CourseOfferings.FirstOrDefault(o => o.Id == offeringId);
-				var existingWorkload = db.Workloads
-					.FirstOrDefault(w => w.Id == workloadId);
-
-				if (existingWorkload == null && numHours > 0)
-				{
-					var newWorkLoad = new TeacherCourseWorkload
-					{
-						Id = Guid.NewGuid(),
-						Teacher = teacher,
-						Course = offering,
-						Workload = numHours
-					};
-					db.Workloads.Add(newWorkLoad);
-					db.SaveChanges();
-				}
-				else if (existingWorkload != null)
-				{
-					if (numHours <= 0)
-					{
-						db.Workloads.Remove(existingWorkload);
-						db.SaveChanges();
-					}
-					else
-					{
-						existingWorkload.Workload = numHours;
-						db.SaveChanges();
-					}
-				}
-			}
-			catch { }
-		}
-
-        [HttpPost]
-        public void AlterNonCourseHoursAllocation(Teacher teacher, TermYear term, int newHours)
-        {
-            //Find the matching NonCourseWorkload in the database
-            var db = StaffingPlanContext.GetContext();
-            var nonCourseWorkload = db.NonCourseWorkloads.Where(ncwl => ncwl.Teacher.Id == teacher.Id
-            && ncwl.TermYear.Term == term.Term
-            && ncwl.TermYear.Year == term.Year).FirstOrDefault();
-
-            //If one exists we can just change the hours, if not then add one
-            if (nonCourseWorkload != null)
-            {
-                nonCourseWorkload.Workload = newHours;
-            }
-            else
-            {
-                db.NonCourseWorkloads.Add(new NonCourseWorkload
-                {
-                    Id = Guid.NewGuid(),
-                    Teacher = teacher,
-                    Workload = newHours
-                });
-            }
-            db.SaveChanges();
         }
 
         // GET: /Teacher/TeacherDetails/{id}
@@ -115,27 +49,9 @@ namespace StaffingPlanner.Controllers
             return View(viewModel);
         }
 
+        #region TeacherDetails Partials
+
         [HttpGet]
-        public PartialViewResult EditTeacher(Guid teacherId)
-        {
-            var viewModel = GenerateTeacherViewModel(teacherId, AcademicYear.GetCurrentYear());
-
-            ViewBag.Name = viewModel.Name;
-            ViewBag.Firstname = viewModel.Name.Split(' ')[0];
-
-            return PartialView("~/Views/Teacher/_TeacherDetailsTopEditable.cshtml", viewModel);
-        }
-
-        [ChildActionOnly]
-        public PartialViewResult CourseHistory(Guid teacherid)
-        {
-            var db = StaffingPlanContext.GetContext();
-            var courses = db.Workloads.Where(x => x.Teacher.Id == teacherid && x.Course.TermYear.Year < DateTime.Now.Year).ToList();
-            
-            return PartialView("~/Views/Teacher/_TeacherCourseHistory.cshtml", courses);
-        }
-
-		[HttpGet]
 		public PartialViewResult CourseList(Guid teacherId)
 		{
 			var db = StaffingPlanContext.GetContext();
@@ -165,7 +81,37 @@ namespace StaffingPlanner.Controllers
 			return PartialView("~/Views/Teacher/_CourseListContent.cshtml", courses);
 		}
 
-		[HttpGet]
+        [ChildActionOnly]
+        public PartialViewResult RenderAddTeacherCourse(Guid Id)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var courses = db.CourseOfferings.Where(c => c.AcademicYear.Id == Globals.CurrentAcademicYear.Id && c.State != CourseState.Completed).ToList();
+            var model = new Tuple<List<CourseOffering>, Guid>(courses, Id);
+
+            return PartialView("~/Views/Teacher/_AddTeacherCourse.cshtml", model);
+        }
+
+        [ChildActionOnly]
+        public PartialViewResult CourseHistory(Guid teacherid)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var courses = db.Workloads.Where(x => x.Teacher.Id == teacherid && x.Course.TermYear.Year < DateTime.Now.Year).ToList();
+
+            return PartialView("~/Views/Teacher/_TeacherCourseHistory.cshtml", courses);
+        }
+
+        [HttpGet]
+        public PartialViewResult EditableTeacherDetails(Guid teacherId)
+        {
+            var viewModel = GenerateTeacherViewModel(teacherId, AcademicYear.GetCurrentYear());
+
+            ViewBag.Name = viewModel.Name;
+            ViewBag.Firstname = viewModel.Name.Split(' ')[0];
+
+            return PartialView("~/Views/Teacher/_TeacherDetailsTopEditable.cshtml", viewModel);
+        }
+
+        [HttpGet]
 		public PartialViewResult EditableCourseList(Guid teacherId)
 		{
 			var db = StaffingPlanContext.GetContext();
@@ -204,14 +150,49 @@ namespace StaffingPlanner.Controllers
             return PartialView("~/Views/Teacher/_CourseListContentEditable.cshtml", offerings);
 		}
 
-        [ChildActionOnly]
-        public PartialViewResult RenderAddTeacherCourse(Guid Id)
-        {
-            var db = StaffingPlanContext.GetContext();
-            var courses = db.CourseOfferings.Where(c => c.AcademicYear.Id == Globals.CurrentAcademicYear.Id && c.State != CourseState.Completed).ToList();
-            var model = new Tuple<List<CourseOffering>, Guid>(courses, Id);
+        #endregion
 
-            return PartialView("~/Views/Teacher/_AddTeacherCourse.cshtml", model);
+        #region Updating the database
+
+        [HttpPost]
+        public void AlterTeacherAllocation(Guid teacherId, Guid offeringId, Guid workloadId, string hours)
+        {
+            try
+            {
+                var numHours = int.Parse(hours);
+                var db = StaffingPlanContext.GetContext();
+                var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
+                var offering = db.CourseOfferings.FirstOrDefault(o => o.Id == offeringId);
+                var existingWorkload = db.Workloads
+                    .FirstOrDefault(w => w.Id == workloadId);
+
+                if (existingWorkload == null && numHours > 0)
+                {
+                    var newWorkLoad = new TeacherCourseWorkload
+                    {
+                        Id = Guid.NewGuid(),
+                        Teacher = teacher,
+                        Course = offering,
+                        Workload = numHours
+                    };
+                    db.Workloads.Add(newWorkLoad);
+                    db.SaveChanges();
+                }
+                else if (existingWorkload != null)
+                {
+                    if (numHours <= 0)
+                    {
+                        db.Workloads.Remove(existingWorkload);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        existingWorkload.Workload = numHours;
+                        db.SaveChanges();
+                    }
+                }
+            }
+            catch { }
         }
 
         [HttpPost]
@@ -237,20 +218,52 @@ namespace StaffingPlanner.Controllers
             }
             return RedirectToAction("TeacherDetails", "Teacher", new { id = Guid.Parse(Id) });
         }
-        //Helper methods
 
-        public static int GetTermEmployment(Teacher teacher, TermYear termYear)
+        [HttpPost]
+        public ActionResult SaveTeacherChanges(Guid teacherId, int fallNonCourseWorkload, int springNonCourseWorkload)
+        {
+            var currentYear = AcademicYear.GetCurrentYear();
+
+            AlterNonCourseHoursAllocation(teacherId, currentYear.StartTerm, fallNonCourseWorkload);
+            AlterNonCourseHoursAllocation(teacherId, currentYear.EndTerm, springNonCourseWorkload);
+
+            return RedirectToAction("TeacherDetails", "Teacher", new { id = teacherId });
+        }
+
+        public void AlterNonCourseHoursAllocation(Guid teacherId, TermYear term, int newHours)
         {
             var db = StaffingPlanContext.GetContext();
-            var teacherEmployment = db.TeacherTermEmployment.Where(tta => tta.Teacher.Id == teacher.Id);
-            var termEmployment = teacherEmployment.
-                Where(tta => tta.TermYear.Year == termYear.Year && tta.TermYear.Term == termYear.Term)
-                .Select(tta => tta.Employment)
-                .FirstOrDefault();
-            return termEmployment;
+
+            var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
+
+            var existingNonCourseWorkload = db.NonCourseWorkloads
+                .FirstOrDefault(w => w.Teacher.Id == teacher.Id
+                && w.TermYear.Year == term.Year
+                && w.TermYear.Term == term.Term);
+
+            if (existingNonCourseWorkload == null)
+            {
+                var newNonCourseWorkload = new NonCourseWorkload
+                {
+                    Id = Guid.NewGuid(),
+                    Teacher = teacher,
+                    TermYear = term,
+                    Workload = newHours
+                };
+                db.NonCourseWorkloads.Add(newNonCourseWorkload);
+                db.SaveChanges();
+            }
+            else if (existingNonCourseWorkload != null)
+            {
+                existingNonCourseWorkload.Workload = newHours;
+                db.SaveChanges();
+            }
+
         }
-       
-        //Methods to generate view models
+
+        #endregion
+
+        #region ViewModel Generation
 
         public static DetailedTeacherViewModel GenerateTeacherViewModel(Guid teacherId, AcademicYear year)
         {
@@ -335,8 +348,10 @@ namespace StaffingPlanner.Controllers
 	        return output;
         }
 
-		// Feel free to replace "warning" with "status" if it makes more sense for its intended use
-		public static Tuple<string, string> GenerateAllocationWarning(TeacherTermAvailability fallBudget, TeacherTermAvailability springBudget, int allocatedFall, int allocatedSpring)
+        #endregion
+
+        // Feel free to replace "warning" with "status" if it makes more sense for its intended use
+        public static Tuple<string, string> GenerateAllocationWarning(TeacherTermAvailability fallBudget, TeacherTermAvailability springBudget, int allocatedFall, int allocatedSpring)
 		{
 			var fallWarning = "";
 			var springWarning = "";
@@ -366,5 +381,6 @@ namespace StaffingPlanner.Controllers
 
 			return new Tuple<string, string>(fallWarning, springWarning);
 		}
+
     }
 }
