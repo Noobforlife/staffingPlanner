@@ -6,6 +6,7 @@ namespace StaffingPlanner.ViewModels
 {
 	public class DashboardViewModel {
 		public bool DoS { get; set; }
+		public int Year { get; set; }
 		public TopPanelViewModel TopPanel { get; set; }
 		public List<DashboardCourseViewModel> FallCourses { get; set; }
 		public List<DashboardCourseViewModel> SpringCourses { get; set; }
