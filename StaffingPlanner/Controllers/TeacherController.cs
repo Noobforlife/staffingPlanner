@@ -69,6 +69,32 @@ namespace StaffingPlanner.Controllers
 			catch { }
 		}
 
+        [HttpPost]
+        public void AlterNonCourseHoursAllocation(Teacher teacher, TermYear term, int newHours)
+        {
+            //Find the matching NonCourseWorkload in the database
+            var db = StaffingPlanContext.GetContext();
+            var nonCourseWorkload = db.NonCourseWorkloads.Where(ncwl => ncwl.Teacher.Id == teacher.Id
+            && ncwl.TermYear.Term == term.Term
+            && ncwl.TermYear.Year == term.Year).FirstOrDefault();
+
+            //If one exists we can just change the hours, if not then add one
+            if (nonCourseWorkload != null)
+            {
+                nonCourseWorkload.Workload = newHours;
+            }
+            else
+            {
+                db.NonCourseWorkloads.Add(new NonCourseWorkload
+                {
+                    Id = Guid.NewGuid(),
+                    Teacher = teacher,
+                    Workload = newHours
+                });
+            }
+            db.SaveChanges();
+        }
+
         // GET: /Teacher/TeacherDetails/{id}
         public ActionResult TeacherDetails(Guid? id)
         {
@@ -240,8 +266,8 @@ namespace StaffingPlanner.Controllers
                 SpringBudget = springBudget,
 
 
-                FallPeriodWorkload = new TeacherPeriodWorkload(teacher, fallBudget.TermYear),
-                SpringPeriodWorkload = new TeacherPeriodWorkload(teacher, springBudget.TermYear)
+                FallWorkload = new TeacherTermWorkload(teacher, fallBudget.TermYear),
+                SpringWorkload = new TeacherTermWorkload(teacher, springBudget.TermYear)
             };
         }
 

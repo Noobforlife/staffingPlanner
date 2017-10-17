@@ -38,11 +38,11 @@
                     <th>Total</th>
                 </tr>
                 <tr>
-                    <td>@Model.FallPeriodWorkload.Period1Workload</td>
-                    <td>@Model.FallPeriodWorkload.Period2Workload</td>
-                    <td>@Model.FallPeriodWorkload.Period3Workload</td>
-                    <td>@Model.FallPeriodWorkload.Period4Workload</td>
-                    <td>@Model.FallPeriodWorkload.TotalTermWorkload</td>
+                    <td>@Model.FallWorkload.Period1Workload</td>
+                    <td>@Model.FallWorkload.Period2Workload</td>
+                    <td>@Model.FallWorkload.Period3Workload</td>
+                    <td>@Model.FallWorkload.Period4Workload</td>
+                    <td>@Model.FallWorkload.TotalTermWorkload</td>
                 </tr>
                 </tbody>
             </table>
@@ -62,11 +62,11 @@
                     <th>Total</th>
                 </tr>
                 <tr>
-                    <td>@Model.SpringPeriodWorkload.Period1Workload</td>
-                    <td>@Model.SpringPeriodWorkload.Period2Workload</td>
-                    <td>@Model.SpringPeriodWorkload.Period3Workload</td>
-                    <td>@Model.SpringPeriodWorkload.Period4Workload</td>
-                    <td>@Model.SpringPeriodWorkload.TotalTermWorkload</td>
+                    <td>@Model.SpringWorkload.Period1Workload</td>
+                    <td>@Model.SpringWorkload.Period2Workload</td>
+                    <td>@Model.SpringWorkload.Period3Workload</td>
+                    <td>@Model.SpringWorkload.Period4Workload</td>
+                    <td>@Model.SpringWorkload.TotalTermWorkload</td>
                 </tr>
                 </tbody>
             </table>
@@ -108,7 +108,7 @@
 
     <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
         <p>Total workload hours</p>
-        <p class="numbers red-border">@(Model.FallPeriodWorkload.TotalTermWorkload + @Model.SpringPeriodWorkload.TotalTermWorkload)</p>
+        <p class="numbers red-border">@(Model.FallWorkload.TotalTermWorkload + @Model.SpringWorkload.TotalTermWorkload)</p>
     </div>
 
     <h5 class="details-h">Task share</h5>
