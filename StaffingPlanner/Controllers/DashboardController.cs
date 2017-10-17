@@ -79,6 +79,7 @@ namespace StaffingPlanner.Controllers
 			        Name = c.Course.Name,
 			        Periods = c.Periods,
 			        Status = c.CourseResponsible.Id == teacher.Id ? "info" : "success",
+					State = c.State,
 			        CourseResponsible = c.CourseResponsible,
 		        })
 		        .ToList();
