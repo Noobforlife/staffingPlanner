@@ -107,29 +107,23 @@ namespace StaffingPlanner.Controllers
 				return RedirectToAction("Teachers", "Teacher");
 			}
 
-            var db = StaffingPlanContext.GetContext();
-            //Get the teacher with the same Id as the parameter id
-            var teacher = db.Teachers.FirstOrDefault(t => t.Id == id);
+            var viewModel = GenerateTeacherViewModel((Guid)id, AcademicYear.GetCurrentYear());
 
-            //Get the terms, right now we simple use HT17 and VT18
-            var fallTerm = db.TermYears.FirstOrDefault(ty => ty.Term == Term.Fall && ty.Year == 2017);
-            var springTerm = db.TermYears.FirstOrDefault(ty => ty.Term == Term.Spring && ty.Year == 2018);
-            var fallBudget = teacher.GetHourBudget(fallTerm);
-            var springBudget = teacher.GetHourBudget(springTerm);
+            ViewBag.Name = viewModel.Name;
+            ViewBag.Firstname = viewModel.Name.Split(' ')[0];
 
-            //Generate final viewmodel
-            var teacherModel = GenerateTeacherViewModel(teacher, fallBudget, springBudget);
-
-            ViewBag.Name = teacher.Name;
-            ViewBag.Firstname = teacher.Name.Split(' ')[0];
-
-            return View(teacherModel);
+            return View(viewModel);
         }
 
         [HttpGet]
-        public PartialViewResult EditTeacher(DetailedTeacherViewModel teacherModel)
+        public PartialViewResult EditTeacher(Guid teacherId)
         {
-            return PartialView("~/Views/Teacher/_TeacherDetailsTopEditable.cshtml", teacherModel);
+            var viewModel = GenerateTeacherViewModel(teacherId, AcademicYear.GetCurrentYear());
+
+            ViewBag.Name = viewModel.Name;
+            ViewBag.Firstname = viewModel.Name.Split(' ')[0];
+
+            return PartialView("~/Views/Teacher/_TeacherDetailsTopEditable.cshtml", viewModel);
         }
 
         [ChildActionOnly]
@@ -258,8 +252,15 @@ namespace StaffingPlanner.Controllers
        
         //Methods to generate view models
 
-        public static DetailedTeacherViewModel GenerateTeacherViewModel(Teacher teacher, TeacherTermAvailability fallBudget, TeacherTermAvailability springBudget)
+        public static DetailedTeacherViewModel GenerateTeacherViewModel(Guid teacherId, AcademicYear year)
         {
+            var db = StaffingPlanContext.GetContext();
+            //Get the teacher with the same Id as the parameter id
+            var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
+
+            var fallBudget = teacher.GetHourBudget(year.StartTerm);
+            var springBudget = teacher.GetHourBudget(year.EndTerm);
+
             return new DetailedTeacherViewModel
             {
                 Id = teacher.Id,

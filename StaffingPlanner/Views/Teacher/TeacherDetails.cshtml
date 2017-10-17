@@ -82,7 +82,7 @@
 
     <script>
         function EditCourse(evt) {
-            $('#teacherDetails').load('@Url.Action("EditTeacher", "Teacher", new { teacher = Model})');
+            $('#teacherDetails').load('@Url.Action("EditTeacher", "Teacher", new { teacherId = Model.Id })');
         }
     </script>
 </div>
