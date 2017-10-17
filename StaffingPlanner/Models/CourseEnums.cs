@@ -2,6 +2,7 @@
 {
     public enum CourseState
     {
+		Draft,
         Ongoing,
         Planned,
         Completed
@@ -20,7 +21,6 @@
 
     public static class EnumToString
     {
-
         public static string PeriodToString(Period period)
         {
             switch (period)
@@ -41,7 +41,5 @@
                     return "P1-4";
             }
         }
-
     }
-
 }

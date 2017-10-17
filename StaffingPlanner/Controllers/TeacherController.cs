@@ -69,6 +69,32 @@ namespace StaffingPlanner.Controllers
 			catch { }
 		}
 
+        [HttpPost]
+        public void AlterNonCourseHoursAllocation(Teacher teacher, TermYear term, int newHours)
+        {
+            //Find the matching NonCourseWorkload in the database
+            var db = StaffingPlanContext.GetContext();
+            var nonCourseWorkload = db.NonCourseWorkloads.Where(ncwl => ncwl.Teacher.Id == teacher.Id
+            && ncwl.TermYear.Term == term.Term
+            && ncwl.TermYear.Year == term.Year).FirstOrDefault();
+
+            //If one exists we can just change the hours, if not then add one
+            if (nonCourseWorkload != null)
+            {
+                nonCourseWorkload.Workload = newHours;
+            }
+            else
+            {
+                db.NonCourseWorkloads.Add(new NonCourseWorkload
+                {
+                    Id = Guid.NewGuid(),
+                    Teacher = teacher,
+                    Workload = newHours
+                });
+            }
+            db.SaveChanges();
+        }
+
         // GET: /Teacher/TeacherDetails/{id}
         public ActionResult TeacherDetails(Guid? id)
         {
@@ -93,6 +119,9 @@ namespace StaffingPlanner.Controllers
 
             //Generate final viewmodel
             var teacherModel = GenerateTeacherViewModel(teacher, fallBudget, springBudget);
+
+            ViewBag.Name = teacher.Name;
+            ViewBag.Firstname = teacher.Name.Split(' ')[0];
 
             return View(teacherModel);
         }
@@ -133,9 +162,7 @@ namespace StaffingPlanner.Controllers
 				name = teacher.Name;
 			}
 
-			ViewBag.Name = name;
-
-			return PartialView("~/Views/Teacher/_TeacherCourseList.cshtml", courses);
+			return PartialView("~/Views/Teacher/_CourseListContent.cshtml", courses);
 		}
 
 		[HttpGet]
@@ -174,9 +201,7 @@ namespace StaffingPlanner.Controllers
 				})
 				.ToList();
 
-			ViewBag.Name = name;
-
-			return PartialView("~/Views/Teacher/_EditableTeacherCourseList.cshtml", offerings);
+            return PartialView("~/Views/Teacher/_CourseListContentEditable.cshtml", offerings);
 		}
 
         [ChildActionOnly]
@@ -240,8 +265,8 @@ namespace StaffingPlanner.Controllers
                 SpringBudget = springBudget,
 
 
-                FallPeriodWorkload = new TeacherPeriodWorkload(teacher, fallBudget.TermYear),
-                SpringPeriodWorkload = new TeacherPeriodWorkload(teacher, springBudget.TermYear)
+                FallWorkload = new TeacherTermWorkload(teacher, fallBudget.TermYear),
+                SpringWorkload = new TeacherTermWorkload(teacher, springBudget.TermYear)
             };
         }
 

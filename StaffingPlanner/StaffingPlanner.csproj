@@ -174,9 +174,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AcademicProfile.cs" />
+    <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\CourseEnums.cs" />
     <Compile Include="Models\NonCourseWorkload.cs" />
-    <Compile Include="Models\TeacherTermAvailability.cs" />
+    <Compile Include="ViewModels\TeacherTermAvailability.cs" />
     <Compile Include="Models\TeacherTaskShare.cs" />
     <Compile Include="Models\TeacherTermEmployment.cs" />
     <Compile Include="Models\AcademicYear.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\CourseViewModels.cs" />
     <Compile Include="ViewModels\DashboardViewModel.cs" />
+    <Compile Include="ViewModels\TeacherTermWorkload.cs" />
     <Compile Include="ViewModels\TeacherViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -255,9 +257,8 @@
     <Content Include="Views\Course\_CourseTeacherList.cshtml" />
     <Content Include="Views\Course\_AddCourseTeacher.cshtml" />
     <Content Include="Views\Teacher\_TeacherDetailsTop.cshtml" />
-    <Content Include="Views\Teacher\_TeacherCourseList.cshtml" />
-    <Content Include="Views\Teacher\_EditableTeacherCourseList.cshtml" />
-    <Content Include="Views\Teacher\_EditableTeacherCourseListRow.cshtml" />
+    <Content Include="Views\Teacher\_CourseListContent.cshtml" />
+    <Content Include="Views\Teacher\_CourseListContentEditable.cshtml" />
     <Content Include="Views\Teacher\_AddTeacherCourse.cshtml" />
   </ItemGroup>
   <ItemGroup>

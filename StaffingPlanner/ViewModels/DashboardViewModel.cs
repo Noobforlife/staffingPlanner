@@ -6,6 +6,7 @@ namespace StaffingPlanner.ViewModels
 {
 	public class DashboardViewModel {
 		public bool DoS { get; set; }
+		public int Year { get; set; }
 		public TopPanelViewModel TopPanel { get; set; }
 		public List<DashboardCourseViewModel> FallCourses { get; set; }
 		public List<DashboardCourseViewModel> SpringCourses { get; set; }
@@ -31,6 +32,7 @@ namespace StaffingPlanner.ViewModels
 		public int PeriodsDuration { get; set; }
 		public int PeriodsAfter { get; set; }
         public string Status { get; set; }
+		public CourseState State { get; set; }
         public Teacher CourseResponsible { get; set; }
 
         public Period Periods

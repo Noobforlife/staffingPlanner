@@ -11,6 +11,7 @@ namespace StaffingPlanner.Models
         public TermYear TermYear { get; set; }
         public int TermEmployment { get; set; }
         public int TotalTermHours { get; set; }
+
         public int TeachingHours { get; set; }
         public int ResearchHours { get; set; }
         public int AdminHours { get; set; }
@@ -38,8 +39,21 @@ namespace StaffingPlanner.Models
             //Multiply the total term hours (half of yearly) by term availability
             TotalTermHours = (int)(BaseYearlyHours / 2m * (TermEmployment / 100m));
 
+            var taskShare = SetShares();
+
+            //Set the hours available for different tasks
+            TeachingHours = (int)(TotalTermHours * taskShare.TeachingShare);
+            ResearchHours = (int)(TotalTermHours * taskShare.ResearchShare);
+            AdminHours = (int)(TotalTermHours * taskShare.AdminShare);
+            OtherHours = (int)(TotalTermHours * taskShare.OtherShare);
+        }
+        
+        private TeacherTaskShare SetShares()
+        {
+            var db = StaffingPlanContext.GetContext();
+
             //Get the shares (% for teaching, research etc) for this teacher
-            var result = db.TeacherTaskShare.Where(tts => tts.Teacher.Name == teacher.Name);
+            var result = db.TeacherTaskShare.Where(tts => tts.Teacher.Name == Teacher.Name);
             TeacherTaskShare taskShare;
             if (result.Any())
             {
@@ -55,7 +69,7 @@ namespace StaffingPlanner.Models
             }
             else
             {
-                var profileShare = db.AcademicProfiles.Where(ap => ap.Title == teacher.AcademicTitle)
+                var profileShare = db.AcademicProfiles.Where(ap => ap.Title == Teacher.AcademicTitle)
                 .Select(ap => new { TeachingShare = ap.TeachingShare, ResearchShare = ap.ResearchShare, AdminShare = ap.AdminShare, OtherShare = ap.OtherShare });
                 var shares = profileShare.First();
                 taskShare = new TeacherTaskShare
@@ -72,12 +86,7 @@ namespace StaffingPlanner.Models
             ResearchShare = (int)(taskShare.ResearchShare * 100);
             AdminShare = (int)(taskShare.AdminShare * 100);
             OtherShare = (int)(taskShare.OtherShare * 100);
-
-            //Set the hours available for different tasks
-            TeachingHours = (int)(TotalTermHours * taskShare.TeachingShare);
-            ResearchHours = (int)(TotalTermHours * taskShare.ResearchShare);
-            AdminHours = (int)(TotalTermHours * taskShare.AdminShare);
-            OtherHours = (int)(TotalTermHours * taskShare.OtherShare);
+            return taskShare;
         }
 
         public int BaseYearlyHours

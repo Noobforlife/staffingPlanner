@@ -10,21 +10,31 @@ namespace StaffingPlanner.Controllers
 	public class DashboardController : Controller
 	{
         // GET: /Dashboard/Index
-        public ActionResult Index()
+        public ActionResult Index(int year = 2017)
         {
             if (Globals.User == null)
             {
                 return RedirectToAction("Login", "Account");
             }
+
+	        var db = StaffingPlanContext.GetContext();
+
+	        var currentYear = year == 2017 
+				? Globals.CurrentAcademicYear 
+				: db.AcademicYears.FirstOrDefault(ay => ay.StartTerm.Term == Term.Fall && ay.StartTerm.Year == year);
+
+			if (currentYear == null)
+	        {
+		        currentYear = Globals.CurrentAcademicYear;
+	        }
+
             //Get all offerings for fall and spring
-            //Todo: Get only current courses, not everything in database
-            var db = StaffingPlanContext.GetContext();
-	        var fallOfferings = db.CourseOfferings
-				.Where(co => co.TermYear.Term == Term.Fall && co.AcademicYear.Id == Globals.CurrentAcademicYear.Id)
+  	        var fallOfferings = db.CourseOfferings
+				.Where(co => co.TermYear.Term == Term.Fall && co.AcademicYear.Id == currentYear.Id)
 				.OrderBy(co => co.Periods)
 				.ToList();
 	        var springOfferings = db.CourseOfferings
-				.Where(co => co.TermYear.Term == Term.Spring && co.AcademicYear.Id == Globals.CurrentAcademicYear.Id)
+				.Where(co => co.TermYear.Term == Term.Spring && co.AcademicYear.Id == currentYear.Id)
 				.OrderBy(co => co.Periods)
 				.ToList();
 
@@ -39,6 +49,7 @@ namespace StaffingPlanner.Controllers
 	        var model = new DashboardViewModel
 	        {
 				DoS = directorOfStudies,
+				Year = currentYear.StartTerm.Year,
 				TopPanel = GenerateTopPanelViewModel(),
 				FallCourses = fallCourses,
 				SpringCourses = springCourses
@@ -79,6 +90,7 @@ namespace StaffingPlanner.Controllers
 			        Name = c.Course.Name,
 			        Periods = c.Periods,
 			        Status = c.CourseResponsible.Id == teacher.Id ? "info" : "success",
+					State = c.State,
 			        CourseResponsible = c.CourseResponsible,
 		        })
 		        .ToList();
