@@ -238,7 +238,8 @@ namespace StaffingPlanner.Controllers
                 PassedStudents = offering.PassedStudents,
                 TotalHours = offering.TotalHours,
                 AllocatedHours = offering.AllocatedHours,
-                RemainingHours = offering.RemainingHours
+                RemainingHours = offering.RemainingHours,
+                IsApproved = offering.IsApproved
             };
             return vm;
         }
@@ -262,8 +263,9 @@ namespace StaffingPlanner.Controllers
                 AllocatedHours = offering.AllocatedHours,
                 RemainingHours = offering.RemainingHours,
                 Status = GetStatus(offering.TotalHours,offering.AllocatedHours),
-                State = offering.State
-            };
+                State = offering.State,
+               IsApproved = offering.IsApproved
+           };
             return vm;
         }
 
@@ -281,7 +283,8 @@ namespace StaffingPlanner.Controllers
                 AllocatedHours = o.AllocatedHours,
                 RemainingHours = o.RemainingHours,
                 State = o.State,
-			    Status = o.Status
+			    Status = o.Status,
+                IsApproved=o.IsApproved
 		    })
 		    .ToList();
         }

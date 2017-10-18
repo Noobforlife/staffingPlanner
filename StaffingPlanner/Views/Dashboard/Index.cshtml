@@ -108,7 +108,12 @@
 }
                                         <td colspan=@item.PeriodsDuration>
                                             <div class="progress" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" data-content="<b>Course responsible</b><br>@item.CourseResponsible.Name<br><br><b>Course state</b><br>@item.State">
-                                                <a class="progress-bar @item.Status" role="button" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" href="@Url.Action("CourseDetails","Course",new {item.Id })" style="width: 100%; text-decoration: none;">@item.Name</a>
+                                                <a class="progress-bar @item.Status" role="button" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" href="@Url.Action("CourseDetails","Course",new {item.Id })" style="width: 100%; text-decoration: none;">@item.Name
+                                                @if (item.IsApproved)
+                                                {<i class="fa fa-check pull-right" style="margin:2px"></i>}
+                                                else
+                                                {<i class="fa fa-exclamation-circle pull-right" aria-hidden="true" style="margin:2px"></i> } 
+                                                </a>
                                             </div>
                                         </td>
                                         @for (var i = 0; i < item.PeriodsAfter; i++)
@@ -147,7 +152,12 @@
 }
                                         <td colspan=@("" + item.PeriodsDuration)>
                                             <div class="progress" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" data-content="<b>Course responsible</b><br>@item.CourseResponsible.Name<br><br><b>Course state</b><br>@item.State">
-                                                <a class="progress-bar @item.Status" role="button" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" href="@Url.Action("CourseDetails","Course",new {item.Id })" style="width: 100%; text-decoration: none;">@item.Name</a>
+                                                <a class="progress-bar @item.Status" role="button" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" href="@Url.Action("CourseDetails","Course",new {item.Id })" style="width: 100%; text-decoration: none;">@item.Name
+                                                @if (item.IsApproved)
+                                                {<i class="fa fa-check pull-right" style="margin:3px"></i>}
+                                                else
+                                                {<i class="fa fa-exclamation-circle pull-right" aria-hidden="true" style="margin:3px"></i> }  
+                                                </a>
                                             </div>
                                         </td>
                                         @for (var i = 0; i < item.PeriodsAfter; i++)
