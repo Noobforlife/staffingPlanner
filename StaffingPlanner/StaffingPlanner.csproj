@@ -165,6 +165,7 @@
     <Compile Include="Controllers\CourseController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="DAL\DataGen.cs" />
     <Compile Include="DAL\Globals.cs" />
@@ -176,7 +177,9 @@
     <Compile Include="Models\AcademicProfile.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\CourseEnums.cs" />
+    <Compile Include="Models\Message.cs" />
     <Compile Include="Models\NonCourseWorkload.cs" />
+    <Compile Include="ViewModels\MessagesViewModels.cs" />
     <Compile Include="ViewModels\TeacherTermAvailability.cs" />
     <Compile Include="Models\TeacherTaskShare.cs" />
     <Compile Include="Models\TeacherTermEmployment.cs" />
@@ -260,7 +263,10 @@
     <Content Include="Views\Teacher\_CourseListContent.cshtml" />
     <Content Include="Views\Teacher\_CourseListContentEditable.cshtml" />
     <Content Include="Views\Teacher\_AddTeacherCourse.cshtml" />
+    <Content Include="Views\Teacher\_TeacherDetailsTopEditable.cshtml" />
     <Content Include="Views\Course\_UseTemplateModal.cshtml" />
+    <Content Include="Views\Messages\Messages.cshtml" />
+    <Content Include="Views\Messages\_NotificationsWindow.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

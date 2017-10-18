@@ -15,7 +15,7 @@ namespace StaffingPlanner.DAL
         public DbSet<Course> Courses { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<TeacherCourseWorkload> Workloads { get; set; }
-        public DbSet<NonCourseWorkload> NonCourseWorkloads {get;set;}
+        public DbSet<NonCourseWorkload> NonCourseWorkloads { get; set; }
         public DbSet<CourseOffering> CourseOfferings { get; set; }
         public DbSet<TermYear> TermYears { get; set; }
         public DbSet<TeacherTermEmployment> TeacherTermEmployment { get; set; }
@@ -23,5 +23,6 @@ namespace StaffingPlanner.DAL
         public DbSet<AcademicYear> AcademicYears { get; set; }
         public DbSet<TeacherTaskShare> TeacherTaskShare { get; set; }
 		public DbSet<Comment> Comments { get; set; }
+        public DbSet<Message> Messages { get; set; }
     }
 }

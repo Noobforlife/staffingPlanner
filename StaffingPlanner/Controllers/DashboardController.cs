@@ -72,6 +72,7 @@ namespace StaffingPlanner.Controllers
 				        Periods = c.Periods,
 				        Status = GetColorForOffering(c),
 				        CourseResponsible = c.CourseResponsible,
+                        IsApproved = c.IsApproved
 			        })
 			        .ToList();
 	        }
@@ -89,7 +90,7 @@ namespace StaffingPlanner.Controllers
 			        Code = c.Course.Code,
 			        Name = c.Course.Name,
 			        Periods = c.Periods,
-			        Status = c.CourseResponsible.Id == teacher.Id ? "info" : "success",
+			        Status = c.CourseResponsible.Id == teacher.Id ? "progress-bar-info" : "progress-bar-success",
 					State = c.State,
 			        CourseResponsible = c.CourseResponsible,
 		        })
@@ -110,7 +111,7 @@ namespace StaffingPlanner.Controllers
 			
 			foreach (var teacher in teachers)
 			{
-				var teachingHours = teacher.GetHourBudget(fallTerm).TeachingHours + teacher.GetHourBudget(springTerm).TeachingHours;
+				var teachingHours = teacher.GetTermAvailability(fallTerm).TeachingHours + teacher.GetTermAvailability(springTerm).TeachingHours;
 				model.TotalRemaining += teachingHours;
 
 				switch (teacher.AcademicTitle)

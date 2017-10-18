@@ -151,6 +151,7 @@ namespace StaffingPlanner.Controllers
 
             db.SaveChanges();
 
+            MessagesController.GenerateTeacherMessage(course, db);
             return RedirectToAction("CourseDetails", "Course", new { id = course.Id });
         }
 
@@ -163,6 +164,7 @@ namespace StaffingPlanner.Controllers
             Workload.Workload = int.Parse(Allocated);
             db.SaveChanges();
 
+            MessagesController.GenerateTeacherMessage(Workload,db);
             return RedirectToAction("CourseDetails", "Course", new { id = Guid.Parse(Id) });
         }
 
@@ -238,7 +240,8 @@ namespace StaffingPlanner.Controllers
                 PassedStudents = offering.PassedStudents,
                 TotalHours = offering.TotalHours,
                 AllocatedHours = offering.AllocatedHours,
-                RemainingHours = offering.RemainingHours
+                RemainingHours = offering.RemainingHours,
+                IsApproved = offering.IsApproved
             };
             return vm;
         }
@@ -262,8 +265,9 @@ namespace StaffingPlanner.Controllers
                 AllocatedHours = offering.AllocatedHours,
                 RemainingHours = offering.RemainingHours,
                 Status = GetStatus(offering.TotalHours,offering.AllocatedHours),
-                State = offering.State
-            };
+                State = offering.State,
+               IsApproved = offering.IsApproved
+           };
             return vm;
         }
 
@@ -281,7 +285,8 @@ namespace StaffingPlanner.Controllers
                 AllocatedHours = o.AllocatedHours,
                 RemainingHours = o.RemainingHours,
                 State = o.State,
-			    Status = o.Status
+			    Status = o.Status,
+                IsApproved=o.IsApproved
 		    })
 		    .ToList();
         }
@@ -302,7 +307,7 @@ namespace StaffingPlanner.Controllers
             var FallWork = db.Workloads.Where(w => w.Teacher.Id == teacher.Id && w.Course.AcademicYear.Id == work.Course.AcademicYear.Id && w.Course.TermYear.Term == Term.Fall).ToList().Select(c => c.Workload).Sum();
             var SpringWork = db.Workloads.Where(w => w.Teacher.Id == teacher.Id && w.Course.AcademicYear.Id == work.Course.AcademicYear.Id && w.Course.TermYear.Term == Term.Spring).ToList().Select(c => c.Workload).Sum();
 
-            var teachingHours = teacher.GetHourBudget(Globals.CurrentAcademicYear.StartTerm).TeachingHours + teacher.GetHourBudget(Globals.CurrentAcademicYear.EndTerm).TeachingHours;
+            var teachingHours = teacher.GetTermAvailability(Globals.CurrentAcademicYear.StartTerm).TeachingHours + teacher.GetTermAvailability(Globals.CurrentAcademicYear.EndTerm).TeachingHours;
             var remaining = teachingHours - FallWork - SpringWork;
             var vm = new CourseTeacherViewModel
             {

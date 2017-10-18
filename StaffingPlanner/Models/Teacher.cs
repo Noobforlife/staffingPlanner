@@ -16,7 +16,7 @@ namespace StaffingPlanner.Models
 		public bool DirectorOfStudies { get; set; }
 		public AcademicTitle AcademicTitle { get; set; }
 
-        public TeacherTermAvailability GetHourBudget(TermYear term)
+        public TeacherTermAvailability GetTermAvailability(TermYear term)
         {
             return new TeacherTermAvailability(this, term);
         }

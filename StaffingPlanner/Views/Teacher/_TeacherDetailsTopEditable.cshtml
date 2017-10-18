@@ -2,6 +2,8 @@
 @using StaffingPlanner.ViewModels
 @model DetailedTeacherViewModel
 
+@using (Html.BeginForm("SaveTeacherChanges", "Teacher", FormMethod.Post))
+{
 <div class="col-md-5 col-sm-5">
     <div class="table-responsive">
         <table class="table borderless">
@@ -43,7 +45,9 @@
                     <td>@Model.FallWorkload.Period2Workload</td>
                     <td>@Model.FallWorkload.Period3Workload</td>
                     <td>@Model.FallWorkload.Period4Workload</td>
-                    <td>@Model.FallWorkload.NonCourseWorkload</td>
+                    <td>
+                        <input type="number" name="fallNonCourseWorkload" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallWorkload.NonCourseWorkload">
+                    </td>
                     <td>@Model.FallWorkload.TotalTermWorkload</td>
                 </tr>
                 </tbody>
@@ -69,7 +73,9 @@
                     <td>@Model.SpringWorkload.Period2Workload</td>
                     <td>@Model.SpringWorkload.Period3Workload</td>
                     <td>@Model.SpringWorkload.Period4Workload</td>
-                    <td>@Model.SpringWorkload.NonCourseWorkload</td>
+                    <td>
+                        <input type="number" name="springNonCourseWorkload" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.SpringWorkload.NonCourseWorkload">
+                    </td>
                     <td>@Model.SpringWorkload.TotalTermWorkload</td>
                 </tr>
                 </tbody>
@@ -118,19 +124,33 @@
     <h5 class="details-h">Task share</h5>
     <div class="time-allocation-div">
         <div class="time-allocation detail-label">
-            <p class="detail-label">Teaching:</p><span class="badge pull-right">@Model.FallBudget.TeachingShare%</span>
+            <p class="detail-label">Teaching:</p>
+            <span class="badge pull-right">
+                <input type="number" name="teachingShare" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallBudget.TeachingShare">
+            </span>
         </div>
         <div class="time-allocation detail-label">
-            <p class="detail-label">Research:</p><span class="badge pull-right">@Model.FallBudget.ResearchShare%</span>
+            <p class="detail-label">Research:</p>
+            <span class="badge pull-right">
+                <input type="number" name="researchShare" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallBudget.ResearchShare">
+            </span>
         </div>
     </div>
     <div class="time-allocation-div">
         <div class="time-allocation detail-label">
-            <p class="detail-label">Admin:</p><span class="badge pull-right">@Model.FallBudget.AdminShare%</span>
+            <p class="detail-label">Admin:</p>
+            <span class="badge pull-right">
+                <input type="number" name="adminShare" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallBudget.AdminShare">
+            </span>
         </div>
         <div class="time-allocation detail-label">
-            <p class="detail-label">Other: </p><span class="badge pull-right">@Model.FallBudget.OtherShare%</span>
+            <p class="detail-label">Other: </p>
+            <span class="badge pull-right">
+                <input type="number" name="otherShare" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallBudget.OtherShare">
+            </span>
         </div>
     </div>
-
+    <input type="hidden" value="@Model.Id" name="teacherId" id="teacherId" />
+    <button class="btn btn-default pull-right" onclick="SaveChanges(this)" type="submit" id="SaveChanges">Save</button>
 </div>
+}

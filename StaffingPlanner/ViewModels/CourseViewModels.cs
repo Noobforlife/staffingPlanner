@@ -17,6 +17,7 @@ namespace StaffingPlanner.ViewModels
 		public int RemainingHours { get; set; }
         public CourseState State { get; set; }
         public string Status { get; set; }
+        public bool IsApproved { get; set; }
     }
 
     public class DetailedCourseViewModel
@@ -38,6 +39,7 @@ namespace StaffingPlanner.ViewModels
         public List<CourseTeacherViewModel> Teachers { get; set; }
         public string Status { get; set; }
         public CourseState State { get; set; }
+        public bool IsApproved { get; set; }
     }
 
     public class CourseTeacherViewModel
