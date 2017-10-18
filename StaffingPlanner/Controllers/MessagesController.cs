@@ -13,12 +13,10 @@ namespace StaffingPlanner.Controllers
         // GET: Message
         public ActionResult Messages()
         {
-            //Removed guid from parameters as it was causing crash when clicking messages icon
-            //Bring it back when that is fixed, or perhaps we could use Globals.UserId instead?
-			if (Globals.UserRole != Role.DirectorOfStudies)
-	        {
-		        return RedirectToAction("Index", "Dashboard");
-			}
+			//if (Globals.UserRole != Role.DirectorOfStudies)
+	        //{
+		    //   return RedirectToAction("Index", "Dashboard");
+			//}
 
 			var model = new List<MessageViewModel>();
 

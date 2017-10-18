@@ -4,153 +4,202 @@
 
 @using (Html.BeginForm("SaveTeacherChanges", "Teacher", FormMethod.Post))
 {
-<div class="col-md-5 col-sm-5">
-    <div class="table-responsive">
-        <table class="table borderless">
-            <tbody>
-            @if (Globals.UserRole == Role.DirectorOfStudies)
-            {
-                <tr>
-                    <th>Personal number :</th>
-                    <td>1234567890</td>
-                </tr>
+    <div class="col-md-6 col-sm-6">
+        <div class="table-responsive">
+            <table class="table borderless">
+                <tbody>
+                    @if (Globals.UserRole == Role.DirectorOfStudies)
+                    {
+                        <tr>
+                            <th>Personal number :</th>
+                            <td>1234567890</td>
+                        </tr>
+                    }
+                    <tr>
+                        <th>Employed as :</th>
+                        <td>@Model.Title</td>
+                    </tr>
+                    <tr>
+                        <th>Email :</th>
+                        <td>@Model.Email</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="table-responsive" style="font-family: Raleway, sans-serif; max-width: 350px">
+                <table class="table">
+                    <thead>
+                        <tr>@Model.FallBudget.TermYear.ToString() Workload (h)</tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>P1</th>
+                            <th>P2</th>
+                            <th>P3</th>
+                            <th>P4</th>
+                            <th>Other</th>
+                            <th>Total</th>
+                        </tr>
+                        <tr>
+                            <td>@Model.FallWorkload.Period1Workload</td>
+                            <td>@Model.FallWorkload.Period2Workload</td>
+                            <td>@Model.FallWorkload.Period3Workload</td>
+                            <td>@Model.FallWorkload.Period4Workload</td>
+                            <td>
+                                <input type="number" name="fallNonCourseWorkload" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallWorkload.NonCourseWorkload">
+                            </td>
+                            <td>@Model.FallWorkload.TotalTermWorkload</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-responsive" style="font-family: Raleway, sans-serif; max-width: 350px">
+                <table class="table">
+                    <thead>
+                        <tr>@Model.SpringBudget.TermYear.ToString() Workload (h)</tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>P1</th>
+                            <th>P2</th>
+                            <th>P3</th>
+                            <th>P4</th>
+                            <th>Other</th>
+                            <th>Total</th>
+                        </tr>
+                        <tr>
+                            <td>@Model.SpringWorkload.Period1Workload</td>
+                            <td>@Model.SpringWorkload.Period2Workload</td>
+                            <td>@Model.SpringWorkload.Period3Workload</td>
+                            <td>@Model.SpringWorkload.Period4Workload</td>
+                            <td>
+                                <input type="number" name="springNonCourseWorkload" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.SpringWorkload.NonCourseWorkload">
+                            </td>
+                            <td>@Model.SpringWorkload.TotalTermWorkload</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-6">
+        <style>
+            p {
+                font-size: 14px;
+                margin-bottom: 6px;
             }
-            <tr>
-                <th>Employed as :</th>
-                <td>@Model.Title</td>
-            </tr>
-            <tr>
-                <th>Email :</th>
-                <td>@Model.Email</td>
-            </tr>
-            </tbody>
-        </table>
 
-        <div class="table-responsive" style="font-family: Raleway, sans-serif;">
-            <table class="table">
-                <thead>
-                <tr>@Model.FallBudget.TermYear.ToString() Workload (h)</tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <th>P1</th>
-                    <th>P2</th>
-                    <th>P3</th>
-                    <th>P4</th>
-                    <th>Other</th>
-                    <th>Total</th>
-                </tr>
-                <tr>
-                    <td>@Model.FallWorkload.Period1Workload</td>
-                    <td>@Model.FallWorkload.Period2Workload</td>
-                    <td>@Model.FallWorkload.Period3Workload</td>
-                    <td>@Model.FallWorkload.Period4Workload</td>
-                    <td>
-                        <input type="number" name="fallNonCourseWorkload" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallWorkload.NonCourseWorkload">
-                    </td>
-                    <td>@Model.FallWorkload.TotalTermWorkload</td>
-                </tr>
-                </tbody>
-            </table>
+            #shareboxContainer {
+            }
+
+            .sharebox {
+                background-color: whitesmoke;
+                margin: 4px;
+            }
+
+            #hourboxContainer {
+            }
+
+            .hourbox {
+                background-color: whitesmoke;
+                margin: 4px;
+            }
+        </style>
+
+        <div class="row" style="margin-bottom:16px">
+            <div class="col-md-12">
+                <div class="col-md-5 col-xs-4">
+                    <p>Base annual hours: @(Model.FallBudget.TotalTermHours + Model.SpringBudget.TotalTermHours)</p>
+                </div>
+                <div class="col-md-3">
+                    <p>HT-17: @Model.FallBudget.TermEmployment%</p>
+                </div>
+                <div class="col-md-3">
+                    <p>VT-18: @Model.SpringBudget.TermEmployment%</p>
+                </div>
+            </div>
         </div>
 
-        <div class="table-responsive" style="font-family: Raleway, sans-serif;">
-            <table class="table">
-                <thead>
-                <tr>@Model.SpringBudget.TermYear.ToString() Workload (h)</tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <th>P1</th>
-                    <th>P2</th>
-                    <th>P3</th>
-                    <th>P4</th>
-                    <th>Other</th>
-                    <th>Total</th>
-                </tr>
-                <tr>
-                    <td>@Model.SpringWorkload.Period1Workload</td>
-                    <td>@Model.SpringWorkload.Period2Workload</td>
-                    <td>@Model.SpringWorkload.Period3Workload</td>
-                    <td>@Model.SpringWorkload.Period4Workload</td>
-                    <td>
-                        <input type="number" name="springNonCourseWorkload" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.SpringWorkload.NonCourseWorkload">
-                    </td>
-                    <td>@Model.SpringWorkload.TotalTermWorkload</td>
-                </tr>
-                </tbody>
-            </table>
+        <div class="row">
+            @*Task share box*@
+            <div class="col-md-6" id="shareboxContainer">
+                <div class="row">
+                    <h5 style="text-align:center">Task share</h5>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 col-xs-5 sharebox">
+                        <h6>Teaching</h6>
+                        <input type="number" name="teachingShare" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallBudget.TeachingShare">
+                    </div>
+                    <div class="col-md-5 col-xs-5 sharebox">
+                        <h6>Research</h6>
+                        <input type="number" name="researchShare" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallBudget.ResearchShare">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 col-xs-5 sharebox">
+                        <h6>Admin</h6>
+                        <input type="number" name="adminShare" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallBudget.AdminShare">
+                    </div>
+                    <div class="col-md-5 col-xs-5 sharebox">
+                        <h6>Other</h6>
+                        <input type="number" name="otherShare" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallBudget.OtherShare">
+                    </div>
+                </div>
+            </div>
+
+            @*Teaching hours box*@
+            <div class="col-md-6" id="hourboxContainer">
+                <div class="row">
+                    <h6 style="text-align:center">Available teaching hours</h6>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 col-xs-5 hourbox">
+                        <h6>HT-17</h6>
+                        <p>@Model.FallBudget.TeachingHours</p>
+                    </div>
+                    <div class="col-md-6 col-xs-5 hourbox">
+                        <h6>Per period</h6>
+                        <p>@(Model.FallBudget.TeachingHours / 4)</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 col-xs-5 hourbox">
+                        <h6>VT-18</h6>
+                        <p>@Model.SpringBudget.TeachingHours</p>
+                    </div>
+                    <div class="col-md-6 col-xs-5 hourbox">
+                        <h6>Per period</h6>
+                        <p>@(Model.SpringBudget.TeachingHours / 4)</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
-    </div>
-</div>
-<div class="col-md-6 col-sm-6">
+        <div class="row">
+            <div class="col-md-6">
+                <div id="totalWorkload" style="text-align:center">
+                    <h6>Total workload</h6>
+                    <h3>@(Model.FallWorkload.TotalTermWorkload + @Model.SpringWorkload.TotalTermWorkload)</h3>
+                </div>
 
-    <div class="hours">
-        <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-            <p>Base yearly hours</p>
-            <p class="numbers blue-border">@(Model.FallBudget.TotalTermHours + Model.SpringBudget.TotalTermHours)</p>
+            </div>
+            <div class="col-md-6">
+                <div id="totalTeaching" style="text-align:center">
+                    <h6>Total teaching hours</h6>
+                    <h3>@(Model.FallBudget.TeachingHours + Model.SpringBudget.TeachingHours)</h3>
+                </div>
+            </div>
         </div>
-        <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-            <p>@Model.FallBudget.TermYear.ToString()%</p>
-            <p class="numbers orange-border">@Model.FallBudget.TermEmployment%</p>
-        </div>
-        <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-            <p>@Model.SpringBudget.TermYear.ToString()%</p>
-            <p class="numbers green-border">@Model.SpringBudget.TermEmployment%</p>
-        </div>
-    </div>
 
-    <div class="hours">
-        <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-            <p>Total teaching hours</p>
-            <p class="numbers blue-border">@(Model.FallBudget.TeachingHours + Model.SpringBudget.TeachingHours)</p>
-        </div>
-        <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-            <p>@Model.FallBudget.TermYear.ToString() teaching hours</p>
-            <p class="numbers orange-border">@Model.FallBudget.TeachingHours</p>
-        </div>
-        <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-            <p>@Model.SpringBudget.TermYear.ToString() teaching hours</p>
-            <p class="numbers green-border">@Model.SpringBudget.TeachingHours</p>
-        </div>
-    </div>
-
-    <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-        <p>Total workload hours</p>
-        <p class="numbers red-border">@(Model.FallWorkload.TotalTermWorkload + @Model.SpringWorkload.TotalTermWorkload)</p>
-    </div>
-
-    <h5 class="details-h">Task share</h5>
-    <div class="time-allocation-div">
-        <div class="time-allocation detail-label">
-            <p class="detail-label">Teaching:</p>
-            <span class="badge pull-right">
-                <input type="number" name="teachingShare" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallBudget.TeachingShare">
-            </span>
-        </div>
-        <div class="time-allocation detail-label">
-            <p class="detail-label">Research:</p>
-            <span class="badge pull-right">
-                <input type="number" name="researchShare" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallBudget.ResearchShare">
-            </span>
+        <div class="row">
+            <div style="margin-top:10px">
+                <input type="hidden" value="@Model.Id" name="teacherId" id="teacherId" />
+                <button class="btn btn-default pull-right" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("TeacherDetails", "Teacher", new { Id = Model.Id })'">Cancel</button>
+                <button class="btn btn-default pull-right" onclick="SaveChanges(this)" type="submit" id="SaveChanges" style="margin-right:10px">Save</button>
+            </div>
         </div>
     </div>
-    <div class="time-allocation-div">
-        <div class="time-allocation detail-label">
-            <p class="detail-label">Admin:</p>
-            <span class="badge pull-right">
-                <input type="number" name="adminShare" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallBudget.AdminShare">
-            </span>
-        </div>
-        <div class="time-allocation detail-label">
-            <p class="detail-label">Other: </p>
-            <span class="badge pull-right">
-                <input type="number" name="otherShare" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallBudget.OtherShare">
-            </span>
-        </div>
-    </div>
-    <input type="hidden" value="@Model.Id" name="teacherId" id="teacherId" />
-    <button class="btn btn-default pull-right" onclick="SaveChanges(this)" type="submit" id="SaveChanges">Save</button>
-</div>
 }
