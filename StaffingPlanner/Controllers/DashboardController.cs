@@ -72,6 +72,7 @@ namespace StaffingPlanner.Controllers
 				        Periods = c.Periods,
 				        Status = GetColorForOffering(c),
 				        CourseResponsible = c.CourseResponsible,
+                        IsApproved = c.IsApproved
 			        })
 			        .ToList();
 	        }

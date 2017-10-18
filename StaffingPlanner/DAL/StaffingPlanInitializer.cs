@@ -386,7 +386,7 @@ namespace StaffingPlanner.DAL
             foreach (var c in courses.GetRange(0,12))
             {
                 var offering = DataGen.CreateOffering(teachers[DataGen.Rnd.Next(0, teachers.Count)], c, CurrentYear,
-                    CourseState.Ongoing, CurrentYear.StartTerm,true);
+                    CourseState.Planned, CurrentYear.StartTerm,true);
                 context.CourseOfferings.Add(offering);
             }
             //Populating the database with course offering for past school year
@@ -410,7 +410,7 @@ namespace StaffingPlanner.DAL
                 if (DataGen.Rnd.Next(2) == 0)
                 {
                     var offering = DataGen.CreateOffering(teachers[DataGen.Rnd.Next(0, teachers.Count)], c, CurrentYear,
-                    CourseState.Planned, CurrentYear.EndTerm,false); 
+                    CourseState.Draft, CurrentYear.EndTerm,false); 
                     context.CourseOfferings.Add(offering);
                 }
 
