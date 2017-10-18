@@ -22,7 +22,7 @@
                 if (Globals.UserRole == Role.DirectorOfStudies && teacher.CourseState != CourseState.Completed)
                 {
                     <tr id="@teacher.WorkloadId">
-                        @Html.Partial("_EditCourseTeacher",teacher);
+                        @Html.Partial("_EditCourseTeacher",teacher)
                         </tr>
                 }
                 else { 

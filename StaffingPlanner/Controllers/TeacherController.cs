@@ -41,7 +41,7 @@ namespace StaffingPlanner.Controllers
 				return RedirectToAction("Teachers", "Teacher");
 			}
 
-            var viewModel = GenerateTeacherViewModel((Guid)id, AcademicYear.GetCurrentYear());
+            var viewModel = GenerateTeacherViewModel((Guid)id, Globals.CurrentAcademicYear);
 
             ViewBag.Name = viewModel.Name;
             ViewBag.Firstname = viewModel.Name.Split(' ')[0];
@@ -103,7 +103,7 @@ namespace StaffingPlanner.Controllers
         [HttpGet]
         public PartialViewResult EditableTeacherDetails(Guid teacherId)
         {
-            var viewModel = GenerateTeacherViewModel(teacherId, AcademicYear.GetCurrentYear());
+            var viewModel = GenerateTeacherViewModel(teacherId, Globals.CurrentAcademicYear);
 
             ViewBag.Name = viewModel.Name;
             ViewBag.Firstname = viewModel.Name.Split(' ')[0];
@@ -220,12 +220,17 @@ namespace StaffingPlanner.Controllers
         }
 
         [HttpPost]
-        public ActionResult SaveTeacherChanges(Guid teacherId, int fallNonCourseWorkload, int springNonCourseWorkload)
+        public ActionResult SaveTeacherChanges(Guid teacherId, int fallNonCourseWorkload, int springNonCourseWorkload,
+            int teachingShare, int researchShare, int adminShare, int otherShare)
         {
-            var currentYear = AcademicYear.GetCurrentYear();
+            var currentYear = Globals.CurrentAcademicYear;
 
+            //Update NonCourseHours for both terms
             AlterNonCourseHoursAllocation(teacherId, currentYear.StartTerm, fallNonCourseWorkload);
             AlterNonCourseHoursAllocation(teacherId, currentYear.EndTerm, springNonCourseWorkload);
+
+            //Update task shares
+            AlterTeacherResearchShare(teacherId, teachingShare, researchShare, adminShare, otherShare);
 
             return RedirectToAction("TeacherDetails", "Teacher", new { id = teacherId });
         }
@@ -250,10 +255,9 @@ namespace StaffingPlanner.Controllers
                     TermYear = term,
                     Workload = newHours
                 };
+                db.TermYears.Attach(term);
                 db.NonCourseWorkloads.Add(newNonCourseWorkload);
                 db.SaveChanges();
-                //Why does this crash because of duplicate keys?
-                //Violation of PRIMARY KEY constraint 'PK_dbo.TermYears'. Cannot insert duplicate key in object 'dbo.TermYears'.
             }
             else if (existingNonCourseWorkload != null)
             {
@@ -261,6 +265,47 @@ namespace StaffingPlanner.Controllers
                 db.SaveChanges();
             }
 
+        }
+
+        public void AlterTeacherResearchShare(Guid teacherId, int newTeachingShare, int newResearchShare, int newAdminShare, int newOtherShare)
+        {
+            var db = StaffingPlanContext.GetContext();
+
+            var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
+            var currentYear = Globals.CurrentAcademicYear;
+
+            decimal teachingShare = newTeachingShare / 100m;
+            decimal researchShare = newResearchShare / 100m;
+            decimal adminShare = newAdminShare / 100m;
+            decimal otherShare = newOtherShare / 100m;
+
+            var currentShares = db.TeacherTaskShare.Where(tts => tts.Teacher.Id == teacherId 
+            && tts.AcademicYear.StartTerm.Term == currentYear.StartTerm.Term
+            && tts.AcademicYear.StartTerm.Year == currentYear.StartTerm.Year).FirstOrDefault();
+
+            if (currentShares != null)
+            {
+                currentShares.TeachingShare = teachingShare;
+                currentShares.ResearchShare = researchShare;
+                currentShares.AdminShare = adminShare;
+                currentShares.OtherShare = otherShare;
+            }
+            else
+            {
+                var teacherShares = new TeacherTaskShare
+                {
+                    Id = Guid.NewGuid(),
+                    AcademicYear = currentYear,
+                    Teacher = teacher,
+                    TeachingShare = teachingShare,
+                    ResearchShare = researchShare,
+                    AdminShare = adminShare,
+                    OtherShare = otherShare
+                };
+                db.AcademicYears.Attach(currentYear);
+                db.TeacherTaskShare.Add(teacherShares);
+            }
+            db.SaveChanges();
         }
 
         #endregion
