@@ -220,12 +220,14 @@ namespace StaffingPlanner.Controllers
         }
 
         [HttpPost]
-        public ActionResult SaveTeacherChanges(Guid teacherId, int fallNonCourseWorkload, int springNonCourseWorkload)
+        public ActionResult SaveTeacherChanges(Guid teacherId, int fallNonCourseWorkload, int springNonCourseWorkload,
+            int teachingShare, int researchShare, int adminShare, int otherShare)
         {
             var currentYear = AcademicYear.GetCurrentYear();
 
             AlterNonCourseHoursAllocation(teacherId, currentYear.StartTerm, fallNonCourseWorkload);
             AlterNonCourseHoursAllocation(teacherId, currentYear.EndTerm, springNonCourseWorkload);
+            AlterTeacherResearchShare(teacherId, teachingShare, researchShare, adminShare, otherShare);
 
             return RedirectToAction("TeacherDetails", "Teacher", new { id = teacherId });
         }
@@ -261,6 +263,44 @@ namespace StaffingPlanner.Controllers
                 db.SaveChanges();
             }
 
+        }
+
+        public void AlterTeacherResearchShare(Guid teacherId, int newTeachingShare, int newResearchShare, int newAdminShare, int newOtherShare)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
+            var currentYear = AcademicYear.GetCurrentYear();
+
+            decimal teachingShare = newTeachingShare / 100m;
+            decimal researchShare = newResearchShare / 100m;
+            decimal adminShare = newAdminShare / 100m;
+            decimal otherShare = newOtherShare / 100m;
+
+            var currentShares = db.TeacherTaskShare.Where(tts => tts.Teacher.Id == teacherId && tts.AcademicYear == currentYear).FirstOrDefault();
+
+            if (currentShares != null)
+            {
+                currentShares.TeachingShare = teachingShare;
+                currentShares.ResearchShare = researchShare;
+                currentShares.AdminShare = adminShare;
+                currentShares.OtherShare = otherShare;
+                db.SaveChanges();
+            }
+            else
+            {
+                var teacherShares = new TeacherTaskShare
+                {
+                    Id = Guid.NewGuid(),
+                    AcademicYear = currentYear,
+                    Teacher = teacher,
+                    TeachingShare = teachingShare,
+                    ResearchShare = researchShare,
+                    AdminShare = adminShare,
+                    OtherShare = otherShare
+                };
+                db.TeacherTaskShare.Add(teacherShares);
+                db.SaveChanges();
+            }
         }
 
         #endregion
