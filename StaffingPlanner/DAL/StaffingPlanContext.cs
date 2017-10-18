@@ -23,5 +23,6 @@ namespace StaffingPlanner.DAL
         public DbSet<AcademicYear> AcademicYears { get; set; }
         public DbSet<TeacherTaskShare> TeacherTaskShare { get; set; }
 		public DbSet<Comment> Comments { get; set; }
+        public DbSet<Message> Messages { get; set; }
     }
 }
