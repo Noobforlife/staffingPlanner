@@ -177,6 +177,7 @@
     <Compile Include="Models\AcademicProfile.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\CourseEnums.cs" />
+    <Compile Include="Models\Message.cs" />
     <Compile Include="Models\NonCourseWorkload.cs" />
     <Compile Include="ViewModels\MessagesViewModels.cs" />
     <Compile Include="ViewModels\TeacherTermAvailability.cs" />
@@ -265,6 +266,7 @@
     <Content Include="Views\Teacher\_TeacherDetailsTopEditable.cshtml" />
     <Content Include="Views\Course\_UseTemplateModal.cshtml" />
     <Content Include="Views\Messages\Messages.cshtml" />
+    <Content Include="Views\Messages\_NotificationsWindow.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

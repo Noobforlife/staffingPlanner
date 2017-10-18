@@ -151,6 +151,7 @@ namespace StaffingPlanner.Controllers
 
             db.SaveChanges();
 
+            MessagesController.GenerateTeacherMessage(course, db);
             return RedirectToAction("CourseDetails", "Course", new { id = course.Id });
         }
 
@@ -163,6 +164,7 @@ namespace StaffingPlanner.Controllers
             Workload.Workload = int.Parse(Allocated);
             db.SaveChanges();
 
+            MessagesController.GenerateTeacherMessage(Workload,db);
             return RedirectToAction("CourseDetails", "Course", new { id = Guid.Parse(Id) });
         }
 
