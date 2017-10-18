@@ -11,12 +11,12 @@ namespace StaffingPlanner.Controllers
     {
         #region View Methods
         // GET: Message
-        public ActionResult Messages(Guid TeacherId)
+        public ActionResult Messages()
         {
-			if (Globals.UserRole != Role.DirectorOfStudies)
-	        {
-		        return RedirectToAction("Index", "Dashboard");
-			}
+			//if (Globals.UserRole != Role.DirectorOfStudies)
+	        //{
+		    //   return RedirectToAction("Index", "Dashboard");
+			//}
 
 			var model = new List<MessageViewModel>();
 
