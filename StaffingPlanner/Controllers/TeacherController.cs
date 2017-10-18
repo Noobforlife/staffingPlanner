@@ -223,12 +223,13 @@ namespace StaffingPlanner.Controllers
         public ActionResult SaveTeacherChanges(Guid teacherId, int fallNonCourseWorkload, int springNonCourseWorkload,
             int teachingShare, int researchShare, int adminShare, int otherShare)
         {
+            var currentYear = Globals.CurrentAcademicYear;
 
-            {
-                var currentYear = Globals.CurrentAcademicYear;
-                AlterNonCourseHoursAllocation(teacherId, currentYear.StartTerm, fallNonCourseWorkload);
-                AlterNonCourseHoursAllocation(teacherId, currentYear.EndTerm, springNonCourseWorkload);
-            }
+            //Update NonCourseHours for both terms
+            AlterNonCourseHoursAllocation(teacherId, currentYear.StartTerm, fallNonCourseWorkload);
+            AlterNonCourseHoursAllocation(teacherId, currentYear.EndTerm, springNonCourseWorkload);
+
+            //Update task shares
             AlterTeacherResearchShare(teacherId, teachingShare, researchShare, adminShare, otherShare);
 
             return RedirectToAction("TeacherDetails", "Teacher", new { id = teacherId });
@@ -257,8 +258,6 @@ namespace StaffingPlanner.Controllers
                 db.TermYears.Attach(term);
                 db.NonCourseWorkloads.Add(newNonCourseWorkload);
                 db.SaveChanges();
-                //Why does this crash because of duplicate keys?
-                //Violation of PRIMARY KEY constraint 'PK_dbo.TermYears'. Cannot insert duplicate key in object 'dbo.TermYears'.
             }
             else if (existingNonCourseWorkload != null)
             {
@@ -303,6 +302,7 @@ namespace StaffingPlanner.Controllers
                     AdminShare = adminShare,
                     OtherShare = otherShare
                 };
+                db.AcademicYears.Attach(currentYear);
                 db.TeacherTaskShare.Add(teacherShares);
             }
             db.SaveChanges();
