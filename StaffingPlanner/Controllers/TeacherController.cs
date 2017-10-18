@@ -41,7 +41,7 @@ namespace StaffingPlanner.Controllers
 				return RedirectToAction("Teachers", "Teacher");
 			}
 
-            var viewModel = GenerateTeacherViewModel((Guid)id, AcademicYear.GetCurrentYear());
+            var viewModel = GenerateTeacherViewModel((Guid)id, Globals.CurrentAcademicYear);
 
             ViewBag.Name = viewModel.Name;
             ViewBag.Firstname = viewModel.Name.Split(' ')[0];
@@ -103,7 +103,7 @@ namespace StaffingPlanner.Controllers
         [HttpGet]
         public PartialViewResult EditableTeacherDetails(Guid teacherId)
         {
-            var viewModel = GenerateTeacherViewModel(teacherId, AcademicYear.GetCurrentYear());
+            var viewModel = GenerateTeacherViewModel(teacherId, Globals.CurrentAcademicYear);
 
             ViewBag.Name = viewModel.Name;
             ViewBag.Firstname = viewModel.Name.Split(' ')[0];
