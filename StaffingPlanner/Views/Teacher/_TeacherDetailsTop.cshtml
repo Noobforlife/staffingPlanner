@@ -2,7 +2,7 @@
 @using StaffingPlanner.ViewModels
 @model DetailedTeacherViewModel
 
-<div class="col-md-5 col-sm-5">
+<div class="col-md-6 col-sm-6">
     <div class="table-responsive">
         <table class="table borderless">
             <tbody>
@@ -24,7 +24,7 @@
             </tbody>
         </table>
 
-        <div class="table-responsive" style="font-family: Raleway, sans-serif;">
+        <div class="table-responsive" style="font-family: Raleway, sans-serif; max-width: 350px">
             <table class="table">
                 <thead>
                 <tr>@Model.FallBudget.TermYear.ToString() Workload (h)</tr>
@@ -50,7 +50,7 @@
             </table>
         </div>
 
-        <div class="table-responsive" style="font-family: Raleway, sans-serif;">
+        <div class="table-responsive" style="font-family: Raleway, sans-serif; max-width: 350px">
             <table class="table">
                 <thead>
                 <tr>@Model.SpringBudget.TermYear.ToString() Workload (h)</tr>
@@ -79,58 +79,101 @@
     </div>
 </div>
 <div class="col-md-6 col-sm-6">
+    <style>
+        p { font-size: 14px; margin-bottom: 6px;}
+        #shareboxContainer {  }
+        .sharebox { background-color: whitesmoke; margin: 4px; }
+        #hourboxContainer { }
+        .hourbox { background-color: whitesmoke; margin: 4px; }
+    </style>
 
-    <div class="hours">
-        <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-            <p>Base yearly hours</p>
-            <p class="numbers blue-border">@(Model.FallBudget.TotalTermHours + Model.SpringBudget.TotalTermHours)</p>
-        </div>
-        <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-            <p>@Model.FallBudget.TermYear.ToString()%</p>
-            <p class="numbers orange-border">@Model.FallBudget.TermEmployment%</p>
-        </div>
-        <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-            <p>@Model.SpringBudget.TermYear.ToString()%</p>
-            <p class="numbers green-border">@Model.SpringBudget.TermEmployment%</p>
+    <div class="row" style="margin-bottom:16px">
+        <div class="col-md-12">
+            <div class="col-md-5 col-xs-4">
+                <p>Base annual hours: @(Model.FallBudget.TotalTermHours + Model.SpringBudget.TotalTermHours)</p>
+            </div>
+            <div class="col-md-3">
+                <p>HT-17: @Model.FallBudget.TermEmployment%</p>
+            </div>
+            <div class="col-md-3">
+                <p>VT-18: @Model.SpringBudget.TermEmployment%</p>
+            </div>
         </div>
     </div>
 
-    <div class="hours">
-        <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-            <p>Total teaching hours</p>
-            <p class="numbers blue-border">@(Model.FallBudget.TeachingHours + Model.SpringBudget.TeachingHours)</p>
+    <div class="row">
+        @*Task share box*@
+        <div class="col-md-6" id="shareboxContainer">
+            <div class="row">
+                <h5 style="text-align:center">Task share</h5>
+            </div>
+            <div class="row">
+                <div class="col-md-5 col-xs-5 sharebox">
+                    <h6>Teaching</h6>
+                    <p>@Model.FallBudget.TeachingShare%</p>
+                </div>
+                <div class="col-md-5 col-xs-5 sharebox">
+                    <h6>Research</h6>
+                    <p>@Model.FallBudget.ResearchShare%</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5 col-xs-5 sharebox">
+                    <h6>Admin</h6>
+                    <p>@Model.FallBudget.AdminShare%</p>
+                </div>
+                <div class="col-md-5 col-xs-5 sharebox">
+                    <h6>Other</h6>
+                    <p>@Model.FallBudget.OtherShare%</p>
+                </div>
+            </div>
         </div>
-        <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-            <p>@Model.FallBudget.TermYear.ToString() teaching hours</p>
-            <p class="numbers orange-border">@Model.FallBudget.TeachingHours</p>
-        </div>
-        <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-            <p>@Model.SpringBudget.TermYear.ToString() teaching hours</p>
-            <p class="numbers green-border">@Model.SpringBudget.TeachingHours</p>
+
+        @*Teaching hours box*@
+        <div class="col-md-6" id="hourboxContainer">
+            <div class="row">
+                <h6 style="text-align:center">Available teaching hours</h6>
+            </div>
+            <div class="row">
+                <div class="col-md-5 col-xs-5 hourbox">
+                    <h6>HT-17</h6>
+                    <p>@Model.FallBudget.TeachingHours</p>
+                </div>
+                <div class="col-md-6 col-xs-5 hourbox">
+                    <h6>Per period</h6>
+                    <p>@(Model.FallBudget.TeachingHours/4)</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5 col-xs-5 hourbox">
+                    <h6>VT-18</h6>
+                    <p>@Model.SpringBudget.TeachingHours</p>
+                </div>
+                <div class="col-md-6 col-xs-5 hourbox">
+                    <h6>Per period</h6>
+                    <p>@(Model.SpringBudget.TeachingHours/4)</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-        <p>Total workload hours</p>
-        <p class="numbers red-border">@(Model.FallWorkload.TotalTermWorkload + @Model.SpringWorkload.TotalTermWorkload)</p>
-    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div id="totalWorkload" style="text-align:center">
+                <h6>Total workload</h6>
+                <h3>@(Model.FallWorkload.TotalTermWorkload + @Model.SpringWorkload.TotalTermWorkload)</h3>
+            </div>
 
-    <h5 class="details-h">Task share</h5>
-    <div class="time-allocation-div">
-        <div class="time-allocation detail-label">
-            <p class="detail-label">Teaching:</p><span class="badge pull-right">@Model.FallBudget.TeachingShare%</span>
         </div>
-        <div class="time-allocation detail-label">
-            <p class="detail-label">Research:</p><span class="badge pull-right">@Model.FallBudget.ResearchShare%</span>
-        </div>
-    </div>
-    <div class="time-allocation-div">
-        <div class="time-allocation detail-label">
-            <p class="detail-label">Admin:</p><span class="badge pull-right">@Model.FallBudget.AdminShare%</span>
-        </div>
-        <div class="time-allocation detail-label">
-            <p class="detail-label">Other: </p><span class="badge pull-right">@Model.FallBudget.OtherShare%</span>
+        <div class="col-md-6">
+            <div id="totalTeaching" style="text-align:center">
+                <h6>Total teaching hours</h6>
+                <h3>@(Model.FallBudget.TeachingHours + Model.SpringBudget.TeachingHours)</h3>
+            </div>
         </div>
     </div>
 
+    <div class="row">
+
+    </div>
 </div>
