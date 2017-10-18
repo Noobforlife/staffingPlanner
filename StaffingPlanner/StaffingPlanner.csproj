@@ -165,6 +165,7 @@
     <Compile Include="Controllers\CourseController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="DAL\DataGen.cs" />
     <Compile Include="DAL\Globals.cs" />
@@ -262,6 +263,7 @@
     <Content Include="Views\Teacher\_AddTeacherCourse.cshtml" />
     <Content Include="Views\Teacher\_TeacherDetailsTopEditable.cshtml" />
     <Content Include="Views\Course\_UseTemplateModal.cshtml" />
+    <Content Include="Views\Messages\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

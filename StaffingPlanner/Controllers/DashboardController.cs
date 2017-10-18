@@ -89,7 +89,7 @@ namespace StaffingPlanner.Controllers
 			        Code = c.Course.Code,
 			        Name = c.Course.Name,
 			        Periods = c.Periods,
-			        Status = c.CourseResponsible.Id == teacher.Id ? "info" : "success",
+			        Status = c.CourseResponsible.Id == teacher.Id ? "progress-bar-info" : "progress-bar-success",
 					State = c.State,
 			        CourseResponsible = c.CourseResponsible,
 		        })

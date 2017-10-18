@@ -10,7 +10,12 @@
                 <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active" : "")" role="presentation">@Html.ActionLink("Dashboard", "Index", "Dashboard")</li>
                 <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Teachers" ? "active" : "")" role="presentation">@Html.ActionLink("Teachers", "Teachers", "Teacher")</li>
                 <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Courses" ? "active" : "")" role="presentation">@Html.ActionLink("Courses", "Courses", "Course")</li>
-                <li role="presentation"><a href=""><i class="fa fa-envelope-o" style="font-size:22px;"></i> <span class="badge">15 </span></a></li>
+                @if (Globals.UserRole == Role.DirectorOfStudies)
+                {
+                    <li role="presentation"><a href="~/Messages/Index"><i class="fa fa-envelope-o" style="font-size:22px;"></i> <span class="badge">15 </span></a></li>}
+                else
+                {
+                    <li role="presentation"><a href=""><i class="fa fa-envelope-o" style="font-size:22px;"></i> <span class="badge">15 </span></a></li>}
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#">@Globals.User<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
