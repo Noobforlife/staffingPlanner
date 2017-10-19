@@ -202,11 +202,13 @@ namespace StaffingPlanner.Controllers
                     {
                         db.Workloads.Remove(existingWorkload);
                         db.SaveChanges();
+                        MessagesController.GenerateTeacherMessageRemoval(existingWorkload, db);
                     }
                     else
                     {
                         existingWorkload.Workload = numHours;
                         db.SaveChanges();
+                        MessagesController.GenerateTeacherMessage(existingWorkload, db);
                     }
                 }
             }

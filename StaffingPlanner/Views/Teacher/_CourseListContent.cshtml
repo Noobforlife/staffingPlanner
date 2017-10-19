@@ -24,7 +24,7 @@
             <td>
                     @using (Html.BeginForm("ApproveWorkload", "Approvals", FormMethod.Post))
                     {
-                        <input type="hidden" id="Id" name="Id" value="@course.WorkloadId"></input>
+                        <input type="hidden" id="Id" name="Id" value="@course.WorkloadId">
                         <button class="btn btn-default" type="submit">Approve</button>
                     }
             </td>
