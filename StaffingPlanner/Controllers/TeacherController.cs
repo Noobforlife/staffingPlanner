@@ -58,23 +58,14 @@ namespace StaffingPlanner.Controllers
 
 			var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
 			var courses = new List<TeacherCourseViewModel>();
-			if (teacher != null)
+            if (teacher != null)
 			{
 				var taughtByTeacher = db.Workloads
-					.Where(w => w.Teacher.Id == teacher.Id &&
-					             ((w.Course.TermYear.Term == Term.Fall && w.Course.TermYear.Year == 2017) ||
-					              (w.Course.TermYear.Term == Term.Spring && w.Course.TermYear.Year == 2018)))
-					.Select(w => w.Course.Id)
+					.Where(w => w.Teacher.Id == teacher.Id && w.Course.AcademicYear.Id == Globals.CurrentAcademicYear.Id)					
 					.ToList();
 
-				var offerings = db.CourseOfferings
-					.Where(co => ((co.TermYear.Term == Term.Fall && co.TermYear.Year == 2017) ||
-						(co.TermYear.Term == Term.Spring && co.TermYear.Year == 2018)) &&
-						taughtByTeacher.Contains(co.Id))
-					.ToList();
-
-				courses = GenerateTeacherCourseList(teacher, offerings);
-			}
+                courses = GenerateTeacherCourseList(taughtByTeacher);
+            }
 
 			return PartialView("~/Views/Teacher/_CourseListContent.cshtml", courses);
 		}
@@ -169,7 +160,8 @@ namespace StaffingPlanner.Controllers
 					RemainingHours = o.Course.RemainingHours,
 					TeacherAssignedHours = teacher.GetAllocatedHoursForOffering(o.Course),
                     CourseState = o.Course.State,
-                    CourseStatus = o.Course.Status
+                    CourseStatus = o.Course.Status,
+                    IsApproved = o.IsApproved
 				})
 				.ToList();
 
@@ -374,37 +366,33 @@ namespace StaffingPlanner.Controllers
 				SpringWorkload = new TeacherTermWorkload(teacher, springBudget.TermYear)
 			};
 		}
+            
 
-        public static List<TeacherCourseViewModel> GenerateTeacherCourseList(Teacher teacher, List<CourseOffering> offerings)
+        public static List<TeacherCourseViewModel> GenerateTeacherCourseList(List<TeacherCourseWorkload> offerings)
         {
-            return offerings.OrderBy(o => o.TermYear.Year)
-                .ThenBy(o => o.TermYear.Term)
-                .ThenBy(o => o.Periods)
+            return offerings.OrderBy(o => o.Course.TermYear.Year)
+                .ThenBy(o => o.Course.TermYear.Term)
+                .ThenBy(o => o.Course.Periods)
                 .Select(o => new TeacherCourseViewModel
-            {
-				TeacherId = teacher.Id,
-                OfferingId = o.Id,
-                Code = o.Course.Code,
-                CourseName = o.Course.TruncatedName,
-                TermYear = o.TermYear,
-                Period = EnumToString.PeriodToString(o.Periods),
-                CourseResponsible = o.CourseResponsible,
-                TotalHours = o.TotalHours,
-                AllocatedHours = o.AllocatedHours,
-                RemainingHours = o.RemainingHours,
-                TeacherAssignedHours = teacher.GetAllocatedHoursForOffering(o),
-                CourseState = o.State,
-                CourseStatus = o.Status,
-				NeedsApproval = WorkloadNeedsApproval(teacher.Id, o.Id)
-			})
+                {
+                    TeacherId = o.Teacher.Id,
+                    OfferingId = o.Id,
+                    Code = o.Course.Course.Code,
+                    CourseName = o.Course.TruncatedName,
+                    TermYear = o.Course.TermYear,
+                    Period = EnumToString.PeriodToString(o.Course.Periods),
+                    CourseResponsible = o.Course.CourseResponsible,
+                    TotalHours = o.Course.TotalHours,
+                    AllocatedHours = o.Course.AllocatedHours,
+                    RemainingHours = o.Course.RemainingHours,
+                    TeacherAssignedHours = o.Teacher.GetAllocatedHoursForOffering(o.Course),
+                    CourseState = o.Course.State,
+                    CourseStatus = o.Course.Status,
+                    IsApproved = o.IsApproved,
+                    WorkloadId = o.Id
+                })
             .ToList();
         }
-
-		private static bool WorkloadNeedsApproval(Guid teacherId, Guid offeringId)
-		{
-			var db = StaffingPlanContext.GetContext();
-			return db.Workloads.Where(w => w.Teacher.Id == teacherId && w.Course.Id == offeringId).Select(w => !w.IsApproved).First();
-		}
 
         public static List<SimpleTeacherViewModel> GenerateTeacherViewModelList(List<Teacher> teachersList, TermYear fallTerm, TermYear springTerm)
         {
