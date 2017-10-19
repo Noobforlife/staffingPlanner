@@ -13,10 +13,20 @@
         <td>@course.TotalHours</td>
         <td>@course.AllocatedHours</td>
         <td>@course.TeacherAssignedHours</td>
-        @if (course.TeacherId == Globals.UserId && course.NeedsApproval)
+        @if (course.TeacherId == Globals.UserId && course.IsApproved)
+        {
+            <td>                
+                 <button class="btn btn-default alert-success disabled">Approved<i class="fa fa-check pull-right" style="margin:2px"></i></button>
+            </td>
+        }
+           else if (course.TeacherId == Globals.UserId && course.IsApproved == false)
         {
             <td>
-                <button class="btn btn-default">Approve</button>
+                    @using (Html.BeginForm("ApproveWorkload", "Approvals", FormMethod.Post))
+                    {
+                        <input type="hidden" id="Id" name="Id" value="@course.WorkloadId"></input>
+                        <button class="btn btn-default" type="submit">Approve</button>
+                    }
             </td>
         }
         <td><span class="label label-@course.CourseStatus pull-right">@course.CourseState</span></td>

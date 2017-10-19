@@ -55,7 +55,7 @@ namespace StaffingPlanner.ViewModels
         public int TeacherAssignedHours { get; set; }
         public CourseState CourseState { get; set; }
         public string CourseStatus { get; set; }
-		public bool NeedsApproval { get; set; }
+		public bool IsApproved { get; set; }
     }
 
     public class TeacherCourseHistoryViewModel

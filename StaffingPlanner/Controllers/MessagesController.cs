@@ -115,6 +115,20 @@ namespace StaffingPlanner.Controllers
             db.Messages.Add(msg);
             db.SaveChanges();
         }
+        public static void GenerateDOSApprovedCourseMessage(TeacherCourseWorkload workload, bool forDOS, StaffingPlanContext db)
+        {
+            var msg = new Message
+            {
+                Id = Guid.NewGuid(),
+                Datetime = DateTime.Now,
+                Body = workload.Teacher.Name + " has approved his workload for " + workload.Course.Course.Name + " " + workload.Course.TermYear.ToString(),
+                Course = workload.Course,
+                Workload = null,
+                Seen = false
+            };
+            db.Messages.Add(msg);
+            db.SaveChanges();
+        }
 
         public static void GenerateDOSPendingMessage(CourseOffering course, bool forDOS, StaffingPlanContext db)
         {
