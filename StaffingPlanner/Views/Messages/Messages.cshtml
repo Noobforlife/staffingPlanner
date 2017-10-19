@@ -1,130 +1,46 @@
 ﻿@using StaffingPlanner.ViewModels
-@model List<MessageViewModel>
+@using StaffingPlanner.Models
+@model List<Message>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "messages";
 }
 
 <div class="container">
     <h3>Messages</h3>
     <ul class="list-group">
-        <li class="list-group-item">
-            <div class="media">
-                <div class="media-left"><a><span class="fa-stack"><i class="fa fa-circle fa-stack-2x text-primary"></i><i class="fa fa-dollar fa-stack-1x fa-inverse"></i></span></a></div>
-                <div class="media-body">
-                    <div class="media" style="overflow:visible;">
-                        <div class="media-left">
-                            <a></a>
-                        </div>
-                        <div class="media-body" style="overflow:visible;">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <p>
-                                        <a href="#">The director of studies </a> changed your allocated hours for <a href="#">Artificial Intelligence HT 18 </a>
-                                        <br>
-                                        <small class="text-muted">August 6, 2016 at 10:35am </small>
-                                    </p>
+        @if (Model != null)
+        {
+            foreach (var message in Model)
+            {
+                <li class="list-group-item">
+                    <div class="media">
+                        <div class="media-left"><a><span class="fa-stack"><i class="fa fa-circle fa-stack-2x text-primary"></i><i class="fa fa-dollar fa-stack-1x fa-inverse"></i></span></a></div>
+                        <div class="media-body">
+                            <div class="media" style="overflow:visible;">
+                                <div class="media-left">
+                                    <a></a>
+                                </div>
+                                <div class="media-body" style="overflow:visible;">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p>
+                                                @message.Body
+                                                <br>
+                                                <small class="text-muted">@message.Datetime.Date.ToString("G") </small>
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </li>
-        <li class="list-group-item">
-            <div class="media">
-                <div class="media-left"><a><span class="fa-stack"><i class="fa fa-circle fa-stack-2x text-primary"></i><i class="fa fa-dollar fa-stack-1x fa-inverse"></i></span></a></div>
-                <div class="media-body">
-                    <div class="media" style="overflow:visible;">
-                        <div class="media-left">
-                            <a></a>
-                        </div>
-                        <div class="media-body" style="overflow:visible;">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <p>
-                                        <a href="#">The director of studies </a> changed your allocated hours for <a href="#">Artificial Intelligence HT 18</a>
-                                        <br>
-                                        <small class="text-muted">August 6, 2016 at 10:35am </small>
-                                        <button class="btn btn-default pull-right" type="button">approve change</button>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </li>
-        <li class="list-group-item">
-            <div class="media">
-                <div class="media-left"><a><span class="fa-stack"><i class="fa fa-circle fa-stack-2x text-primary"></i><i class="fa fa-dollar fa-stack-1x fa-inverse"></i></span></a></div>
-                <div class="media-body">
-                    <div class="media" style="overflow:visible;">
-                        <div class="media-left">
-                            <a></a>
-                        </div>
-                        <div class="media-body" style="overflow:visible;">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <p>
-                                        <a href="#">The director of studies </a> changed your allocated hours for <a href="#">Artificial Intelligence HT 18 </a>
-                                        <br>
-                                        <small class="text-muted">August 6, 2016 at 10:35am </small>
-                                        <button class="btn btn-default pull-right" type="button">approve change</button>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </li>
-        <li class="list-group-item">
-            <div class="media">
-                <div class="media-left"><a><span class="fa-stack"><i class="fa fa-circle fa-stack-2x text-primary"></i><i class="fa fa-dollar fa-stack-1x fa-inverse"></i></span></a></div>
-                <div class="media-body">
-                    <div class="media" style="overflow:visible;">
-                        <div class="media-left">
-                            <a></a>
-                        </div>
-                        <div class="media-body" style="overflow:visible;">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <p>
-                                        <a href="#">The director of studies </a> changed your allocated hours for <a href="#">Artificial Intelligence HT 18 </a>
-                                        <br>
-                                        <small class="text-muted">August 6, 2016 at 10:35am </small>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </li>
-        <li class="list-group-item">
-            <div class="media">
-                <div class="media-left"><a><span class="fa-stack"><i class="fa fa-circle fa-stack-2x text-primary"></i><i class="fa fa-dollar fa-stack-1x fa-inverse"></i></span></a></div>
-                <div class="media-body">
-                    <div class="media" style="overflow:visible;">
-                        <div class="media-left">
-                            <a></a>
-                        </div>
-                        <div class="media-body" style="overflow:visible;">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <p>
-                                        <a href="#">The director of studies </a> changed your allocated hours for <a href="#">Artificial Intelligence HT 18 </a>
-                                        <br>
-                                        <small class="text-muted">August 6, 2016 at 10:35am </small>
-                                        <button class="btn btn-default pull-right" type="button">approve change</button>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </li>
+                </li>
+            }
+        }
+        else
+        {
+            <li class="text-center">Your inbox is empty :)</li>
+        }
     </ul>
 </div>

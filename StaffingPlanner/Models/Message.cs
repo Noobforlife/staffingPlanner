@@ -9,8 +9,10 @@ namespace StaffingPlanner.Models
     {
         public Guid Id { get; set; }
         public string Body { get; set; }
-        public TeacherCourseWorkload Workload { get; set; }
-        public CourseOffering Course { get; set; }
+        public virtual TeacherCourseWorkload Workload { get; set; }
+        public virtual CourseOffering Course { get; set; }
+        public DateTime Datetime { get; set; }
         public bool DOSonly { get; set; }
+        public bool Seen { get; set; }
     }
 }
