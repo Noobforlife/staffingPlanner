@@ -95,7 +95,20 @@ namespace StaffingPlanner.Controllers
             var db = StaffingPlanContext.GetContext();
             var courses = db.Workloads.Where(x => x.Teacher.Id == teacherid && x.Course.TermYear.Year < DateTime.Now.Year).ToList();
 
-            return PartialView("~/Views/Teacher/_TeacherCourseHistory.cshtml", courses);
+            var courseHistory = courses.OrderBy(c => c.Course.TermYear.Year)
+            .ThenBy(c => c.Course.TermYear.Term)
+            .Select(c => new TeacherCourseHistoryViewModel
+            {
+                CourseId = c.Course.Id,
+                CourseName = c.Course.Course.Name,
+                TermYear = c.Course.TermYear.ToString(),
+                Period = EnumToString.PeriodToString(c.Course.Periods),
+                CourseResponsibe = c.Course.CourseResponsible,
+                HoursTaught = c.Workload
+            }).ToList();
+
+
+            return PartialView("~/Views/Teacher/_TeacherCourseHistory.cshtml", courseHistory);
         }
 
 		[HttpGet]

@@ -57,4 +57,14 @@ namespace StaffingPlanner.ViewModels
         public string CourseStatus { get; set; }
 		public bool NeedsApproval { get; set; }
     }
+
+    public class TeacherCourseHistoryViewModel
+    {
+        public Guid CourseId { get; set; }
+        public string CourseName { get; set; }
+        public string TermYear { get; set; }
+        public string Period { get; set; }
+        public Teacher CourseResponsibe { get; set; }
+        public int HoursTaught { get; set; }
+    }
 }

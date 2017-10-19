@@ -1,13 +1,13 @@
-﻿@using StaffingPlanner.Models;
-@model List<TeacherCourseWorkload> 
+﻿@using StaffingPlanner.ViewModels;
+@model List<TeacherCourseHistoryViewModel> 
 <div class="card card-block">
     <table class="table table-hover">
         <thead>
             <tr>
                 <th>Name </th>
                 <th>Term </th>
-                <th>Year</th>
                 <th>Period</th>
+                <th>Course responsible</th>
                 <th>Hours Taught</th>
             </tr>
         </thead>
@@ -21,14 +21,14 @@
             }
             else
             {
-                foreach (var workload in Model)
+                foreach (var course in Model)
                 {
                     <tr>
-                        <td>@workload.Course.Course.Name</td>
-                        <td>@workload.Course.TermYear.Term</td>
-                        <td>@workload.Course.TermYear.Year</td>
-                        <td>@workload.Course.Periods</td>
-                        <td>@workload.Workload<span class="label label-success pull-right">Completed</span></td>
+                        <td>@Html.ActionLink(course.CourseName, "CourseDetails", "Course", new { id = course.CourseId }, null)</td>
+                        <td>@course.TermYear</td>
+                        <td>@course.Period</td>
+                        <td>@course.CourseResponsibe.Name</td>
+                        <td>@course.HoursTaught</td>
                     </tr>
                 }
             }
