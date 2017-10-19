@@ -22,17 +22,22 @@ namespace StaffingPlanner.ViewModels
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string Email { get; set; }
-        public AcademicTitle Title { get; set; }
-
-        //The total hours available for different tasks
-        public TeacherTermAvailability FallBudget { get; set; }
-        public TeacherTermAvailability SpringBudget { get; set; }
-
-        //The hours actually allocated on differnt periods
-        public TeacherTermWorkload FallWorkload { get; set; }
-        public TeacherTermWorkload SpringWorkload { get; set; }
     }
+
+	public class TeacherDetailsTopViewModel
+	{
+		public Guid Id { get; set; }
+		public string Email { get; set; }
+		public AcademicTitle Title { get; set; }
+
+		//The total hours available for different tasks
+		public TeacherTermAvailability FallBudget { get; set; }
+		public TeacherTermAvailability SpringBudget { get; set; }
+
+		//The hours actually allocated on differnt periods
+		public TeacherTermWorkload FallWorkload { get; set; }
+		public TeacherTermWorkload SpringWorkload { get; set; }
+	}
 
     public class TeacherCourseViewModel
     {
@@ -50,6 +55,7 @@ namespace StaffingPlanner.ViewModels
         public int TeacherAssignedHours { get; set; }
         public CourseState CourseState { get; set; }
         public string CourseStatus { get; set; }
+		public bool NeedsApproval { get; set; }
     }
 
     public class TeacherCourseHistoryViewModel
