@@ -1,4 +1,5 @@
 ﻿@using StaffingPlanner.ViewModels
+@using StaffingPlanner.DAL
 @using System.Linq
 @using StaffingPlanner.Models
 @model List<Message>
@@ -29,6 +30,13 @@
        {
         <li>You have no new notifactions</li>
        }
-       <li>@Html.ActionLink("View All Messages", "Messages", "Messages")</li>
+    @if (Globals.UserRole == Role.DirectorOfStudies)
+    {
+           <li>@Html.ActionLink("View All Messages", "MessagesDos", "Messages")</li>
+    }
+    else
+    {
+        <li>View All Messages</li>
+    }
     </ul>
 </li>

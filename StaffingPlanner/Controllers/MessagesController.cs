@@ -12,18 +12,31 @@ namespace StaffingPlanner.Controllers
     {
         #region View Methods
         // GET: Message
-        public ActionResult Messages()
+        public ActionResult MessagesDos()
         {
             if (Globals.UserRole != Role.DirectorOfStudies)
             {
                 return RedirectToAction("Index", "Dashboard");
             }
             var db = StaffingPlanContext.GetContext();
-            var model = db.Messages.ToList();
+            var model = db.Messages.Where(x => x.DOSonly == true).ToList();
 
-			// TODO: Generate view model
+            // TODO: Generate view model
 
-            return View(model);
+            return View("~/Views/Messages/Messages.cshtml", model);
+        }
+        public ActionResult MessagesTeacher(Guid TeacherId)
+        {
+            if (Globals.UserRole != Role.DirectorOfStudies)
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+            var db = StaffingPlanContext.GetContext();
+            var model = db.Messages.Where(x => x.Workload!= null && x.Workload.Teacher.Id == TeacherId).ToList();
+
+            // TODO: Generate view model
+
+            return View("~/Views/Messages/Messages.cshtml", model);
         }
 
         public ActionResult RedirectToCourse(Guid Id, Guid CourseId)
@@ -45,10 +58,27 @@ namespace StaffingPlanner.Controllers
         }
 
         [ChildActionOnly]
-        public PartialViewResult RenderNotificationWindow()
+        public PartialViewResult RenderDosNotificationWindow()
         {
             var db = StaffingPlanContext.GetContext();
-            var model = db.Messages.ToList();
+            var model = db.Messages.Where(x => x.DOSonly == true).ToList();
+
+            return PartialView("~/Views/Messages/_NotificationsWindow.cshtml", model);
+        }
+
+        [ChildActionOnly]
+        public PartialViewResult RenderTeacherNotificationWindow(Guid TeacherId)
+        {
+            var db = StaffingPlanContext.GetContext();
+            var model = db.Messages.Where(x => x.Workload != null && x.Workload.Teacher.Id == TeacherId).ToList();
+            var msgs = db.Messages.Where(x => x.Course != null && x.DOSonly == false).ToList();
+            var courses = db.Workloads.Where(w => w.Teacher.Id == TeacherId).Select(x => x.Course).ToList();
+                        
+            foreach (var message in msgs) {
+                if (courses.Where(c => c.Id == message.Course.Id).Any()) {
+                    model.Add(message);
+               }
+            }            
 
             return PartialView("~/Views/Messages/_NotificationsWindow.cshtml", model);
         }
@@ -77,8 +107,23 @@ namespace StaffingPlanner.Controllers
             {
                 Id = Guid.NewGuid(),
                 Datetime = DateTime.Now,
-                Body = "The director of studies changed your time allocation for " + workload.Course.Course.Name,
+                Body = "The director of studies changed your time allocation for " + workload.Course.Course.Name + workload.Course.TermYear.ToString(),
                 Course= workload.Course,
+                Workload = workload,
+                Seen = false
+            };
+            db.Messages.Add(msg);
+            db.SaveChanges();
+        }
+
+        public static void GenerateTeacherMessageRemoval(TeacherCourseWorkload workload, StaffingPlanContext db)
+        {
+            var msg = new Message
+            {
+                Id = Guid.NewGuid(),
+                Datetime = DateTime.Now,
+                Body = "The director of studies has Removed you from" + workload.Course.Course.Name + workload.Course.TermYear.ToString(),
+                Course = workload.Course,
                 Workload = workload,
                 Seen = false
             };
@@ -92,7 +137,7 @@ namespace StaffingPlanner.Controllers
             {
                 Id = Guid.NewGuid(),
                 Datetime = DateTime.Now,
-                Body = "You have a pending approval for " + workload.Course.Course.Name,
+                Body = "You have a pending approval for " + workload.Course.Course.Name + workload.Course.TermYear.ToString(),
                 Course = workload.Course,
                 Workload = workload,
                 Seen = false
@@ -110,7 +155,8 @@ namespace StaffingPlanner.Controllers
                 Body = course.Course.Name + " for "+ course.TermYear.ToString() + " is now approved.",
                 Course = course,
                 Workload = null,
-                Seen = false
+                Seen = false,
+                DOSonly = forDOS
             };
             db.Messages.Add(msg);
             db.SaveChanges();
@@ -124,7 +170,8 @@ namespace StaffingPlanner.Controllers
                 Body = workload.Teacher.Name + " has approved his workload for " + workload.Course.Course.Name + " " + workload.Course.TermYear.ToString(),
                 Course = workload.Course,
                 Workload = null,
-                Seen = false
+                Seen = false,
+                DOSonly= forDOS
             };
             db.Messages.Add(msg);
             db.SaveChanges();
