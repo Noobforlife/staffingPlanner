@@ -8,3 +8,9 @@ StaffingPlanner.Tests/obj/
 *.suo
 
 .idea/
+/packages/Microsoft.jQuery.Unobtrusive.Ajax.3.2.3/Content/Scripts/jquery.unobtrusive-ajax.js
+/packages/Microsoft.jQuery.Unobtrusive.Ajax.3.2.3/Content/Scripts/jquery.unobtrusive-ajax.min.js
+/StaffingPlanner/Scripts/jquery.unobtrusive-ajax.js
+/StaffingPlanner/Scripts/jquery.unobtrusive-ajax.min.js
+/packages/Microsoft.jQuery.Unobtrusive.Ajax.3.2.3/Microsoft.jQuery.Unobtrusive.Ajax.3.2.3.nupkg
+/StaffingPlanner/Content/img/Rolling.gif
