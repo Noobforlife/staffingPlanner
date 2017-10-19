@@ -495,6 +495,7 @@ namespace StaffingPlanner.DAL
                 ResearchShare = 0.4m,
                 Comment = "Extra teaching"
             });
+            context.SaveChanges();
         }
     }
 }

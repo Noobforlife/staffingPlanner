@@ -298,7 +298,8 @@ namespace StaffingPlanner.Controllers
             var db = StaffingPlanContext.GetContext();
 
             var teacher = db.Teachers.FirstOrDefault(t => t.Id == teacherId);
-            var currentYear = Globals.CurrentAcademicYear;
+            var currentYear = db.AcademicYears.Where(y => y.Id == Globals.CurrentAcademicYear.Id).FirstOrDefault();
+
 
             decimal teachingShare = newTeachingShare / 100m;
             decimal researchShare = newResearchShare / 100m;
@@ -328,7 +329,6 @@ namespace StaffingPlanner.Controllers
                     AdminShare = adminShare,
                     OtherShare = otherShare
                 };
-                db.AcademicYears.Attach(currentYear);
                 db.TeacherTaskShare.Add(teacherShares);
             }
             db.SaveChanges();
