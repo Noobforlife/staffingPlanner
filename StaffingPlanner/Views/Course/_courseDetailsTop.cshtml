@@ -1,4 +1,5 @@
-﻿@using StaffingPlanner.ViewModels;
+﻿@using StaffingPlanner.ViewModels
+@using StaffingPlanner.Models
 @model DetailedCourseViewModel
 
 <div class="col-md-6 col-sm-6">
@@ -7,7 +8,7 @@
             <tbody>
                 <tr>
                     <th>Term:</th>
-                    <td colspan="2">@Model.TermYear.Term - @Model.TermYear.Year</td>
+                    <td colspan="2">@Model.TermYear.ToString()</td>
                 </tr>
                 <tr>
                     <th>Code:</th>
@@ -16,20 +17,38 @@
                 <tr>
                     <th>Credits:</th>
                     <td colspan="2">@Model.Credits</td>
-                </tr>               
+                </tr>
+                <tr>
+                    <th>HST:</th>
+                    <td>@Model.HST</td>
+                </tr>
+                <tr id="courseResponsible">
+                    <th>Course responsible:</th>
+                    <td>@Html.ActionLink(Model.CourseResponsible.Name, "TeacherDetails", "Teacher", new { id = Model.CourseResponsible.Id }, null)</td>
+                </tr>
+                @if (Model.State == CourseState.Completed)
+                {
+                    <tr>
+                        <th>Course feedback:</th>
+                        <td><a href="https://studentportalen.uu.se" target="_blank">Link</a></td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
+</div>
+<div><span class="label label-@Model.Status pull-right">@Model.State </span></div>
+<div class="col-md-6 col-sm-6">   
     <div class="table-responsive" style="font-family: Raleway, sans-serif;">
         <table class="table">
             <thead>
-                <td colspan="3">Students</td>
+            <td colspan="3">Students</td>
             </thead>
             <tbody>
                 <tr>
                     <th>Budgeted</th>
                     <th>Registered</th>
-                    <th>Passed</th>                    
+                    <th>Passed</th>
                 </tr>
                 <tr>
                     <td>@Model.NumStudents</td>
@@ -39,33 +58,16 @@
             </tbody>
         </table>
     </div>
-</div>
-<div><span class="label label-@Model.Status pull-right">@Model.State </span></div>
-<div class="col-md-6 col-sm-6">    
-    <div class="table-responsive">
-        <table class="table borderless">
-            <tbody>
-                <tr id="courseResponsible">
-                    <th>Course responsible:</th>
-                    <td>@Html.ActionLink(Model.CourseResponsible.Name, "TeacherDetails", "Teacher", new { id = Model.CourseResponsible.Id }, null)</td>
-                </tr>
-                <tr>
-                    <th>HST:</th>
-                    <td>@Model.HST</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
     <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-        <p>Total Budget (h)</p>
+        <p data-toggle="tooltip" title="Total number of hours budgeted for the course">Total Budget</p>
         <p class="numbers blue-border">@Model.TotalHours</p>
     </div>
     <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-        <p>Allocated (h)</p>
+        <p data-toggle="tooltip" title="Total number of hours allocated to this course">Allocated</p>
         <p class="numbers green-border">@Model.AllocatedHours</p>
     </div>
     <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-        <p>Remaining (h)</p>
+        <p data-toggle="tooltip" title="The number of unallocated horus (Total hours - Allocated hours)">Remaining</pdata-toggle="tooltip">
         <p class="numbers orange-border">@Model.RemainingHours</p>
     </div> 
 </div>

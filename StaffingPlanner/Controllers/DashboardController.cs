@@ -71,6 +71,7 @@ namespace StaffingPlanner.Controllers
 				        Name = c.Course.Name,
 				        Periods = c.Periods,
 				        Status = GetColorForOffering(c),
+						State = c.State,
 				        CourseResponsible = c.CourseResponsible,
                         IsApproved = c.IsApproved
 			        })

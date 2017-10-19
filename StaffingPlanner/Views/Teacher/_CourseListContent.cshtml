@@ -1,4 +1,5 @@
-﻿@using StaffingPlanner.ViewModels
+﻿@using StaffingPlanner.DAL
+@using StaffingPlanner.ViewModels
 @model List<TeacherCourseViewModel>
 
 @foreach (var course in Model)
@@ -12,6 +13,12 @@
         <td>@course.TotalHours</td>
         <td>@course.AllocatedHours</td>
         <td>@course.TeacherAssignedHours</td>
+        @if (course.TeacherId == Globals.UserId && course.NeedsApproval)
+        {
+            <td>
+                <button class="btn btn-default">Approve</button>
+            </td>
+        }
         <td><span class="label label-@course.CourseStatus pull-right">@course.CourseState</span></td>
     </tr>
 }

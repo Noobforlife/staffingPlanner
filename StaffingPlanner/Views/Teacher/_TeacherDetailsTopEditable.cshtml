@@ -1,6 +1,6 @@
 ﻿@using StaffingPlanner.DAL
 @using StaffingPlanner.ViewModels
-@model DetailedTeacherViewModel
+@model TeacherDetailsTopViewModel
 
 @using (Html.BeginForm("SaveTeacherChanges", "Teacher", FormMethod.Post))
 {
@@ -197,7 +197,6 @@
         <div class="row">
             <div style="margin-top:10px">
                 <input type="hidden" value="@Model.Id" name="teacherId" id="teacherId" />
-                <button class="btn btn-default pull-right" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("TeacherDetails", "Teacher", new { Id = Model.Id })'">Cancel</button>
                 <button class="btn btn-default pull-right" onclick="SaveChanges(this)" type="submit" id="SaveChanges" style="margin-right:10px">Save</button>
             </div>
         </div>
