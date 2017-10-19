@@ -100,7 +100,18 @@ namespace StaffingPlanner.Controllers
             return PartialView("~/Views/Teacher/_TeacherCourseHistory.cshtml", courses);
         }
 
-        [HttpGet]
+		[HttpGet]
+		public PartialViewResult TeacherDetailsTop(Guid teacherId)
+		{
+			var viewModel = GenerateTeacherViewModel((Guid)teacherId, Globals.CurrentAcademicYear);
+
+			ViewBag.Name = viewModel.Name;
+			ViewBag.Firstname = viewModel.Name.Split(' ')[0];
+
+			return PartialView("~/Views/Teacher/_TeacherDetailsTop.cshtml", viewModel);
+		}
+
+		[HttpGet]
         public PartialViewResult EditableTeacherDetails(Guid teacherId)
         {
             var viewModel = GenerateTeacherViewModel(teacherId, Globals.CurrentAcademicYear);

@@ -20,7 +20,7 @@
     <div class="modal-body">
         <!--Information about teacher-->
         <div id="teacherDetails" class="row well background-white">
-            @Html.Partial("_TeacherDetailsTop", Model)
+            @Html.Action("TeacherDetailsTop", "Teacher", new { teacherId = Model.Id });
         </div>
 
         <div class="row" id="courseList">
@@ -70,7 +70,7 @@
             </div>
         }
         <div id="addCourseModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-            @Html.Action("RenderAddTeacherCourse", "Teacher", new { Id = Model.Id });
+            @Html.Action("RenderAddTeacherCourse", "Teacher", new { Model.Id });
         </div>
         <!--Course history table-->
         <div class="row">
@@ -82,7 +82,15 @@
 
     <script>
         function EditCourse(evt) {
-            $('#teacherDetails').load('@Url.Action("EditableTeacherDetails", "Teacher", new { teacherId = Model.Id })');
+            var button = $('#EditTeacherButton');
+            var buttonText = button.text();
+            if (buttonText === "Edit") {
+                button.text("Cancel");
+                $('#teacherDetails').load('@Url.Action("EditableTeacherDetails", "Teacher", new { teacherId = Model.Id })');
+            } else {
+                button.text("Edit");
+                $('#teacherDetails').load('@Url.Action("TeacherDetailsTop", "Teacher", new { teacherId = Model.Id })');
+            }
         }
     </script>
 </div>
