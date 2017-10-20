@@ -13,11 +13,14 @@
                 @if (Globals.UserRole == Role.DirectorOfStudies)
                 {
                     //TODO: Update the number of messages next to the envelope to the actual number of messages
-                    <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Messages" ? "active" : "")" role="presentation"><a href="~/Messages/Messages"><i class="fa fa-envelope-o" style="font-size:22px;"></i> <span class="badge">15 </span></a></li>}
+                    @*<li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Messages" ? "active" : "")" role="presentation"><a href="~/Messages/Messages"><i class="fa fa-envelope-o" style="font-size:22px;"></i> <span class="badge">15 </span></a></li>}*@
+                    @Html.Action("RenderDosNotificationWindow", "Messages")
+                }
                 else
                 {
                     //TODO: Show dropdown-ish menu with messages
-                    <li role="presentation"><a href=""><i class="fa fa-envelope-o" style="font-size:22px;"></i> <span class="badge">15 </span></a></li>}
+                    @Html.Action("RenderTeacherNotificationWindow", "Messages", new { TeacherId = Globals.UserId })
+                }                
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#">@Globals.User<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">

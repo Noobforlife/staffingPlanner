@@ -1,1 +1,42 @@
-﻿
+﻿@using StaffingPlanner.ViewModels
+@using StaffingPlanner.DAL
+@using System.Linq
+@using StaffingPlanner.Models
+@model List<Message>
+
+@{
+    ViewBag.Title = "notifications";
+}
+
+@*<li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Messages" ? "active" : "")" role="presentation"><a href="~/Messages/Messages"><i class="fa fa-envelope-o" style="font-size:22px;"></i> </a></li>*@
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#"> <span class="badge">@Model.Where(m => m.Seen == false).ToList().Count </span></a>
+    <ul class="dropdown-menu"  style="width: 400px" role="menu">
+       @if (Model != null)
+       {
+           foreach (var message in Model)
+           {
+               if (message.Workload == null)
+               {
+                <li role="presentation"><a onClick="location.href='@Url.Action("RedirectToCourse", "Messages", new { Id = message.Id, CourseId = message.Course.Id })'"><p>@message.Body</p></a><hr /></li>
+               }
+               else
+               {
+                <li role="presentation"><a onClick="location.href='@Url.Action("RedirectToTeacherProfile", "Messages", new { Id = message.Id, TeacherId = message.Workload.Teacher.Id })'"><p>@message.Body</p></a><hr /></li>
+               }
+           }
+       }
+       else
+       {
+        <li>You have no new notifactions</li>
+       }
+    @if (Globals.UserRole == Role.DirectorOfStudies)
+    {
+           <li>@Html.ActionLink("View All Messages", "MessagesDos", "Messages")</li>
+    }
+    else
+    {
+        <li>View All Messages</li>
+    }
+    </ul>
+</li>

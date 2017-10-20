@@ -420,7 +420,7 @@ namespace StaffingPlanner.DAL
             //Populating database with workloads
             foreach (var c in context.CourseOfferings)
             {
-                var workload1 = DataGen.CreateWorkload(teachers[DataGen.Rnd.Next(0, teachers.Count/2)], c, false);
+                var workload1 = DataGen.CreateWorkload(teachers[DataGen.Rnd.Next(0, teachers.Count/2)], c,false);
                 var workload2 = DataGen.CreateWorkload(teachers[DataGen.Rnd.Next(teachers.Count/2, teachers.Count)], c,false);
                 context.Workloads.Add(workload1);
                 context.Workloads.Add(workload2);
