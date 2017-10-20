@@ -1,24 +1,62 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+﻿
+/* Styles for notifications window Notifications*/
+
+
+
+#notification_li {
+    position: relative
 }
 
-/* Set padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+#notificationContainer {
+    background-color: #fff;
+    border: 1px solid rgba(100, 100, 100, .4);
+    -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, .25);
+    overflow: visible;
+    position: absolute;
+    top: 60px;
+    margin-left: -280px;
+    width: 500px;
+    z-index: 10;
+    display: none;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
-.dl-horizontal dt {
-    white-space: normal;
+#notificationContainer:before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    color: transparent;
+    border: 10px solid black;
+    border-color: transparent transparent white;
+    margin-top: -20px;
+    margin-left: 300px;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+#notificationTitle {
+    font-weight: bold;
+    padding: 8px;
+    font-size: 15px;
+    background-color: #ffffff;
+    position: absolute;
+    z-index: 1000;
+    width: 400px;
+    border-bottom: 1px solid #dddddd;
+}
+
+#notificationsBody {
+    padding: 33px 5px 0px 0px !important;
+    margin: 15px;
+    min-height: 300px;
+    overflow: auto;
+    max-height: 500px;
+}
+
+#notificationFooter {
+    background-color: #e9eaed;
+    text-align: center;
+    font-weight: bold;
+    padding: 8px;
+    font-size: 15px;
+    border-top: 1px solid #dddddd;
 }
