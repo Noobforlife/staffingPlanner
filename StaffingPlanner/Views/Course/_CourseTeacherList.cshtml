@@ -21,12 +21,12 @@
             {
                 if (Globals.UserRole == Role.DirectorOfStudies && teacher.CourseState != CourseState.Completed)
                 {
-                    <tr id="@teacher.WorkloadId">
+                    <tr>
                         @Html.Partial("_EditCourseTeacher",teacher)
                         </tr>
                 }
                 else { 
-                    <tr id="@teacher.WorkloadId">
+                    <tr>
                     <td>@Html.ActionLink(teacher.Name, "TeacherDetails", "Teacher", new { id = teacher.Id }, null)</td>
                     <td>@teacher.Title</td>
                     <td>@teacher.RemainingHours</td>
