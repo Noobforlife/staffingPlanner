@@ -29,7 +29,8 @@ namespace StaffingPlanner
                       "~/Scripts/app.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-					  "~/Content/styles.min.css"));
+					  "~/Content/styles.min.css",
+                      "~/Content/Site.css"));
 		}
 	}
 }

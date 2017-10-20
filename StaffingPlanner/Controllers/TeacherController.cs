@@ -378,7 +378,7 @@ namespace StaffingPlanner.Controllers
                 .Select(o => new TeacherCourseViewModel
                 {
                     TeacherId = o.Teacher.Id,
-                    OfferingId = o.Id,
+                    OfferingId = o.Course.Id,
                     Code = o.Course.Course.Code,
                     CourseName = o.Course.TruncatedName,
                     TermYear = o.Course.TermYear,

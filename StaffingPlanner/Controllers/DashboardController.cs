@@ -94,6 +94,7 @@ namespace StaffingPlanner.Controllers
 			        Status = c.CourseResponsible.Id == teacher.Id ? "progress-bar-info" : "progress-bar-success",
 					State = c.State,
 			        CourseResponsible = c.CourseResponsible,
+                    IsApproved = c.IsApproved
 		        })
 		        .ToList();
 

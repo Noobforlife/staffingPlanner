@@ -1,4 +1,5 @@
 ﻿@using StaffingPlanner.ViewModels
+@using StaffingPlanner.DAL
 @using StaffingPlanner.Models
 @model List<Message>
 
@@ -9,7 +10,11 @@
 <div class="container">
     <h3>Messages</h3>
     <ul class="list-group">
-        @if (Model != null)
+        @if (Model.Count == 0)
+        {
+            <li class="text-center">Your inbox is empty :)</li>
+        }
+        else
         {
             foreach (var message in Model)
             {
@@ -28,6 +33,23 @@
                                                 @message.Body
                                                 <br>
                                                 <small class="text-muted">@message.Datetime.Date.ToString("G") </small>
+                                                @{
+                                                    if (Globals.UserRole != Role.DirectorOfStudies && message.Workload != null)
+                                                    {
+                                                        if ( message.Workload.IsApproved)
+                                                        {                                                           
+                                                                <button class="btn btn-default pull-right alert-success disabled">Approved<i class="fa fa-check pull-right" style="margin:2px"></i></button>
+                                                        }
+                                                        else
+                                                        {
+                                                                using (Html.BeginForm("ApproveWorkload", "Approvals", FormMethod.Post))
+                                                                {
+                                                                    <input type="hidden" id="Id" name="Id" value="@message.Workload.Id">
+                                                                    <button class="btn btn-default pull-right" type="submit">approve change</button>
+                                                                }
+                                                        }
+                                                    }
+                                                }                                                                                              
                                             </p>
                                         </div>
                                     </div>
@@ -37,10 +59,6 @@
                     </div>
                 </li>
             }
-        }
-        else
-        {
-            <li class="text-center">Your inbox is empty :)</li>
-        }
+        }        
     </ul>
 </div>
