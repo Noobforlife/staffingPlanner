@@ -10,10 +10,11 @@
             <tr>
                 <th>Name </th>
                 <th>Title </th>
-                <th>Remaining (h)</th>
-                <th>HT work</th>
-                <th>VT work</th>
-                <th>Allocated to course (h)</th>
+                <th>Remaining <br />year</th>
+                <th>Remaining <br />@ViewBag.CourseOffering.TermYear.ToString()</th>
+                <th>HT <br /> workload</th>
+                <th>VT <br /> workload</th>
+                <th>Course <br /> workload</th>
             </tr>
         </thead>
         <tbody>
@@ -29,7 +30,8 @@
                     <tr id="@teacher.WorkloadId">
                     <td>@Html.ActionLink(teacher.Name, "TeacherDetails", "Teacher", new { id = teacher.Id }, null)</td>
                     <td>@teacher.Title</td>
-                    <td>@teacher.RemainingHours</td>
+                    <td>@teacher.RemainingHoursForYear</td>
+                    <td>@teacher.RemainingHoursForTerm</td>
                     <td>@teacher.WorkloadFall</td>
                     <td>@teacher.WorkloadSpring</td>
                     <td>@teacher.CourseWorkload
