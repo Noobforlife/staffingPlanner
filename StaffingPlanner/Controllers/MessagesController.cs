@@ -25,14 +25,20 @@ namespace StaffingPlanner.Controllers
 
             return View("~/Views/Messages/Messages.cshtml", model);
         }
-        public ActionResult MessagesTeacher(Guid TeacherId)
+        public ActionResult MessagesTeacher(Guid Id)
         {
-            if (Globals.UserRole != Role.DirectorOfStudies)
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
             var db = StaffingPlanContext.GetContext();
-            var model = db.Messages.Where(x => x.Workload!= null && x.Workload.Teacher.Id == TeacherId).ToList();
+            var model = db.Messages.Where(x => x.Workload!= null && x.Workload.Teacher.Id == Id).ToList();
+            var msgs = db.Messages.Where(x => x.Course != null && x.DOSonly == false).ToList();
+            var courses = db.Workloads.Where(w => w.Teacher.Id == Id).Select(x => x.Course).ToList();
+
+            foreach (var message in msgs)
+            {
+                if (courses.Where(c => c.Id == message.Course.Id).Any() && message.Workload == null)
+                {
+                    model.Add(message);
+                }
+            }
 
             // TODO: Generate view model
 
@@ -72,10 +78,10 @@ namespace StaffingPlanner.Controllers
             var db = StaffingPlanContext.GetContext();
             var model = db.Messages.Where(x => x.Workload != null && x.Workload.Teacher.Id == TeacherId).ToList();
             var msgs = db.Messages.Where(x => x.Course != null && x.DOSonly == false).ToList();
-            var courses = db.Workloads.Where(w => w.Teacher.Id == TeacherId).Select(x => x.Course).ToList();
+            var workloads = db.Workloads.Where(w => w.Teacher.Id == TeacherId).Select(x => x.Course).ToList();
                         
             foreach (var message in msgs) {
-                if (courses.Where(c => c.Id == message.Course.Id).Any()) {
+                if (workloads.Where(c => c.Id == message.Course.Id).Any() && message.Workload==null) {
                     model.Add(message);
                }
             }            
@@ -146,13 +152,13 @@ namespace StaffingPlanner.Controllers
             db.SaveChanges();
         }
 
-        public static void GenerateDOSApprovedMessage(CourseOffering course, bool forDOS, StaffingPlanContext db)
+        public static void GenerateDOSApprovedCourseMessage(CourseOffering course, bool forDOS, StaffingPlanContext db)
         {
             var msg = new Message
             {
                 Id = Guid.NewGuid(),
                 Datetime = DateTime.Now,
-                Body = course.Course.Name + " for "+ course.TermYear.ToString() + " is now approved.",
+                Body = course.Course.Name + " for "+ course.TermYear.ToString() + " is now approved by all Teachers",
                 Course = course,
                 Workload = null,
                 Seen = false,
@@ -161,7 +167,7 @@ namespace StaffingPlanner.Controllers
             db.Messages.Add(msg);
             db.SaveChanges();
         }
-        public static void GenerateDOSApprovedCourseMessage(TeacherCourseWorkload workload, bool forDOS, StaffingPlanContext db)
+        public static void GenerateDOSApprovedWorkloadMessage(TeacherCourseWorkload workload, bool forDOS, StaffingPlanContext db)
         {
             var msg = new Message
             {

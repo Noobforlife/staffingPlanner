@@ -23,9 +23,19 @@ namespace StaffingPlanner.Controllers
             var work = db.Workloads.Where(m => m.Id.ToString() == Id).ToList().FirstOrDefault();
             work.IsApproved = true;
             db.SaveChanges();
-            MessagesController.GenerateDOSApprovedCourseMessage(work, true, db);
+            ApproveCourse(db, work.Course);
+            MessagesController.GenerateDOSApprovedWorkloadMessage(work, true, db);
 
             return RedirectToAction("TeacherDetails", "Teacher", new { id = work.Teacher.Id });
+        }
+
+
+        public void ApproveCourse(StaffingPlanContext db, CourseOffering course) {
+            if (db.Workloads.Where(x => x.Course.Id == course.Id && x.IsApproved == false).Any() == false) {
+                course.IsApproved = true;
+                db.SaveChanges();
+                MessagesController.GenerateDOSApprovedCourseMessage(course, true, db);
+            }            
         }
 
     }
