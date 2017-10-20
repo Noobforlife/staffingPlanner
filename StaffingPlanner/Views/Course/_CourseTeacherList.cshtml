@@ -10,11 +10,21 @@
             <tr>
                 <th>Name </th>
                 <th>Title </th>
-                <th>Remaining <br />year</th>
-                <th>Remaining <br />@ViewBag.CourseOffering.TermYear.ToString()</th>
-                <th>HT <br /> workload</th>
-                <th>VT <br /> workload</th>
-                <th>Course <br /> workload</th>
+                <th data-toggle="tooltip" title="Remaining teaching hours for the whole academic year">
+                    Remaining <br />year
+                </th>
+                <th data-toggle="tooltip" title="Remaining teaching hours for the @ViewBag.Term term">
+                    Remaining <br />@ViewBag.Term
+                </th>
+                <th data-toggle="tooltip" title="Total workload (allocated hours) for the fall term">
+                    HT <br /> work
+                </th>
+                <th data-toggle="tooltip" title="Total workload (allocated hours) for the spring term">
+                    VT <br /> work
+                </th>
+                <th data-toggle="tooltip" title="Number of hours allocated for the teacher to @ViewBag.CourseName @ViewBag.Term">
+                    Course <br /> work
+                </th>
             </tr>
         </thead>
         <tbody>

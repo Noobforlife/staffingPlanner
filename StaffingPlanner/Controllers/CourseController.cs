@@ -61,7 +61,9 @@ namespace StaffingPlanner.Controllers
 
             var CourseTeacherList = GenerateCourseTeacherViewModelList(teachers, Courseid);
 
-            ViewBag.CourseOffering = db.CourseOfferings.FirstOrDefault(co => co.Id == Courseid);
+            var offering = db.CourseOfferings.FirstOrDefault(co => co.Id == Courseid);
+            ViewBag.CourseName = offering.Course.Name;
+            ViewBag.Term = offering.TermYear.ToString();
             
             return PartialView("~/Views/Course/_CourseTeacherList.cshtml", CourseTeacherList);
         }
