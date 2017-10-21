@@ -8,6 +8,7 @@
     <table class="table table-hover">
         <thead>
             <tr>
+                <th></th>
                 <th>Name </th>
                 <th>Title </th>
                 <th>Remaining (h)</th>
@@ -27,6 +28,12 @@
                 }
                 else { 
                     <tr id="@teacher.WorkloadId">
+                    <td>
+                        @if (teacher.IsApproved)
+                        {<i class="fa fa fa-check-circle" style="color:#87D37C"></i> }
+                        else
+                        {<i class="fa fa fa-exclamation-circle" style="color:#d66c78"></i>  }
+                    </td>
                     <td>@Html.ActionLink(teacher.Name, "TeacherDetails", "Teacher", new { id = teacher.Id }, null)</td>
                     <td>@teacher.Title</td>
                     <td>@teacher.RemainingHours</td>

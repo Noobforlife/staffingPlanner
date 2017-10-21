@@ -195,6 +195,7 @@ namespace StaffingPlanner.Controllers
                     };
                     db.Workloads.Add(newWorkLoad);
                     db.SaveChanges();
+                    if (existingWorkload.IsApproved) { ApprovalsController.Unapprove(db, newWorkLoad); }
                 }
                 else if (existingWorkload != null)
                 {
@@ -208,6 +209,7 @@ namespace StaffingPlanner.Controllers
                     {
                         existingWorkload.Workload = numHours;
                         db.SaveChanges();
+                        if (existingWorkload.IsApproved) { ApprovalsController.Unapprove(db, existingWorkload); }
                         MessagesController.GenerateTeacherMessage(existingWorkload, db);
                     }
                 }

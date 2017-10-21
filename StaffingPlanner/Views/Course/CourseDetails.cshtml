@@ -6,13 +6,13 @@
 }
 
 <div class="container">
-    <div class="modal-header">
+    <div class="modal-header" style="border-bottom:1px solid #000000">
         <h3 class="modal-title" style="display:inline-block">@Model.Name</h3>
         <div style="float: right; display:inline-block">
-            <button class="btn btn-default" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("Courses", "Course")'">Back to Course List</button>
+            <button class="btn btn-default  clear-button" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("Courses", "Course")'">Back to Course List</button>
             @if (Globals.UserRole == Role.DirectorOfStudies)
             {
-                <button class="btn btn-primary" onclick="EditCourse(this)" type="button" id="EditcourseButton">Edit</button>
+                <button class="btn btn-primary solid-button" onclick="EditCourse(this)" type="button" id="EditcourseButton">Edit</button>
             }
         </div>        
     </div>
@@ -26,14 +26,14 @@
                 @Html.Action("RenderTeacherList", "Course", new { Courseid = Model.Id })
             </div>
             <div class="col-md-6">
-                <button class="btn btn-primary pull-left" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                <button class="btn btn-primary pull-left solid-button" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                     Course History
                 </button>
             </div>
             @if (Globals.UserRole == Role.DirectorOfStudies)
             {
                 <div class="col-md-6">
-                    <button class="btn btn-default pull-right" data-toggle="modal" data-target="#addstaffModal" type="button">Add staff <i class="icon-plus" style="margin: 2px; margin-left: 3px;"></i></button>
+                    <button class="btn btn-default clear-button pull-right" data-toggle="modal" data-target="#addstaffModal" type="button">Add staff <i class="icon-plus" style="margin: 2px; margin-left: 3px;"></i></button>
                 </div>
             }
         </div>

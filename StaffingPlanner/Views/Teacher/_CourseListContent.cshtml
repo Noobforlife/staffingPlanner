@@ -16,7 +16,7 @@
         @if (course.TeacherId == Globals.UserId && course.IsApproved)
         {
             <td>                
-                 <button class="btn btn-default alert-success disabled">Approved<i class="fa fa-check pull-right" style="margin:2px"></i></button>
+                 <button class="btn btn-default alert-success flat disabled" style="height: 40px">Approved<i class="fa fa-check pull-right" style="margin:2px"></i></button>
             </td>
         }
            else if (course.TeacherId == Globals.UserId && course.IsApproved == false)
@@ -24,11 +24,11 @@
             <td>
                     @using (Html.BeginForm("ApproveWorkload", "Approvals", FormMethod.Post))
                     {
-                        <input type="hidden" id="Id" name="Id" value="@course.WorkloadId">
-                        <button class="btn btn-default" type="submit">Approve</button>
+                        <input style="height: 0px" type="hidden" id="Id" name="Id" value="@course.WorkloadId">
+                        <button class="btn btn-default clear-button" style="height: 40px" type="submit">Approve</button>
                     }
             </td>
         }
-        <td><span class="label label-@course.CourseStatus pull-right">@course.CourseState</span></td>
+        <td><span class="label @course.CourseStatus pull-right">@course.CourseState</span></td>
     </tr>
 }

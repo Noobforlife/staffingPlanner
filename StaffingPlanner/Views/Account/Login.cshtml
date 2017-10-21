@@ -13,14 +13,18 @@
         @Html.AntiForgeryToken()
         <div class="form-group login-form">
             @Html.TextBoxFor(m => m.Name, new { @class = "login-input", @placeholder= "username" })
-            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+            <div>
+                @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+            </div> 
+                @Html.TextBoxFor(m => m.Password, new { @class = "login-input", @placeholder = "password", @type = "password" })
+            <div>
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+            </div>
+                
 
-            @Html.TextBoxFor(m => m.Password, new { @class = "login-input", @placeholder = "password", @type = "password" })
-            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger"})
-            
-            <br><a href="#" class="forgot-password">forgot password?</a>
-            <button class="btn btn-default login-button" type="submit">login </button>
-        </div>
+                <br><a href="#" class="forgot-password">forgot password?</a>
+                <button class="btn btn-default login-button" type="submit">login </button>
+            </div>
     }
     </div>
 </div>

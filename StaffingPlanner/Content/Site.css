@@ -52,11 +52,30 @@
     max-height: 500px;
 }
 
+
 #notificationFooter {
-    background-color: #e9eaed;
+    background-color: #c32d3f;
     text-align: center;
     font-weight: bold;
     padding: 8px;
+    color:#ffffff;
     font-size: 15px;
     border-top: 1px solid #dddddd;
+}
+
+#legend {
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    font-size: 16px;
+    border-radius: 4px;
+    margin-right: 2px;
+    cursor: pointer;
+}
+
+.inlineSpan {
+    display: inline-block;
+    height: 15px;
+    width: 15px;
+    border-radius: 2px;
 }
