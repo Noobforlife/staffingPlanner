@@ -60,6 +60,10 @@ namespace StaffingPlanner.Controllers
             var teachers = db.Workloads.Where(w => w.Course.Id == Courseid).Select(x => x.Teacher).ToList();
 
             var CourseTeacherList = GenerateCourseTeacherViewModelList(teachers, Courseid);
+
+            var offering = db.CourseOfferings.FirstOrDefault(co => co.Id == Courseid);
+            ViewBag.CourseName = offering.Course.Name;
+            ViewBag.Term = offering.TermYear.ToString();
             
             return PartialView("~/Views/Course/_CourseTeacherList.cshtml", CourseTeacherList);
         }
@@ -310,8 +314,21 @@ namespace StaffingPlanner.Controllers
             var FallWork = db.Workloads.Where(w => w.Teacher.Id == teacher.Id && w.Course.AcademicYear.Id == work.Course.AcademicYear.Id && w.Course.TermYear.Term == Term.Fall).ToList().Select(c => c.Workload).Sum();
             var SpringWork = db.Workloads.Where(w => w.Teacher.Id == teacher.Id && w.Course.AcademicYear.Id == work.Course.AcademicYear.Id && w.Course.TermYear.Term == Term.Spring).ToList().Select(c => c.Workload).Sum();
 
-            var teachingHours = teacher.GetTermAvailability(Globals.CurrentAcademicYear.StartTerm).TeachingHours + teacher.GetTermAvailability(Globals.CurrentAcademicYear.EndTerm).TeachingHours;
-            var remaining = teachingHours - FallWork - SpringWork;
+            var fallAvailability = teacher.GetTermAvailability(Globals.CurrentAcademicYear.StartTerm);
+            var springAvailability = teacher.GetTermAvailability(Globals.CurrentAcademicYear.EndTerm);
+
+            var teachingHours = fallAvailability.TeachingHours + springAvailability.TeachingHours;
+            var remainingYear = teachingHours - FallWork - SpringWork;
+            int remainingTerm;
+            if (db.CourseOfferings.FirstOrDefault(co => co.Id == CourseId).TermYear.Term == Term.Fall)
+            {
+                remainingTerm = fallAvailability.TeachingHours - FallWork;
+            }
+            else
+            {
+                remainingTerm = springAvailability.TeachingHours - SpringWork;
+            }
+
             var vm = new CourseTeacherViewModel
             {
                 Id = teacher.Id,
@@ -322,9 +339,10 @@ namespace StaffingPlanner.Controllers
                 WorkloadFall = FallWork,
                 WorkloadSpring = SpringWork,
                 CourseWorkload = work.Workload,
-                RemainingHours = remaining,
+                RemainingHoursForYear = remainingYear,
+                RemainingHoursForTerm = remainingTerm,
                 CourseState = work.Course.State,
-                IsApproved= work.IsApproved
+                IsApproved = work.IsApproved
             };
             return vm;
         }
