@@ -1,10 +1,16 @@
 ﻿@using StaffingPlanner.ViewModels;
 @model CourseTeacherViewModel
 
-    
+    <td>
+        @if (Model.IsApproved)
+        {<i class="fa fa fa-check-circle" style="color:#87D37C"></i> }
+        else
+        {<i class="fa fa fa-exclamation-circle" style="color:#d66c78"></i>}
+    </td>
     <td>@Html.ActionLink(Model.Name, "TeacherDetails", "Teacher", new { id = Model.Id }, null)</td>
     <td>@Model.Title</td>
-    <td>@Model.RemainingHours</td>
+    <td>@Model.RemainingHoursForYear</td>
+    <td>@Model.RemainingHoursForTerm</td>
     <td>@Model.WorkloadFall</td>
     <td>@Model.WorkloadSpring</td>
     <td>
@@ -15,6 +21,6 @@
         <input type="number" style ="width: 60px; border:none" id ="Allocated" name="Allocated" value="@Model.CourseWorkload">
         <span  class="pull-right" data-toggle="tooltip" title="Delete Teacher" style="cursor:pointer; margin-left: 10px" type="button" onclick="location.href='@Url.Action("DeleteTeacher", "Course", new { id = Model.CourseId, workloadId = Model.WorkloadId })'"> <i class="glyphicon glyphicon-minus" style="font-size:23px;color:rgb(203,40,40)"></i></span>
         <span  class="pull-right" data-toggle="tooltip" title="Cancel Changes" style="cursor:pointer; margin-left: 10px" type="button" onclick="location.href='@Url.Action("CancelChanges", "Course", new { id = Model.CourseId })'"> <i class="fa fa-remove" style="font-size:23px;color:rgb(149,148,148);"></i></span>
-        <button class="btn btn-default save-button pull-right" data-toggle="tooltip" title="Save Changes" type="submit">save </button>
+        <button class="btn btn-default save-button clear-button  pull-right" data-toggle="tooltip" title="Save Changes" type="submit">save </button>
 }
      </td>

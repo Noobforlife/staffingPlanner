@@ -181,6 +181,7 @@
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\NonCourseWorkload.cs" />
     <Compile Include="ViewModels\MessagesViewModels.cs" />
+    <Compile Include="ViewModels\PeriodBalance.cs" />
     <Compile Include="ViewModels\TeacherTermAvailability.cs" />
     <Compile Include="Models\TeacherTaskShare.cs" />
     <Compile Include="Models\TeacherTermEmployment.cs" />
@@ -201,6 +202,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\img\uppsala.png" />
+    <Content Include="Content\styles-old.min.css" />
     <Content Include="Content\styles.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />

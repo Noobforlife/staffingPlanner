@@ -37,6 +37,10 @@ namespace StaffingPlanner.ViewModels
 		//The hours actually allocated on differnt periods
 		public TeacherTermWorkload FallWorkload { get; set; }
 		public TeacherTermWorkload SpringWorkload { get; set; }
+
+        //Period balance (for warnings)
+        public PeriodBalance FallPeriodBalance { get; set; }
+        public PeriodBalance SpringPeriodBalance { get; set; }
 	}
 
     public class TeacherCourseViewModel

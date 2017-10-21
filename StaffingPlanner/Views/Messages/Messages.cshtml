@@ -8,7 +8,7 @@
 }
 
 <div class="container">
-    <h3>Messages</h3>
+    <h3 style="border-bottom:1px solid #000000;padding:15px">Messages</h3>
     <ul class="list-group">
         @if (Model.Count == 0)
         {
@@ -18,7 +18,7 @@
         {
             foreach (var message in Model)
             {
-                <li class="list-group-item">
+                <li class="list-group-item message">
                     <div class="media">
                         <div class="media-left"><a><span class="fa-stack"><i class="fa fa-circle fa-stack-2x text-primary"></i><i class="fa fa-dollar fa-stack-1x fa-inverse"></i></span></a></div>
                         <div class="media-body">
@@ -38,14 +38,14 @@
                                                     {
                                                         if ( message.Workload.IsApproved)
                                                         {                                                           
-                                                                <button class="btn btn-default pull-right alert-success disabled">Approved<i class="fa fa-check pull-right" style="margin:2px"></i></button>
+                                                                <button class="btn btn-default pull-right alert-success flat disabled">Approved<i class="fa fa-check pull-right" style="margin:2px"></i></button>
                                                         }
                                                         else
                                                         {
                                                                 using (Html.BeginForm("ApproveWorkload", "Approvals", FormMethod.Post))
                                                                 {
-                                                                    <input type="hidden" id="Id" name="Id" value="@message.Workload.Id">
-                                                                    <button class="btn btn-default pull-right" type="submit">approve change</button>
+                                                                    <input type="hidden" style="height:0px" id="Id" name="Id" value="@message.Workload.Id">
+                                                                    <button class="btn btn-default flat-border pull-right" type="submit">approve change</button>
                                                                 }
                                                         }
                                                     }

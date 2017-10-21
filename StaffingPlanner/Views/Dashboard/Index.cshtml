@@ -10,7 +10,6 @@
 {
     // TODO: Add "show-all" button to show data for more types of employees
     <div class="row well background-white">
-        <h6 style="margin-left: 15px;">Remaining hours</h6>
         <div class="col-md-3 col-sm-3 col-xs-3 statictic-container">
             <div class="statistic">
                 <div class="capsule-side background-grey"></div>
@@ -52,44 +51,27 @@
 <div class="row year-plan">
     <div class="col-md-12">
         <div class="pull-right">
-            <div class="dropdown">
-                <style>
-                    #legend {
-                        background-color: white;
-                        border: 1px solid #ddd;
-                        padding: 8px 12px;
-                        font-size: 16px;
-                        border-radius: 4px;
-                        margin-right: 2px;
-                        cursor: pointer;
-                    }
-                    .inlineSpan {
-                        display: inline-block;
-                        height: 15px;
-                        width: 15px;
-                        border-radius: 2px;
-                    }
-                </style>
-                <span id="legend" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-html="true"
+            <div class="dropdown">                
+                <span id="legend" data-toggle="popover" data-trigger="hover" class="flat" data-placement="bottom" data-html="true"
                       data-content="<i class='fa fa-check'/> - No pending approvals<br><i class='fa fa-exclamation-circle'/> - Pending approval<br><span class='inlineSpan progress-bar-success'/> - Draft, all set<br><span class='inlineSpan progress-bar-warning'/> - Draft, needs some attention<br><span class='inlineSpan progress-bar-danger'/> - Draft, needs much attention<br><span class='inlineSpan progress-bar-info'/> - Planned/ongoing<br><span class='inlineSpan background-grey'/> - Completed">
                     Legend
                 </span>
                 @switch (Model.Year)
                 {
                     case 2016:
-                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">2016/2017 <span class="caret"></span></button>
+                        <button class="btn btn-default dropdown-toggle flat" data-toggle="dropdown" aria-expanded="false" type="button">2016/2017 <span class="caret"></span></button>
                         <ul class="dropdown-menu" role="menu">
                             <li role="presentation">@Html.ActionLink("2017/2018", "Index", "Dashboard", new {year = 2017}, null)</li>
                             <li role="presentation">@Html.ActionLink("2015/2016", "Index", "Dashboard", new {year = 2015}, null)</li>
                         </ul>break;
                     case 2015:
-                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">2015/2016 <span class="caret"></span></button>
+                        <button class="btn btn-default dropdown-toggle flat" data-toggle="dropdown" aria-expanded="false" type="button">2015/2016 <span class="caret"></span></button>
                         <ul class="dropdown-menu" role="menu">
                             <li role="presentation">@Html.ActionLink("2017/2018", "Index", "Dashboard", new {year = 2017}, null)</li>
                             <li role="presentation">@Html.ActionLink("2016/2017", "Index", "Dashboard", new {year = 2016}, null)</li>
                         </ul>break;
                     default:
-                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">2017/2018 <span class="caret"></span></button>
+                        <button class="btn btn-default dropdown-toggle flat" data-toggle="dropdown" aria-expanded="false" type="button">2017/2018 <span class="caret"></span></button>
                         <ul class="dropdown-menu" role="menu">
                             <li role="presentation">@Html.ActionLink("2016/2017", "Index", "Dashboard", new {year = 2016}, null)</li>
                             <li role="presentation">@Html.ActionLink("2015/2016", "Index", "Dashboard", new {year = 2015}, null)</li>
@@ -129,8 +111,8 @@
                                         <td></td>
                                     }
                                     <td colspan=@item.PeriodsDuration>
-                                        <div class="progress" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" data-content="<b>Course responsible</b><br>@item.CourseResponsible.Name<br><br><b>Course state</b><br>@item.State">
-                                            <a class="progress-bar @item.Status" role="button" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" href="@Url.Action("CourseDetails","Course",new {item.Id })" style="width: 100%; text-decoration: none;">@item.Name
+                                        <div class="progress flat" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" data-content="<b>Course responsible</b><br>@item.CourseResponsible.Name<br><br><b>Course state</b><br>@item.State">
+                                            <a class="progress-bar @item.Status flat" role="button" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" href="@Url.Action("CourseDetails","Course",new {item.Id })" style="width: 100%; text-decoration: none;">@item.Name
                                                 @if (item.IsApproved)
                                                 {<i class="fa fa-check pull-right" style="margin:2px"></i>}
                                                 else
@@ -173,8 +155,8 @@
                                         <td></td>
                                     }
                                     <td colspan=@("" + item.PeriodsDuration)>
-                                        <div class="progress" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" data-content="<b>Course responsible</b><br>@item.CourseResponsible.Name<br><br><b>Course state</b><br>@item.State">
-                                            <a class="progress-bar @item.Status" role="button" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" href="@Url.Action("CourseDetails","Course",new {item.Id })" style="width: 100%; text-decoration: none;">@item.Name
+                                        <div class="progress flat" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" data-content="<b>Course responsible</b><br>@item.CourseResponsible.Name<br><br><b>Course state</b><br>@item.State">
+                                            <a class="progress-bar @item.Status flat" role="button" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" href="@Url.Action("CourseDetails","Course",new {item.Id })" style="width: 100%; text-decoration: none;">@item.Name
                                                 @if (item.IsApproved)
                                                 {<i class="fa fa-check pull-right" style="margin:3px"></i>}
                                                 else

@@ -44,7 +44,7 @@
         </table>
     </div>
 </div>
-<div><span class="label label-@Model.Item1.Status pull-right">@Model.Item1.State</span></div>
+<div><span class="label @Model.Item1.Status pull-right">@Model.Item1.State</span></div>
 
 <div class="col-md-6 col-sm-6">
   <input type="hidden" value="@Model.Item1.Id" name="CourseId" id="CourseId" />
@@ -96,6 +96,6 @@
         <p>Remaining(hrs)</p>
         <p class="numbers orange-border">@Model.Item1.RemainingHours</p>
     </div>   
-    <button class="btn btn-default pull-right" onclick="SaveChanges(this)" type="submit" id="SaveChanges">Save</button>
+    <button class="btn btn-default clear-button-red pull-right" onclick="SaveChanges(this)" type="submit" id="SaveChanges">Save</button>
 </div>
 }

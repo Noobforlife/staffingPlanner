@@ -60,6 +60,10 @@ namespace StaffingPlanner.Controllers
             var teachers = db.Workloads.Where(w => w.Course.Id == Courseid).Select(x => x.Teacher).ToList();
 
             var CourseTeacherList = GenerateCourseTeacherViewModelList(teachers, Courseid);
+
+            var offering = db.CourseOfferings.FirstOrDefault(co => co.Id == Courseid);
+            ViewBag.CourseName = offering.Course.Name;
+            ViewBag.Term = offering.TermYear.ToString();
             
             return PartialView("~/Views/Course/_CourseTeacherList.cshtml", CourseTeacherList);
         }
@@ -164,6 +168,8 @@ namespace StaffingPlanner.Controllers
             Workload.Workload = int.Parse(Allocated);
             db.SaveChanges();
 
+            if (Workload.IsApproved) { ApprovalsController.Unapprove(db, Workload); }
+
             MessagesController.GenerateTeacherMessage(Workload,db);
             return RedirectToAction("CourseDetails", "Course", new { id = Guid.Parse(Id) });
         }
@@ -187,6 +193,7 @@ namespace StaffingPlanner.Controllers
 
                 db.Workloads.Add(teacherworkload);
                 db.SaveChanges();
+                ApprovalsController.Unapprove(db, teacherworkload);
             }
             return RedirectToAction("CourseDetails", "Course", new { id = Guid.Parse(Id) });
         }
@@ -264,7 +271,7 @@ namespace StaffingPlanner.Controllers
                 TotalHours = offering.TotalHours,
                 AllocatedHours = offering.AllocatedHours,
                 RemainingHours = offering.RemainingHours,
-                Status = GetStatus(offering.TotalHours,offering.AllocatedHours),
+                Status = offering.Status,
                 State = offering.State,
                IsApproved = offering.IsApproved
            };
@@ -307,8 +314,21 @@ namespace StaffingPlanner.Controllers
             var FallWork = db.Workloads.Where(w => w.Teacher.Id == teacher.Id && w.Course.AcademicYear.Id == work.Course.AcademicYear.Id && w.Course.TermYear.Term == Term.Fall).ToList().Select(c => c.Workload).Sum();
             var SpringWork = db.Workloads.Where(w => w.Teacher.Id == teacher.Id && w.Course.AcademicYear.Id == work.Course.AcademicYear.Id && w.Course.TermYear.Term == Term.Spring).ToList().Select(c => c.Workload).Sum();
 
-            var teachingHours = teacher.GetTermAvailability(Globals.CurrentAcademicYear.StartTerm).TeachingHours + teacher.GetTermAvailability(Globals.CurrentAcademicYear.EndTerm).TeachingHours;
-            var remaining = teachingHours - FallWork - SpringWork;
+            var fallAvailability = teacher.GetTermAvailability(Globals.CurrentAcademicYear.StartTerm);
+            var springAvailability = teacher.GetTermAvailability(Globals.CurrentAcademicYear.EndTerm);
+
+            var teachingHours = fallAvailability.TeachingHours + springAvailability.TeachingHours;
+            var remainingYear = teachingHours - FallWork - SpringWork;
+            int remainingTerm;
+            if (db.CourseOfferings.FirstOrDefault(co => co.Id == CourseId).TermYear.Term == Term.Fall)
+            {
+                remainingTerm = fallAvailability.TeachingHours - FallWork;
+            }
+            else
+            {
+                remainingTerm = springAvailability.TeachingHours - SpringWork;
+            }
+
             var vm = new CourseTeacherViewModel
             {
                 Id = teacher.Id,
@@ -319,8 +339,10 @@ namespace StaffingPlanner.Controllers
                 WorkloadFall = FallWork,
                 WorkloadSpring = SpringWork,
                 CourseWorkload = work.Workload,
-                RemainingHours = remaining,
-                CourseState = work.Course.State
+                RemainingHoursForYear = remainingYear,
+                RemainingHoursForTerm = remainingTerm,
+                CourseState = work.Course.State,
+                IsApproved = work.IsApproved
             };
             return vm;
         }
@@ -329,7 +351,7 @@ namespace StaffingPlanner.Controllers
 
         //helpers
         public static string GetStatus() {
-            var credits = new List<string> {"warning","success","danger"};
+            var credits = new List<string> { "allocation-bad", "allocation-good", "allocation-okay" };
             return credits[Rnd.Next(credits.Count)];
         }
 
@@ -338,13 +360,13 @@ namespace StaffingPlanner.Controllers
             float percentage = (AllocatedHours/(float)TotalHours)*100;
             if (percentage >= 90)
             {
-                return "success";
+                return "allocation-good";
             }
             else if (percentage >= 55 && percentage < 90)
             {
-                return "warning";
+                return "allocation-okay";
             }
-            return "danger";
+            return "allocation-bad";
         }
 
         public static CourseState matchState(string state) {
