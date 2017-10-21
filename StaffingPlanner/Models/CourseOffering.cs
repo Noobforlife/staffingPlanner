@@ -36,7 +36,7 @@ namespace StaffingPlanner.Models
                 return workloads.Select(x => x.Workload).Sum();
 			}
 		}
-        public string Status => CourseController.GetStatus(TotalHours,AllocatedHours);
+        public string Status => DashboardController.GetColorForOffering(this);
 
 	    public string TruncatedName => Course.TruncatedName;
 

@@ -168,6 +168,8 @@ namespace StaffingPlanner.Controllers
             Workload.Workload = int.Parse(Allocated);
             db.SaveChanges();
 
+            if (Workload.IsApproved) { ApprovalsController.Unapprove(db, Workload); }
+
             MessagesController.GenerateTeacherMessage(Workload,db);
             return RedirectToAction("CourseDetails", "Course", new { id = Guid.Parse(Id) });
         }
@@ -191,6 +193,7 @@ namespace StaffingPlanner.Controllers
 
                 db.Workloads.Add(teacherworkload);
                 db.SaveChanges();
+                ApprovalsController.Unapprove(db, teacherworkload);
             }
             return RedirectToAction("CourseDetails", "Course", new { id = Guid.Parse(Id) });
         }
@@ -268,7 +271,7 @@ namespace StaffingPlanner.Controllers
                 TotalHours = offering.TotalHours,
                 AllocatedHours = offering.AllocatedHours,
                 RemainingHours = offering.RemainingHours,
-                Status = GetStatus(offering.TotalHours,offering.AllocatedHours),
+                Status = offering.Status,
                 State = offering.State,
                IsApproved = offering.IsApproved
            };
@@ -338,7 +341,8 @@ namespace StaffingPlanner.Controllers
                 CourseWorkload = work.Workload,
                 RemainingHoursForYear = remainingYear,
                 RemainingHoursForTerm = remainingTerm,
-                CourseState = work.Course.State
+                CourseState = work.Course.State,
+                IsApproved = work.IsApproved
             };
             return vm;
         }
@@ -347,7 +351,7 @@ namespace StaffingPlanner.Controllers
 
         //helpers
         public static string GetStatus() {
-            var credits = new List<string> {"warning","success","danger"};
+            var credits = new List<string> { "allocation-bad", "allocation-good", "allocation-okay" };
             return credits[Rnd.Next(credits.Count)];
         }
 
@@ -356,13 +360,13 @@ namespace StaffingPlanner.Controllers
             float percentage = (AllocatedHours/(float)TotalHours)*100;
             if (percentage >= 90)
             {
-                return "success";
+                return "allocation-good";
             }
             else if (percentage >= 55 && percentage < 90)
             {
-                return "warning";
+                return "allocation-okay";
             }
-            return "danger";
+            return "allocation-bad";
         }
 
         public static CourseState matchState(string state) {

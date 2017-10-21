@@ -56,5 +56,6 @@ namespace StaffingPlanner.ViewModels
         public int RemainingHoursForYear { get; set; }
         public int RemainingHoursForTerm { get; set; }
         public CourseState CourseState { get; set; }
+        public bool IsApproved { get; set; }
     }
 }

@@ -30,12 +30,19 @@ namespace StaffingPlanner.Controllers
         }
 
 
-        public void ApproveCourse(StaffingPlanContext db, CourseOffering course) {
+        public static void ApproveCourse(StaffingPlanContext db, CourseOffering course) {
             if (db.Workloads.Where(x => x.Course.Id == course.Id && x.IsApproved == false).Any() == false) {
                 course.IsApproved = true;
                 db.SaveChanges();
                 MessagesController.GenerateDOSApprovedCourseMessage(course, true, db);
             }            
+        }
+
+        public static void Unapprove(StaffingPlanContext db, TeacherCourseWorkload workload)
+        {
+            workload.IsApproved = false;
+            workload.Course.IsApproved = false;
+            db.SaveChanges();
         }
 
     }

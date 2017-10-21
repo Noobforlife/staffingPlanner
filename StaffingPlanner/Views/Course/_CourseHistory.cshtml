@@ -32,12 +32,13 @@
                             <td>@course.CourseResponsible.Name</td>
                             <td>@course.RegisteredStudents</td>
                             <td>@course.PassedStudents</td>
-                            <td>@course.TotalHours<span class="label label-@course.Status pull-right">@course.State</span></td>
+                            <td>@course.TotalHours</td>
+                            <td><span class="label @course.Status pull-right">@course.State</span></td>
                             <td>
                                 @{
                                     if (Model.Item2.State == CourseState.Draft)
                                     {                                       
-                                        <button class="btn btn-default pull-right" value="@course.Id" id="@Model.Item2.Id" type="button" onclick="ViewComparison(this)">Use Template</button>                                        
+                                        <button class="btn btn-default clear-button-red pull-right" value="@course.Id" id="@Model.Item2.Id" type="button" onclick="ViewComparison(this)">Use Template</button>                                        
                                     }
                                 }
                             </td>
