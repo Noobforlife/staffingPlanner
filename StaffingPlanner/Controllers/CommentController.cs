@@ -38,6 +38,7 @@ namespace StaffingPlanner.Controllers
                 Message = message
             };
             db.Comments.Add(newComment);
+            db.SaveChanges();
         }
 
         // Post: Comment/Edit/{commentId, message}
@@ -65,6 +66,7 @@ namespace StaffingPlanner.Controllers
                 var db = StaffingPlanContext.GetContext();
                 var comment = db.Comments.FirstOrDefault(c => c.Id == commentId);
                 db.Comments.Remove(comment);
+                db.SaveChanges();
             }
             catch
             {
