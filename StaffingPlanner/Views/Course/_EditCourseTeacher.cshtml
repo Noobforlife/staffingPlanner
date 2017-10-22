@@ -63,47 +63,19 @@
             class="btn btn-default save-button pull-right"
             data-toggle="tooltip"
             title="Save Changes"
-            type="button">
+            type="button"
+            data-workloadid="@Model.WorkloadId"
+            data-originalworkload="@Model.CourseWorkload"
+            onclick="SaveChanges(this)">
             Save
         </button>
     }
 </td>
 
 <script>
-    // SaveTeacherChanges(string Id, string workloadId, string Allocated)
-
-    /*
-    var teacherId = $(elem).data('teacher');
-    var offeringId = $(elem).data('offering');
-    var workloadId = $(elem).data('workload');
-    var hours = $('#' + workloadId).val();
-    console.log(hours);
-    $.ajax({
-        type: "POST",
-        url: 'Url.Action("AlterTeacherAllocation", "Teacher")',
-        contentType: "application/json",
-        data: JSON.stringify({
-            teacherId: teacherId,
-            offeringId: offeringId,
-            workloadId: workloadId,
-            hours: hours
-        }),
-        dataType: "json",
-        success: function() {
-            console.log("success");
-            location.reload();
-        },
-        error: function() {
-            console.log("error");
-            location.reload();
-        }
-    });
-    */
-
     function DeleteTeacher(elem) {
         var id = $(elem).data('offeringid');
         var workloadId = $(elem).data('workloadid');
-        console.log("OfferingId: " + id + "\nWorkloadId: " + workloadId);
         $.ajax({
             type: "POST",
             url: '@Url.Action("DeleteTeacher", "Course")',
@@ -127,7 +99,44 @@
     }
 
     function SaveChanges(elem) {
-        
+        var workloadId = $(elem).data('workloadid');
+        var workload = $(elem).data("originalworkload");
+        var inputField = $("#" + workloadId);
+        var newWorkload = inputField.val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("NewSaveTeacherChanges", "Course")',
+            contentType: "application/json",
+            data: JSON.stringify({
+                workloadId: workloadId,
+                allocated: newWorkload
+            }),
+            dataType: "json",
+            complete: function (jqXhr) {
+                var jsonResponse = JSON.parse(jqXhr.responseText);
+                if (jsonResponse["message"] === "Overallocation") {
+                    if (confirm("Making this change would over-allocate this teacher.\nPress Ok to proceed")) {
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("NewSaveTeacherChanges", "Course")',
+                            contentType: "application/json",
+                            data: JSON.stringify({
+                                workloadId: workloadId,
+                                allocated: newWorkload,
+                                force: true
+                            }),
+                            dataType: "json",
+                            complete: function() {
+                                console.log("Done!");
+                            }
+                        });
+                    } else {
+                        inputField.val(workload);
+                    }
+                }
+                location.reload();
+            }
+        });
     }
 </script>
 

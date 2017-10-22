@@ -175,7 +175,7 @@ namespace StaffingPlanner.Controllers
         }
 
 		[HttpPost]
-		public ActionResult NewSaveTeacherChanges(Guid id, Guid workloadId, int allocated, bool force=false)
+		public ActionResult NewSaveTeacherChanges(Guid workloadId, int allocated, bool force=false)
 		{
 			var db = StaffingPlanContext.GetContext();
 			var workload = db.Workloads.First(x => x.Id == workloadId);
