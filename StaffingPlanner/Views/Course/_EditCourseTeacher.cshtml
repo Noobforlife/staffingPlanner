@@ -125,15 +125,16 @@
                                 force: true
                             }),
                             dataType: "json",
-                            complete: function() {
-                                console.log("Done!");
+                            complete: function(innerJqXhr) {
+                                location.reload();
                             }
                         });
                     } else {
                         inputField.val(workload);
                     }
+                } else {
+                    location.reload();
                 }
-                location.reload();
             }
         });
     }

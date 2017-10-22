@@ -188,7 +188,8 @@ namespace StaffingPlanner.Controllers
 				if (workload.IsApproved) { ApprovalsController.Unapprove(db, workload); }
 
 				MessagesController.GenerateTeacherMessage(workload, db);
-				return Json(new { message = "Ok" });
+				var message = force ? "Ok - forced" : "Ok - no problems";
+				return Json(new { message });
 			}
 
 			var currentYear = db.AcademicYears.First(ay => ay.Id == Globals.CurrentAcademicYear.Id);
@@ -207,7 +208,7 @@ namespace StaffingPlanner.Controllers
 			if (workload.IsApproved) { ApprovalsController.Unapprove(db, workload); }
 
 			MessagesController.GenerateTeacherMessage(workload, db);
-			return Json(new { message = "Ok" });
+			return Json(new { message = "Ok - no problems" });
 		}
 
 		private static int GetRemainingAllocatableHoursForDurationOfCourse(CourseOffering offering,
