@@ -180,6 +180,7 @@
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\CourseEnums.cs" />
     <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\messageEnums.cs" />
     <Compile Include="Models\NonCourseWorkload.cs" />
     <Compile Include="ViewModels\MessagesViewModels.cs" />
     <Compile Include="ViewModels\PeriodBalance.cs" />

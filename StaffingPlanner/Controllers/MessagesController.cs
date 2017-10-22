@@ -19,7 +19,7 @@ namespace StaffingPlanner.Controllers
                 return RedirectToAction("Index", "Dashboard");
             }
             var db = StaffingPlanContext.GetContext();
-            var model = db.Messages.Where(x => x.DOSonly == true).ToList();
+            var model = db.Messages.Where(x => x.DOSonly == true).OrderByDescending(x => x.Datetime).ToList();
 
             // TODO: Generate view model
 
@@ -28,7 +28,7 @@ namespace StaffingPlanner.Controllers
         public ActionResult MessagesTeacher(Guid Id)
         {
             var db = StaffingPlanContext.GetContext();
-            var model = db.Messages.Where(x => x.Workload!= null && x.Workload.Teacher.Id == Id).ToList();
+            var model = db.Messages.Where(x => x.Workload!= null && x.Workload.Teacher.Id == Id).OrderByDescending(x => x.Datetime).ToList();
             var msgs = db.Messages.Where(x => x.Course != null && x.DOSonly == false).ToList();
             var courses = db.Workloads.Where(w => w.Teacher.Id == Id).Select(x => x.Course).ToList();
 
@@ -39,7 +39,6 @@ namespace StaffingPlanner.Controllers
                     model.Add(message);
                 }
             }
-
             // TODO: Generate view model
 
             return View("~/Views/Messages/Messages.cshtml", model);
@@ -67,7 +66,7 @@ namespace StaffingPlanner.Controllers
         public PartialViewResult RenderDosNotificationWindow()
         {
             var db = StaffingPlanContext.GetContext();
-            var model = db.Messages.Where(x => x.DOSonly == true).ToList();
+            var model = db.Messages.Where(x => x.DOSonly == true).OrderByDescending(x => x.Datetime).ToList();
 
             return PartialView("~/Views/Messages/_NotificationsWindow.cshtml", model);
         }
@@ -76,7 +75,7 @@ namespace StaffingPlanner.Controllers
         public PartialViewResult RenderTeacherNotificationWindow(Guid TeacherId)
         {
             var db = StaffingPlanContext.GetContext();
-            var model = db.Messages.Where(x => x.Workload != null && x.Workload.Teacher.Id == TeacherId).ToList();
+            var model = db.Messages.Where(x => x.Workload != null && x.Workload.Teacher.Id == TeacherId).OrderByDescending(x => x.Datetime).ToList();
             var msgs = db.Messages.Where(x => x.Course != null && x.DOSonly == false).ToList();
             var workloads = db.Workloads.Where(w => w.Teacher.Id == TeacherId).Select(x => x.Course).ToList();
                         
@@ -98,10 +97,11 @@ namespace StaffingPlanner.Controllers
             {
                 Id = Guid.NewGuid(),
                 Datetime = DateTime.Now,
-                Body = "The director of studies made a change to " + course.Course.Name,
+                Body = "The director of studies made a change to the details of " + course.Course.Name,
                 Course = course,
                 Workload = null,
-                Seen=false
+                Seen=false,
+                MessageType = MessageType.Notification
             };
             db.Messages.Add(msg);
             db.SaveChanges();
@@ -116,7 +116,8 @@ namespace StaffingPlanner.Controllers
                 Body = "The director of studies changed your time allocation for " + workload.Course.Course.Name + workload.Course.TermYear.ToString(),
                 Course= workload.Course,
                 Workload = workload,
-                Seen = false
+                Seen = false,
+                MessageType = MessageType.Notification
             };
             db.Messages.Add(msg);
             db.SaveChanges();
@@ -131,7 +132,8 @@ namespace StaffingPlanner.Controllers
                 Body = "The director of studies has Removed you from" + workload.Course.Course.Name + workload.Course.TermYear.ToString(),
                 Course = workload.Course,
                 Workload = workload,
-                Seen = false
+                Seen = false,
+                MessageType = MessageType.Notification
             };
             db.Messages.Add(msg);
             db.SaveChanges();
@@ -162,7 +164,8 @@ namespace StaffingPlanner.Controllers
                 Course = course,
                 Workload = null,
                 Seen = false,
-                DOSonly = forDOS
+                DOSonly = forDOS,
+                MessageType = MessageType.CourseApproval
             };
             db.Messages.Add(msg);
             db.SaveChanges();
@@ -173,11 +176,12 @@ namespace StaffingPlanner.Controllers
             {
                 Id = Guid.NewGuid(),
                 Datetime = DateTime.Now,
-                Body = workload.Teacher.Name + " has approved his workload for " + workload.Course.Course.Name + " " + workload.Course.TermYear.ToString(),
+                Body = workload.Teacher.Name + " has approved workload for " + workload.Course.Course.Name + " " + workload.Course.TermYear.ToString(),
                 Course = workload.Course,
                 Workload = null,
                 Seen = false,
-                DOSonly= forDOS
+                DOSonly= forDOS,
+                MessageType = MessageType.WorkloadApproval
             };
             db.Messages.Add(msg);
             db.SaveChanges();
@@ -198,6 +202,34 @@ namespace StaffingPlanner.Controllers
             db.SaveChanges();
         }
 
-        #endregion 
+        #endregion
+
+        #region helpers
+        public static string getIcon(MessageType type) {
+            switch (type) {
+                case (MessageType.Notification):
+                    return "fa fa-bell-o";
+                    break;
+                case (MessageType.CourseApproval):
+                    return "fa fa-check";
+                    break;
+                case (MessageType.WorkloadApproval):
+                    return "fa fa-bell-o";
+                    break;
+                case (MessageType.Request):
+                    return "fa fa-handshake-o";
+                    break;
+                case (MessageType.Comment):
+                    return "fa fa-commenting-o";
+                    break;
+                case (MessageType.Reminder):
+                    return "fa fa-exclamation";
+                    break;
+
+            }
+            return "fa fa-bell-o";
+        }
+
+        #endregion
     }
 }
