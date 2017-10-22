@@ -162,6 +162,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ApprovalsController.cs" />
+    <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\CourseController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\NonCourseWorkload.cs" />
     <Compile Include="ViewModels\MessagesViewModels.cs" />
+    <Compile Include="ViewModels\PeriodBalance.cs" />
     <Compile Include="ViewModels\TeacherTermAvailability.cs" />
     <Compile Include="Models\TeacherTaskShare.cs" />
     <Compile Include="Models\TeacherTermEmployment.cs" />
@@ -201,6 +203,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\img\uppsala.png" />
+    <Content Include="Content\styles-old.min.css" />
     <Content Include="Content\styles.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -272,6 +275,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Approvals\" />
+    <Folder Include="Views\Comment\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

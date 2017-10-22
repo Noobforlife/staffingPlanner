@@ -41,12 +41,12 @@ namespace StaffingPlanner.DAL
                 Periods = RandomPeriod(),
                 TotalHours = Rnd.Next(300, 800),
                 CourseResponsible = courseResponsible,
-                State = state,
+                State = state,                
                 NumStudents = Rnd.Next(10, 80),
                 RegisteredStudents = Rnd.Next(10,79),
                 PassedStudents = Rnd.Next(0,50),
                 HST = Hst[Rnd.Next(0, Hst.Count)],
-                IsApproved = approval
+                IsApproved = approval,                
             };
         }
 

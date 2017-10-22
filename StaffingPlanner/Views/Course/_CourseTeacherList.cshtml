@@ -8,12 +8,24 @@
     <table class="table table-hover">
         <thead>
             <tr>
+                <th></th>
                 <th>Name </th>
                 <th>Title </th>
-                <th>Remaining (h)</th>
-                <th>HT work</th>
-                <th>VT work</th>
-                <th>Allocated to course (h)</th>
+                <th data-toggle="tooltip" title="Remaining teaching hours for the whole academic year">
+                    Remaining <br />year
+                </th>
+                <th data-toggle="tooltip" title="Remaining teaching hours for the @ViewBag.Term term">
+                    Remaining <br />@ViewBag.Term
+                </th>
+                <th data-toggle="tooltip" title="Total workload (allocated hours) for the fall term">
+                    HT <br /> work
+                </th>
+                <th data-toggle="tooltip" title="Total workload (allocated hours) for the spring term">
+                    VT <br /> work
+                </th>
+                <th data-toggle="tooltip" title="Number of hours allocated for the teacher to @ViewBag.CourseName @ViewBag.Term">
+                    Course <br /> work
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -26,10 +38,21 @@
                         </tr>
                 }
                 else { 
+<<<<<<< HEAD
                     <tr>
+=======
+                    <tr id="@teacher.WorkloadId">
+                    <td>
+                        @if (teacher.IsApproved)
+                        {<i class="fa fa fa-check-circle" style="color:#87D37C"></i> }
+                        else
+                        {<i class="fa fa fa-exclamation-circle" style="color:#d66c78"></i>  }
+                    </td>
+>>>>>>> 2928519784a1b3b7ddd0d1944df936b38e8d0e98
                     <td>@Html.ActionLink(teacher.Name, "TeacherDetails", "Teacher", new { id = teacher.Id }, null)</td>
                     <td>@teacher.Title</td>
-                    <td>@teacher.RemainingHours</td>
+                    <td>@teacher.RemainingHoursForYear</td>
+                    <td>@teacher.RemainingHoursForTerm</td>
                     <td>@teacher.WorkloadFall</td>
                     <td>@teacher.WorkloadSpring</td>
                     <td>@teacher.CourseWorkload

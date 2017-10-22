@@ -24,19 +24,49 @@
             </tbody>
         </table>
 
-        <div class="table-responsive" style="font-family: Raleway, sans-serif; max-width: 350px">
+        <div class="table-responsive" style="font-family: Raleway, sans-serif; max-width: 400px">
             <table class="table">
                 <thead>
                 <tr>@Model.FallBudget.TermYear.ToString() Workload (h)</tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <th>P1</th>
-                    <th>P2</th>
-                    <th>P3</th>
-                    <th>P4</th>
+                    <th>
+                        P1
+                        @if (Model.FallPeriodBalance.P1Balance < 0)
+                        {
+                            <span class="glyphicon glyphicon-warning-sign" data-toggle="tooltip" title="Period 1 is over-allocated"></span>
+                        }
+                    </th>
+                    <th>
+                        P2
+                        @if (Model.FallPeriodBalance.P2Balance < 0)
+                        {
+                            <span class="glyphicon glyphicon-warning-sign" data-toggle="tooltip" title="Period 2 is over-allocated"></span>
+                        }
+                    </th>
+                    <th>
+                        P3
+                        @if (Model.FallPeriodBalance.P3Balance < 0)
+                        {
+                            <span class="glyphicon glyphicon-warning-sign" data-toggle="tooltip" title="Period 3 is over-allocated"></span>
+                        }
+                    </th>
+                    <th>
+                        P4
+                        @if (Model.FallPeriodBalance.P4Balance < 0)
+                        {
+                            <span class="glyphicon glyphicon-warning-sign" data-toggle="tooltip" title="Period 4 is over-allocated"></span>
+                        }
+                    </th>
                     <th>Other</th>
-                    <th>Total</th>
+                    <th>
+                        Total
+                        @if (Model.FallBudget.TeachingHours - Model.FallWorkload.TotalTermWorkload < 0)
+                        {
+                            <span class="glyphicon glyphicon-warning-sign" data-toggle="tooltip" title="The teacher is over-allocated for the fall term"></span>
+                        }
+                    </th>
                 </tr>
                 <tr>
                     <td>@Model.FallWorkload.Period1Workload</td>
@@ -50,19 +80,49 @@
             </table>
         </div>
 
-        <div class="table-responsive" style="font-family: Raleway, sans-serif; max-width: 350px">
+        <div class="table-responsive" style="font-family: Raleway, sans-serif; max-width: 400px">
             <table class="table">
                 <thead>
                 <tr>@Model.SpringBudget.TermYear.ToString() Workload (h)</tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <th>P1</th>
-                    <th>P2</th>
-                    <th>P3</th>
-                    <th>P4</th>
+                    <th>
+                        P1
+                        @if (Model.SpringPeriodBalance.P1Balance < 0)
+                        {
+                            <span class="glyphicon glyphicon-warning-sign" data-toggle="tooltip" title="Period 1 is over-allocated"></span>
+                        }
+                    </th>
+                    <th>
+                        P2
+                        @if (Model.SpringPeriodBalance.P2Balance < 0)
+                        {
+                            <span class="glyphicon glyphicon-warning-sign" data-toggle="tooltip" title="Period 2 is over-allocated"></span>
+                        }
+                    </th>
+                    <th>
+                        P3
+                        @if (Model.SpringPeriodBalance.P3Balance < 0)
+                        {
+                            <span class="glyphicon glyphicon-warning-sign" data-toggle="tooltip" title="Period 3 is over-allocated"></span>
+                        }
+                    </th>
+                    <th>
+                        P4
+                        @if (Model.SpringPeriodBalance.P4Balance < 0)
+                        {
+                            <span class="glyphicon glyphicon-warning-sign" data-toggle="tooltip" title="Period 4 is over-allocated"></span>
+                        }
+                    </th>
                     <th>Other</th>
-                    <th>Total</th>
+                    <th>
+                        Total
+                        @if (Model.SpringBudget.TeachingHours - Model.SpringWorkload.TotalTermWorkload < 0)
+                        {
+                            <span class="glyphicon glyphicon-warning-sign" data-toggle="tooltip" title="The teacher is over-allocated for the spring term"></span>
+                        }
+                    </th>
                 </tr>
                 <tr>
                     <td>@Model.SpringWorkload.Period1Workload</td>
@@ -161,7 +221,13 @@
         <div class="col-md-6">
             <div id="totalWorkload" style="text-align:center">
                 <h6>Total workload</h6>
-                <h3>@(Model.FallWorkload.TotalTermWorkload + @Model.SpringWorkload.TotalTermWorkload)</h3>
+                <h3>
+                    @(Model.FallWorkload.TotalTermWorkload + @Model.SpringWorkload.TotalTermWorkload)
+                    @if (Model.FallBudget.TeachingHours + Model.SpringBudget.TeachingHours - Model.FallWorkload.TotalTermWorkload - @Model.SpringWorkload.TotalTermWorkload < 0)
+                    {
+                        <span class="glyphicon glyphicon-warning-sign" data-toggle="tooltip" title="The total workload is more than the yearly teaching hours!"></span>
+                    }
+                </h3>
             </div>
 
         </div>

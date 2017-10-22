@@ -3,7 +3,7 @@
 <div class="modal-dialog" role="document">
 @using (Html.BeginForm("SaveNewTeacher", "Course", FormMethod.Post))
 {
-    <div class="modal-content" style=" width: 100%">
+    <div class="modal-content flat" style=" width: 100%">
         <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLongTitle">Add Teacher to Course</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -14,7 +14,7 @@
             <input type="hidden" id="Id" name="Id" value="@Model.Item2">
             <div class="form-group">
                 <label for="teacher">Select Teacher to Add:  </label>
-                <select id="teacherId" name="teacherId" data-style="btn-primary" class="teacher-selector" style="margin-left: 15px; width: 300px; height: 30px">
+                <select id="teacherId" name="teacherId" data-style="btn-primary" class="teacher-selector flat-border" style="margin-left: 15px; width: 300px; height: 30px">
                     @foreach (var teacher in Model.Item1)
                     {
                         <option value="@teacher.Id">@teacher.Name</option>
@@ -27,8 +27,8 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary">Add Teacher</button>
+            <button type="button" class="btn btn-secondary clear-button" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary solid-button">Add Teacher</button>
         </div>
     </div>
 }    

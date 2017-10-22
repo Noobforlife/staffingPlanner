@@ -4,7 +4,7 @@
     ViewBag.Title = "Courses";
 }
 
-<h2>Courses </h2>
+<h2 style="border-bottom:1px solid #000000;padding:15px">Courses </h2>
 @*<input type="text" id="searchInput" onkeyup="myFunction()" placeholder="Search for course" title="Type in a name">*@
 <div class="table-responsive">
     <table id="courseListTable" class="table table-hover" >
@@ -33,7 +33,7 @@
                     <td>@Html.ActionLink(course.CourseResponsible.Name, "TeacherDetails", "Teacher", new { id = course.CourseResponsible.Id }, null)</td>
                     <td>@course.AllocatedHours</td>
                     <td>@course.RemainingHours</td>
-                    <td><span class="label label-@course.Status pull-right">@course.State </span></td>                   
+                    <td><span class="label @course.Status pull-right" style="width:100%">@course.State </span></td>                   
                 </tr>
             }
         </tbody>

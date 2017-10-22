@@ -195,6 +195,7 @@ namespace StaffingPlanner.Controllers
                     };
                     db.Workloads.Add(newWorkLoad);
                     db.SaveChanges();
+                    if (existingWorkload.IsApproved) { ApprovalsController.Unapprove(db, newWorkLoad); }
                 }
                 else if (existingWorkload != null)
                 {
@@ -208,6 +209,7 @@ namespace StaffingPlanner.Controllers
                     {
                         existingWorkload.Workload = numHours;
                         db.SaveChanges();
+                        if (existingWorkload.IsApproved) { ApprovalsController.Unapprove(db, existingWorkload); }
                         MessagesController.GenerateTeacherMessage(existingWorkload, db);
                     }
                 }
@@ -354,7 +356,17 @@ namespace StaffingPlanner.Controllers
 			var fallBudget = teacher.GetTermAvailability(year.StartTerm);
 			var springBudget = teacher.GetTermAvailability(year.EndTerm);
 
-			return new TeacherDetailsTopViewModel()
+            var fallWorkload = new TeacherTermWorkload(teacher, fallBudget.TermYear);
+            var springWorkload = new TeacherTermWorkload(teacher, springBudget.TermYear);
+
+            int fallHoursPerPeriod = fallBudget.TeachingHours / 4;
+            int springHoursPerPeriod = springBudget.TeachingHours / 4;
+
+            var fallPeriodBalance = new PeriodBalance(fallHoursPerPeriod, fallWorkload.Period1Workload, fallWorkload.Period2Workload, fallWorkload.Period3Workload, fallWorkload.Period4Workload);
+            var springPeriodBalance = new PeriodBalance(springHoursPerPeriod, springWorkload.Period1Workload, springWorkload.Period2Workload, springWorkload.Period3Workload, springWorkload.Period4Workload);
+
+
+            return new TeacherDetailsTopViewModel()
 			{
 				Id = teacher.Id,
 				Email = teacher.Email,
@@ -363,9 +375,11 @@ namespace StaffingPlanner.Controllers
 				FallBudget = fallBudget,
 				SpringBudget = springBudget,
 
+				FallWorkload = fallWorkload,
+				SpringWorkload = springWorkload,
 
-				FallWorkload = new TeacherTermWorkload(teacher, fallBudget.TermYear),
-				SpringWorkload = new TeacherTermWorkload(teacher, springBudget.TermYear)
+                FallPeriodBalance = fallPeriodBalance,
+                SpringPeriodBalance = springPeriodBalance
 			};
 		}
             

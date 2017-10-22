@@ -4,7 +4,7 @@
 <div class="modal-dialog" role="document">
 @using (Html.BeginForm("SaveNewCourse", "Teacher", FormMethod.Post))
 {
-    <div class="modal-content" style=" width: 100%">
+    <div class="modal-content flat" style=" width: 100%">
         <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLongTitle">Add Course to Teacher's workload</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -15,7 +15,7 @@
             <input type="hidden" id="Id" name="Id" value="@Model.Item2">
             <div class="form-group">
                 <label for="teacher">Select Course to Add:  </label>
-                <select id="teacherId" name="courseId" data-style="btn-primary" class="teacher-selector" style="margin-left: 15px; width: 300px; height: 30px">
+                <select id="teacherId" name="courseId" data-style="btn-primary" class="teacher-selector flat-border" style="margin-left: 15px; width: 300px; height: 30px">
                     <optgroup label="Fall @Globals.CurrentAcademicYear.StartTerm.Year">
                         @foreach (var offering in Model.Item1.Where(x => x.TermYear.Term == Term.Fall))
                         {
@@ -36,8 +36,8 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary">Add Course</button>
+            <button type="button" class="btn btn-secondary pull-left clear-button" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary solid-button">Add Course</button>
         </div>
     </div>
 }    

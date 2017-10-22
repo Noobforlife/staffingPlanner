@@ -91,7 +91,7 @@ namespace StaffingPlanner.Controllers
 			        Code = c.Course.Code,
 			        Name = c.Course.Name,
 			        Periods = c.Periods,
-			        Status = c.CourseResponsible.Id == teacher.Id ? "progress-bar-info" : "progress-bar-success",
+			        Status = c.CourseResponsible.Id == teacher.Id ? "planned-ongoing" : "allocation-good",
 					State = c.State,
 			        CourseResponsible = c.CourseResponsible,
                     IsApproved = c.IsApproved
@@ -167,18 +167,22 @@ namespace StaffingPlanner.Controllers
 			return model;
 		}
 
-		private static string GetColorForOffering(CourseOffering offering)
+		public static string GetColorForOffering(CourseOffering offering)
 		{
 			if (offering.State == CourseState.Draft)
 			{
-				return "progress-bar-" + CourseController.GetStatus();
+				return CourseController.GetStatus(offering.TotalHours,offering.AllocatedHours);
 			}
-			if (offering.State == CourseState.Completed)
+			else if (offering.State == CourseState.Completed)
 			{
-				return "background-grey";
+				return "completed";
 			}
+            else if (offering.State == CourseState.Planned)
+            {
+                return "planned-ongoing";
+            }
 
-			return "progress-bar-info";
+            return "planned-ongoing ";
 		}
 	}
 }

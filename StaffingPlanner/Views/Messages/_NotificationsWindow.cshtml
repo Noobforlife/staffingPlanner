@@ -24,11 +24,11 @@
                 {
                     if (message.Workload == null)
                     {
-                        <a onClick="location.href='@Url.Action("RedirectToCourse", "Messages", new { Id = message.Id, CourseId = message.Course.Id })'"><div>@message.Body</div></a><hr />
+                        <a style="cursor:pointer" onClick="location.href='@Url.Action("RedirectToCourse", "Messages", new { Id = message.Id, CourseId = message.Course.Id })'"><div>@message.Body</div></a><hr />
                     }
                     else
                     {
-                        <a onClick="location.href='@Url.Action("RedirectToTeacherProfile", "Messages", new { Id = message.Id, TeacherId = message.Workload.Teacher.Id })'"><div>@message.Body</div></a><hr />
+                        <a style="cursor:pointer" onclick="location.href='@Url.Action("RedirectToTeacherProfile", "Messages", new { Id = message.Id, TeacherId = message.Workload.Teacher.Id })'"><div>@message.Body</div></a><hr />
                     }
                 }
             }            
@@ -36,11 +36,11 @@
             <div id="notificationFooter">
                 @if (Globals.UserRole == Role.DirectorOfStudies)
                 {
-                    <a onClick="location.href='@Url.Action("MessagesDos", "Messages")'">View all Messages</a>
+                    <a style="color:#ffffff" onClick="location.href='@Url.Action("MessagesDos", "Messages")'">View all Messages</a>
                 }
                 else
                 {
-                    <a onClick="location.href='@Url.Action("MessagesTeacher", "Messages", new { Id = Globals.UserId }, null)'">View all Messages</a>
+                    <a style="cursor:pointer;color:#ffffff" onClick="location.href='@Url.Action("MessagesTeacher", "Messages", new { Id = Globals.UserId }, null)'">View all Messages</a>
                  }
             </div>
         </div>
