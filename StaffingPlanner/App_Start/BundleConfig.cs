@@ -26,7 +26,9 @@ namespace StaffingPlanner
             bundles.Add(new ScriptBundle("~/bundles/customScripts").Include(
                     "~/Scripts/dataTables.min.js",
                     "~/Scripts/dataTables.uikit.min.js",
-                      "~/Scripts/app.js"));
+                      "~/Scripts/app.js",
+                      "~/Scripts/jquery.validate.unobtrusive.js",
+                     "~/Scripts/jquery.validate.unobtrusive.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
 					  "~/Content/styles.min.css",

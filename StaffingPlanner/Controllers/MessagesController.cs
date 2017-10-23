@@ -52,6 +52,27 @@ namespace StaffingPlanner.Controllers
             db.SaveChanges();
             return RedirectToAction("CourseDetails", "Course", new { id = CourseId});
         }
+        [HttpPost]
+        public ActionResult NewRequest()
+        {
+            Guid Id = Guid.NewGuid();
+            var db = StaffingPlanContext.GetContext();
+            var course = db.CourseOfferings.Where(c => c.Id == Id).ToList().FirstOrDefault();
+            var msg = new Message
+            {
+                Id = Guid.NewGuid(),
+                Datetime = DateTime.Now,
+                Body = " Test",
+                Course = course,
+                Workload = null,
+                Seen = false,
+                MessageType = MessageType.Request,
+                DOSonly=true
+            };
+            db.Messages.Add(msg);
+            db.SaveChanges();
+            return null;
+        }
 
         public ActionResult RedirectToTeacherProfile(Guid Id, Guid TeacherId)
         {
@@ -170,6 +191,7 @@ namespace StaffingPlanner.Controllers
             db.Messages.Add(msg);
             db.SaveChanges();
         }
+
         public static void GenerateDOSApprovedWorkloadMessage(TeacherCourseWorkload workload, bool forDOS, StaffingPlanContext db)
         {
             var msg = new Message
