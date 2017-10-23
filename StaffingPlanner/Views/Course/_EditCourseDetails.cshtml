@@ -4,7 +4,6 @@
 
 @using (Html.BeginForm("SaveCourseChanges", "Course", FormMethod.Post))
 {
-
 <div class="col-md-6 col-sm-6">
     <div class="table-responsive">
         <table class="table borderless">
@@ -76,8 +75,8 @@
                             </tr>
                             <tr>
                                 <td>@Model.Item1.NumStudents</td>
-                                <td><input type="number" style="width: 60px; border: 1px solid #000000" id="registeredStudents" name="registeredStudents" value="@Model.Item1.RegisteredStudents"></td>
-                                <td><input type="number" style="width: 60px; border:1px solid #000000" id="passedStudents" name="passedStudents" value="@Model.Item1.PassedStudents"></td>
+                                <td><input type="number" style="width: 60px; border: 1px solid #000000" required id="registeredStudents" name="registeredStudents" value="@Model.Item1.RegisteredStudents"></td>
+                                <td><input type="number" style="width: 60px; border:1px solid #000000" required id="passedStudents" name="passedStudents" value="@Model.Item1.PassedStudents"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -97,6 +96,7 @@
             </tbody>
         </table>
     </div>
-    <button class="btn btn-default clear-button-red pull-right" onclick="SaveChanges(this)" type="submit" id="SaveChanges">Save</button>
+    <button class="btn btn-default clear-button-red pull-right" type="submit" id="SaveChanges">Save</button>
 </div>
 }
+
