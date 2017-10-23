@@ -20,7 +20,7 @@
         });
 
         $.post('@Url.Action("NewRequest", "Messages", new { id = Model})', { request: $("#Request").val() }).done(function (data) {
-            alert("Your request has been sent to the course responsible");
+            alert("Your request has been sent to the Director of Studies");
             $("#Request").val(" ");
         });;
         }
