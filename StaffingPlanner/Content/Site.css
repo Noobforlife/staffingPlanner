@@ -54,10 +54,8 @@
 
 #requestBody {
     padding: 5px;
-    margin: 15px;
-    min-height: 300px;
-    overflow: auto;
-    max-height: 400px;
+    margin: 10px;
+    max-height: 100px
 }
 
 
@@ -97,11 +95,13 @@
 .overlay-box {
     position: absolute;
     top: 46%;
-    width:20%;
-    padding:10px;
+    width: 20%;
+    padding: 10px;
     right: 0;
     z-index: 10;
-    background-color:#FFFFFF;
+    background-color: #FFFFFF;
+    overflow: auto;
+    max-height: 300px;
 }
 
 
