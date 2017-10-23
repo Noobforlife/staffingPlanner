@@ -79,3 +79,21 @@
     width: 15px;
     border-radius: 2px;
 }
+
+.overlay-button {
+    position: absolute;
+    top: 40%;
+    right: 0;
+    z-index: 10;
+}
+.overlay-box {
+    position: absolute;
+    top: 46%;
+    width:20%;
+    padding:10px;
+    right: 0;
+    z-index: 10;
+    background-color:#FFFFFF;
+}
+
+

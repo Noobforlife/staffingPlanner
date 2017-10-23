@@ -20,54 +20,27 @@
                 <tr>
                     <th>Credits:</th>
                     <td colspan="2">@Model.Item1.Credits</td>
-                </tr>               
-            </tbody>
-        </table>
-    </div>
-    <div class="table-responsive" style="font-family: Raleway, sans-serif;">
-        <table class="table">
-            <thead>
-                <td colspan="3">Students</td>
-            </thead>
-            <tbody>
+                </tr>   
                 <tr>
-                    <th>Budgeted</th>
-                    <th>Registered</th>
-                    <th>Passed</th>
+                    <th>HST:</th>
+                    <td>@Model.Item1.HST</td>
                 </tr>
-                <tr>
-                    <td>@Model.Item1.NumStudents</td>
-                    <td><input type="number" style="width: 60px; border: 1px solid #000000" id="registeredStudents" name="registeredStudents" value="@Model.Item1.RegisteredStudents"></td>
-                    <td><input type="number" style="width: 60px; border:1px solid #000000" id="passedStudents" name="passedStudents" value="@Model.Item1.PassedStudents"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-<div><span class="label @Model.Item1.Status pull-right">@Model.Item1.State</span></div>
-
-<div class="col-md-6 col-sm-6">
-  <input type="hidden" value="@Model.Item1.Id" name="CourseId" id="CourseId" />
-    <div class="table-responsive">
-        <table class="table borderless">
-            <tbody>
                 <tr id="courseResponsible">
                     <th>Course responsible:</th>
-                       <td>                          
-                            <select id="Responsible" name="Responsible" class="teacher-selector" id="Responsible" name="Responsible" data-style="btn-primary">
-                                <option value="@Model.Item1.CourseResponsible.Id">@Model.Item1.CourseResponsible.Name</option>
-                                @foreach (var teacher in Model.Item2)
-                                {
-                                    <option value="@teacher.Id">@teacher.Name</option>
-                                }
-                            </select>                            
-                        </td>
-                   </tr>
-                <tr>
+                    <td>
+                        <select id="Responsible" name="Responsible" class="teacher-selector flat-border" id="Responsible" name="Responsible" data-style="btn-primary">
+                            <option value="@Model.Item1.CourseResponsible.Id">@Model.Item1.CourseResponsible.Name</option>
+                            @foreach (var teacher in Model.Item2)
+                            {
+                                <option value="@teacher.Id">@teacher.Name</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
                 <tr id="Course State">
                     <th>Course State:</th>
                     <td>
-                        <select id="state" name="state" class="teacher-selector" id="Responsible" name="Responsible" data-style="btn-primary">
+                        <select id="state" name="state" class="teacher-selector flat-border" id="Responsible" name="Responsible" data-style="btn-primary">
                             <option value="@Model.Item1.State">@Model.Item1.State</option>
                             <option value="@CourseState.Completed">@CourseState.Completed</option>
                             <option value="@CourseState.Ongoing">@CourseState.Ongoing</option>
@@ -76,26 +49,50 @@
                         </select>
                     </td>
                 </tr>
-                <tr>
-                    <th>HST:</th>
-                    <td>@Model.Item1.HST</td>
-                </tr>
             </tbody>
         </table>
     </div>
-
-    <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-        <p>Total Budget(hrs)</p>
-        <p class="numbers blue-border">@Model.Item1.TotalHours</p>
+</div>
+<div><span class="label @Model.Item1.Status pull-right">@Model.Item1.State</span></div>
+<div class="col-md-6 col-sm-6">
+  <input type="hidden" value="@Model.Item1.Id" name="CourseId" id="CourseId" />
+    <div class="table-responsive">
+        <table class="table borderless">
+            <tbody>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr colspan="3">Students</tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Budgeted</th>
+                                <th>Registered</th>
+                                <th>Passed</th>
+                            </tr>
+                            <tr>
+                                <td>@Model.Item1.NumStudents</td>
+                                <td><input type="number" style="width: 60px; border: 1px solid #000000" id="registeredStudents" name="registeredStudents" value="@Model.Item1.RegisteredStudents"></td>
+                                <td><input type="number" style="width: 60px; border:1px solid #000000" id="passedStudents" name="passedStudents" value="@Model.Item1.PassedStudents"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+                    <p>Total Budget(h)</p>
+                    <h3 class="numbers">@Model.Item1.TotalHours</h3>
+                </div>
+                <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+                    <p>Allocated(h)</p>
+                    <h3 class="numbers">@Model.Item1.AllocatedHours</h3>
+                </div>
+                <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
+                    <p>Remaining(h)</p>
+                    <h3 class="numbers">@Model.Item1.RemainingHours</h3>
+                </div>   
+            </tbody>
+        </table>
     </div>
-    <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-        <p>Allocated(hrs)</p>
-        <p class="numbers green-border">@Model.Item1.AllocatedHours</p>
-    </div>
-    <div class="detail-bubble col-md-4 col-sm-4 col-xs-4">
-        <p>Remaining(hrs)</p>
-        <p class="numbers orange-border">@Model.Item1.RemainingHours</p>
-    </div>   
     <button class="btn btn-default clear-button-red pull-right" onclick="SaveChanges(this)" type="submit" id="SaveChanges">Save</button>
 </div>
 }

@@ -1,11 +1,28 @@
 ﻿@using StaffingPlanner.ViewModels;
 @model CourseTeacherViewModel
 
+    
+<style>
+    .glyphs {
+        cursor: pointer;
+        margin-left: 10px;
+    }
+
+    #cross {
+        font-size: 23px;
+        color: rgb(203, 40, 40);
+    }
+
+    #minus {
+        font-size: 23px;
+        color: rgb(149, 148, 148);
+    }
+</style>
     <td>
         @if (Model.IsApproved)
-        {<i class="fa fa fa-check-circle" style="color:#87D37C"></i> }
+        {<i class="fa fa fa-check-circle" data-toggle="tooltip" title="Workload has been approved by the teacher" style="color:#87D37C"></i> }
         else
-        {<i class="fa fa fa-exclamation-circle" style="color:#d66c78"></i>}
+        {<i class="fa fa fa-exclamation-circle" data-toggle="tooltip" title="Workload is pending approval" style="color:#d66c78"></i>}
     </td>
     <td>@Html.ActionLink(Model.Name, "TeacherDetails", "Teacher", new { id = Model.Id }, null)</td>
     <td>@Model.Title</td>
@@ -13,14 +30,126 @@
     <td>@Model.RemainingHoursForTerm</td>
     <td>@Model.WorkloadFall</td>
     <td>@Model.WorkloadSpring</td>
-    <td>
-@using (Html.BeginForm("SaveTeacherChanges", "Course", FormMethod.Post, new { id = "MyForm" }))
-{
-        <input type="hidden" id="workloadId" name="workloadId" value="@Model.WorkloadId">
-        <input type="hidden" id="Id" name="Id" value="@Model.CourseId">
-        <input type="number" style ="width: 60px; border:none" id ="Allocated" name="Allocated" value="@Model.CourseWorkload">
-        <span  class="pull-right" data-toggle="tooltip" title="Delete Teacher" style="cursor:pointer; margin-left: 10px" type="button" onclick="location.href='@Url.Action("DeleteTeacher", "Course", new { id = Model.CourseId, workloadId = Model.WorkloadId })'"> <i class="glyphicon glyphicon-minus" style="font-size:23px;color:rgb(203,40,40)"></i></span>
-        <span  class="pull-right" data-toggle="tooltip" title="Cancel Changes" style="cursor:pointer; margin-left: 10px" type="button" onclick="location.href='@Url.Action("CancelChanges", "Course", new { id = Model.CourseId })'"> <i class="fa fa-remove" style="font-size:23px;color:rgb(149,148,148);"></i></span>
-        <button class="btn btn-default save-button clear-button  pull-right" data-toggle="tooltip" title="Save Changes" type="submit">save </button>
-}
-     </td>
+<td>
+    @using (Html.BeginForm("SaveTeacherChanges", "Course", FormMethod.Post, new { id = "MyForm" }))
+    {
+    <input type="hidden" id="workloadId" name="workloadId" value="@Model.WorkloadId">
+    <input type="hidden" id="Id" name="Id" value="@Model.CourseId">
+    <input type="number" style="width: 60px; border:none" id="Allocated" name="Allocated" value="@Model.CourseWorkload">
+        if (Model.RemainingHoursForTerm < 0)
+        { <i class="fa fa-exclamation-triangle" data-toggle="tooltip" title="Teacher is over allocated for this period"></i>}
+    <span class="pull-right" data-toggle="tooltip" title="Delete Teacher" style="cursor:pointer; margin-left: 10px" type="button" onclick="location.href='@Url.Action("DeleteTeacher", "Course", new { id = Model.CourseId, workloadId = Model.WorkloadId })'"> <i class="glyphicon glyphicon-minus" style="font-size:23px;color:rgb(203,40,40)"></i></span>
+    <span class="pull-right" data-toggle="tooltip" title="Cancel Changes" style="cursor:pointer; margin-left: 10px" type="button" onclick="location.href='@Url.Action("CancelChanges", "Course", new { id = Model.CourseId })'"> <i class="fa fa-remove" style="font-size:23px;color:rgb(149,148,148);"></i></span>
+    <button class="btn btn-default save-button clear-button  pull-right" data-toggle="tooltip" title="Save Changes" type="submit">save </button>
+    }
+</td>
+
+@*<td>
+    <input 
+        type="number" 
+        style="width: 60px; border:none" 
+        id="@Model.WorkloadId" 
+        name="@Model.WorkloadId"
+        value="@Model.CourseWorkload"/> 
+
+        <span
+            class="pull-right glyphs"
+            data-toggle="tooltip"
+            title="Delete Teacher"
+            data-offeringid="@Model.CourseId"
+            data-workloadid="@Model.WorkloadId"
+            onclick="DeleteTeacher(this)">
+            <i class="glyphicon glyphicon-minus" id="cross"></i>
+        </span>
+
+        <span
+            class="pull-right glyphs"
+            data-toggle="tooltip"
+            title="Cancel Changes"
+            data-workloadid="@Model.WorkloadId"
+            data-workload="@Model.CourseWorkload"
+            onclick="CancelChanges(this)">
+            <i class="fa fa-remove" id="minus"></i>
+        </span>
+
+        <button
+            class="btn btn-default save-button pull-right"
+            data-toggle="tooltip"
+            title="Save Changes"
+            type="button"
+            data-workloadid="@Model.WorkloadId"
+            data-originalworkload="@Model.CourseWorkload"
+            onclick="SaveChanges(this)">
+            Save
+        </button>
+</td>
+
+<script>
+    function DeleteTeacher(elem) {
+        var id = $(elem).data('offeringid');
+        var workloadId = $(elem).data('workloadid');
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DeleteTeacher", "Course")',
+            contentType: "application/json",
+            data: JSON.stringify({
+                id: id,
+                workloadId: workloadId
+            }),
+            dataType: "json",
+            complete: function() {
+                location.reload();
+            }
+        });
+    }
+
+    function CancelChanges(elem) {
+        var workload = $(elem).data("workload");
+        var elemId = "#" + $(elem).data("workloadid");
+        var inputField = $(elemId);
+        inputField.val(workload);
+    }
+
+    function SaveChanges(elem) {
+        var workloadId = $(elem).data('workloadid');
+        var workload = $(elem).data("originalworkload");
+        var inputField = $("#" + workloadId);
+        var newWorkload = inputField.val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("NewSaveTeacherChanges", "Course")',
+            contentType: "application/json",
+            data: JSON.stringify({
+                workloadId: workloadId,
+                allocated: newWorkload
+            }),
+            dataType: "json",
+            complete: function (jqXhr) {
+                var jsonResponse = JSON.parse(jqXhr.responseText);
+                if (jsonResponse["message"] === "Overallocation") {
+                    if (confirm("Making this change would over-allocate this teacher.\nPress Ok to proceed")) {
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("NewSaveTeacherChanges", "Course")',
+                            contentType: "application/json",
+                            data: JSON.stringify({
+                                workloadId: workloadId,
+                                allocated: newWorkload,
+                                force: true
+                            }),
+                            dataType: "json",
+                            complete: function(innerJqXhr) {
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        inputField.val(workload);
+                    }
+                } else {
+                    location.reload();
+                }
+            }
+        });
+    }
+</script>*@
+

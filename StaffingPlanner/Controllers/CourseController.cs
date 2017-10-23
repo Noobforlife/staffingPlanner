@@ -174,6 +174,122 @@ namespace StaffingPlanner.Controllers
             return RedirectToAction("CourseDetails", "Course", new { id = Guid.Parse(Id) });
         }
 
+		[HttpPost]
+		public ActionResult NewSaveTeacherChanges(Guid workloadId, int allocated, bool force=false)
+		{
+			var db = StaffingPlanContext.GetContext();
+			var workload = db.Workloads.First(x => x.Id == workloadId);
+
+			if (force || workload.Workload >= allocated)
+			{
+				workload.Workload = allocated;
+				db.SaveChanges();
+
+				if (workload.IsApproved) { ApprovalsController.Unapprove(db, workload); }
+
+				MessagesController.GenerateTeacherMessage(workload, db);
+				var message = force ? "Ok - forced" : "Ok - no problems";
+				return Json(new { message });
+			}
+
+			var currentYear = db.AcademicYears.First(ay => ay.Id == Globals.CurrentAcademicYear.Id);
+			var periodAllocationInformation = TeacherController.GenerateTeacherTopDetails(workload.Teacher.Id, currentYear);
+			var diff = allocated - workload.Workload;
+			var willOverallocate = diff > GetRemainingAllocatableHoursForDurationOfCourse(workload.Course, periodAllocationInformation);
+
+			if (willOverallocate)
+			{
+				return Json(new { message = "Overallocation" });
+			}
+
+			workload.Workload = allocated;
+			db.SaveChanges();
+
+			if (workload.IsApproved) { ApprovalsController.Unapprove(db, workload); }
+
+			MessagesController.GenerateTeacherMessage(workload, db);
+			return Json(new { message = "Ok - no problems" });
+		}
+
+		private static int GetRemainingAllocatableHoursForDurationOfCourse(CourseOffering offering,
+			TeacherDetailsTopViewModel allocationInfo)
+		{
+			var result = 0.0;
+
+			if (offering.TermYear.Term == Term.Fall)
+			{
+				switch (offering.Periods)
+				{
+					case Period.P1:
+						result = ((double) allocationInfo.FallBudget.TeachingHours / 4) * 0.1 +
+						         allocationInfo.FallPeriodBalance.P1Balance;
+						break;
+					case Period.P2:
+						result = ((double)allocationInfo.FallBudget.TeachingHours / 4) * 0.1 +
+						         allocationInfo.FallPeriodBalance.P2Balance;
+						break;
+					case Period.P3:
+						result = ((double)allocationInfo.FallBudget.TeachingHours / 4) * 0.1 +
+						         allocationInfo.FallPeriodBalance.P3Balance;
+						break;
+					case Period.P4:
+						result = ((double)allocationInfo.FallBudget.TeachingHours / 4) * 0.1 +
+						         allocationInfo.FallPeriodBalance.P4Balance;
+						break;
+					case Period.P1P2:
+						result = ((double)allocationInfo.FallBudget.TeachingHours / 2) * 0.1 +
+						         allocationInfo.FallPeriodBalance.P1Balance + allocationInfo.FallPeriodBalance.P2Balance;
+						break;
+					case Period.P3P4:
+						result = ((double)allocationInfo.FallBudget.TeachingHours / 2) * 0.1 +
+						         allocationInfo.FallPeriodBalance.P3Balance + allocationInfo.FallPeriodBalance.P4Balance;
+						break;
+					case Period.AllPeriods:
+						result = allocationInfo.FallBudget.TeachingHours * 0.1 +
+						         allocationInfo.FallPeriodBalance.P1Balance + allocationInfo.FallPeriodBalance.P2Balance +
+						         allocationInfo.FallPeriodBalance.P3Balance + allocationInfo.FallPeriodBalance.P4Balance;
+						break;
+				}
+			}
+			else
+			{
+				switch (offering.Periods)
+				{
+					case Period.P1:
+						result = ((double)allocationInfo.SpringBudget.TeachingHours / 4) * 0.1 +
+						         allocationInfo.SpringPeriodBalance.P1Balance;
+						break;
+					case Period.P2:
+						result = ((double)allocationInfo.SpringBudget.TeachingHours / 4) * 0.1 +
+						         allocationInfo.SpringPeriodBalance.P2Balance;
+						break;
+					case Period.P3:
+						result = ((double)allocationInfo.SpringBudget.TeachingHours / 4) * 0.1 +
+						         allocationInfo.SpringPeriodBalance.P3Balance;
+						break;
+					case Period.P4:
+						result = ((double)allocationInfo.SpringBudget.TeachingHours / 4) * 0.1 +
+						         allocationInfo.SpringPeriodBalance.P4Balance;
+						break;
+					case Period.P1P2:
+						result = ((double)allocationInfo.SpringBudget.TeachingHours / 2) * 0.1 +
+						         allocationInfo.SpringPeriodBalance.P1Balance + allocationInfo.SpringPeriodBalance.P2Balance;
+						break;
+					case Period.P3P4:
+						result = ((double)allocationInfo.SpringBudget.TeachingHours / 2) * 0.1 +
+						         allocationInfo.SpringPeriodBalance.P3Balance + allocationInfo.SpringPeriodBalance.P4Balance;
+						break;
+					case Period.AllPeriods:
+						result = allocationInfo.SpringBudget.TeachingHours * 0.1 +
+						         allocationInfo.SpringPeriodBalance.P1Balance + allocationInfo.SpringPeriodBalance.P2Balance +
+						         allocationInfo.SpringPeriodBalance.P3Balance + allocationInfo.SpringPeriodBalance.P4Balance;
+						break;
+				}
+			}
+
+			return (int)result;
+		}
+
         [HttpPost]
         public ActionResult SaveNewTeacher(string Id, string teacherId, string Allocated)
         {
@@ -194,6 +310,7 @@ namespace StaffingPlanner.Controllers
                 db.Workloads.Add(teacherworkload);
                 db.SaveChanges();
                 ApprovalsController.Unapprove(db, teacherworkload);
+                MessagesController.GenerateTeacherMessageAddition(teacherworkload, db);
             }
             return RedirectToAction("CourseDetails", "Course", new { id = Guid.Parse(Id) });
         }
