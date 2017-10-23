@@ -13,7 +13,8 @@ namespace StaffingPlanner.Controllers
         // GET: /Dashboard/Index
         public ActionResult Index(int year = 2017)
         {
-            if (!Globals.SessionUser.ContainsKey(Session["UserID"].ToString()))
+	        var session = Session["UserID"] as string;
+			if (session == null || Globals.SessionUser[session].UserRole == Role.Unauthorized)
             {
                 return RedirectToAction("Login", "Account");
             }
