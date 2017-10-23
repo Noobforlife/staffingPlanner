@@ -8,7 +8,7 @@
         <div class="table-responsive">
             <table class="table borderless">
                 <tbody>
-                    @if (Globals.UserRole == Role.DirectorOfStudies)
+                    @if (Globals.SessionUser[Session["UserID"] as string].UserRole == Role.DirectorOfStudies)
                     {
                         <tr>
                             <th>Personal number :</th>

@@ -14,7 +14,7 @@ namespace StaffingPlanner.Controllers
         // GET: Message
         public ActionResult MessagesDos()
         {
-            if (Globals.SessionUser[Session["UserID"].ToString()].UserRole != Role.DirectorOfStudies)
+            if (Globals.SessionUser[Session["UserID"] as string].UserRole != Role.DirectorOfStudies)
             {
                 return RedirectToAction("Index", "Dashboard");
             }

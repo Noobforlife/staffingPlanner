@@ -26,51 +26,81 @@ namespace StaffingPlanner.Controllers
             }
         }
 
-        // POST: Comment/Create
-        [HttpPost]
-        public void Create(Guid connectedId, string message)
+        [ChildActionOnly]
+        public PartialViewResult RenderAddComment(Guid connectedId, bool teacher)
         {
-            var db = StaffingPlanContext.GetContext();
-            var newComment = new Comment
+            Comment newComment = new Comment
             {
                 Id = Guid.NewGuid(),
                 ConnectedTo = connectedId,
-                Message = message
+                Message = ""
             };
-            db.Comments.Add(newComment);
-            db.SaveChanges();
+
+	        if (teacher)
+	        {
+		        return PartialView("~/Views/Comment/_AddCommentForTeacher.cshtml", newComment);
+			}
+	        return PartialView("~/Views/Comment/_AddCommentForCourse.cshtml", newComment);
         }
+
+        // POST: Comment/Create
+        [HttpPost]
+        public ActionResult CreateFromTeacherPage(Guid connectedId, string message)
+        {
+            CreateComment(connectedId, message);
+            return RedirectToAction("TeacherDetails", "Teacher", new { id = connectedId });
+        }
+
+	    [HttpPost]
+	    public ActionResult CreateFromCoursePage(Guid connectedId, string message)
+	    {
+		    CreateComment(connectedId, message);
+		    return RedirectToAction("CourseDetails", "Course", new { id = connectedId });
+	    }
+
+		private static void CreateComment(Guid connectedId, string message)
+	    {
+			var db = StaffingPlanContext.GetContext();
+		    var newComment = new Comment
+		    {
+			    Id = Guid.NewGuid(),
+			    ConnectedTo = connectedId,
+			    Message = message
+		    };
+		    db.Comments.Add(newComment);
+		    db.SaveChanges();
+		}
 
         // Post: Comment/Edit/{commentId, message}
         [HttpPost]
-        public void Edit(Guid commentId, string newMessage)
+        public JsonResult Edit(Guid commentId, string newMessage)
         {
-            try
-            {
-                var db = StaffingPlanContext.GetContext();
-                var comment = db.Comments.FirstOrDefault(c => c.Id == commentId);
-                comment.Message = newMessage;
-                db.SaveChanges();
-            }
-            catch
-            {
-            }
+            var db = StaffingPlanContext.GetContext();
+            var comment = db.Comments.FirstOrDefault(c => c.Id == commentId);
+	        if (comment != null)
+	        {
+		        comment.Message = newMessage;
+		        db.SaveChanges();
+		        return Json(new { message = "Success" });
+			}
+
+	        return Json(new {message = "No comment with that Id"});
         }
 
         // POST: Comment/Delete/{commentId}
         [HttpPost]
-        public void Delete(Guid commentId)
+        public JsonResult Delete(Guid commentId)
         {
-            try
-            {
-                var db = StaffingPlanContext.GetContext();
-                var comment = db.Comments.FirstOrDefault(c => c.Id == commentId);
-                db.Comments.Remove(comment);
-                db.SaveChanges();
-            }
-            catch
-            {
-            }
+            var db = StaffingPlanContext.GetContext();
+            var comment = db.Comments.FirstOrDefault(c => c.Id == commentId);
+	        if (comment != null)
+	        {
+		        db.Comments.Remove(comment);
+		        db.SaveChanges();
+		        return Json(new { message = "Success" });
+			}
+
+	        return Json(new {message = "No comment with that Id"});
         }
     }
 }

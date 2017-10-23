@@ -56,7 +56,7 @@ namespace StaffingPlanner.Controllers
         [AllowAnonymous]
         public ActionResult LogOff(string returnUrl)
         {
-            Globals.SessionUser.Remove(Session["UserID"].ToString());
+            Globals.SessionUser.Remove(Session["UserID"] as string);
             return RedirectToAction("Login", "Account");
         }
 

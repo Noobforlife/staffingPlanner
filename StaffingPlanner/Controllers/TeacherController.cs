@@ -168,6 +168,13 @@ namespace StaffingPlanner.Controllers
             return PartialView("~/Views/Teacher/_CourseListContentEditable.cshtml", offerings);
 		}
 
+		[HttpGet]
+		[ChildActionOnly]
+		public PartialViewResult GetComments(Guid teacherId)
+		{
+			return PartialView("~/Views/Teacher/_CommentSection.cshtml", teacherId);
+		}
+
         #endregion
 
         #region Updating the database
