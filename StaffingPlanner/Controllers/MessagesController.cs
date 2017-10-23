@@ -52,17 +52,27 @@ namespace StaffingPlanner.Controllers
             db.SaveChanges();
             return RedirectToAction("CourseDetails", "Course", new { id = CourseId});
         }
-        [HttpPost]
-        public ActionResult NewRequest()
+        [ChildActionOnly]
+        public PartialViewResult RenderRequestList(Guid Id)
         {
-            Guid Id = Guid.NewGuid();
+            var db = StaffingPlanContext.GetContext();
+            var msgs = db.Messages.Where(m => m.MessageType == MessageType.Request && m.Course.Id == Id).ToList();
+            var ms = db.Messages.ToList();
+           
+            return PartialView("~/Views/Messages/_requestList.cshtml", msgs);
+        }
+
+        [HttpPost]
+        public ActionResult NewRequest(Guid Id, string request)
+        {
+            
             var db = StaffingPlanContext.GetContext();
             var course = db.CourseOfferings.Where(c => c.Id == Id).ToList().FirstOrDefault();
             var msg = new Message
             {
                 Id = Guid.NewGuid(),
                 Datetime = DateTime.Now,
-                Body = " Test",
+                Body = request,
                 Course = course,
                 Workload = null,
                 Seen = false,

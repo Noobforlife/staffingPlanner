@@ -8,11 +8,11 @@
  
        @if (Globals.UserRole == Role.DirectorOfStudies)
        {
-        @Html.Partial("~/Views/Messages/_requestList.cshtml")
+        @Html.Action("RenderRequestList", "Messages", new { Id = Model.Id })
        }
        else if (Globals.UserId == Model.CourseResponsible.Id)
        {
-        @Html.Partial("~/Views/Messages/_requestWindow.cshtml")
+        @Html.Partial("~/Views/Messages/_requestWindow.cshtml", Model.Id)
        }
         
         <div class="container">

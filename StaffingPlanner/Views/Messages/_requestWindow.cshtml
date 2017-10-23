@@ -1,10 +1,27 @@
-﻿<button id="requestLink" class=" clear-button overlay-button" type="button" data-toggle="collapse" data-target="#requests" aria-expanded="false" aria-controls="requests">make request</button>
+﻿@using StaffingPlanner.Models
+@using System;
+@using StaffingPlanner.ViewModels
+
+@model Guid 
+<button id="requestLink" class=" clear-button overlay-button" type="button" data-toggle="collapse" data-target="#requests" aria-expanded="false" aria-controls="requests">make request</button>
 
 <div class="collapse overlay-box flat-border" id="requests">
-    @using (Html.BeginForm("NewRequest", "Messages", FormMethod.Post))
-    {
+    @*@using (Html.BeginForm("NewRequest", "Messages", FormMethod.Post))
+    {*@
         <textarea id="Request" name="Request" placeholder="type out your request" rows="3" cols="32"> </textarea>
-        <input id="send" name="send" value="Submit" class="clear-button pull-right" type="submit">
-    }
+        <input id="send" onclick="SendRequest(this)" name="send" value="Submit" class="clear-button pull-right" type="submit">
+    @*}*@
 </div>
 
+<script>
+    function SendRequest(btn) {
+        $(document).ready(function () {
+            $('#success').alert('close');
+        });
+
+        $.post('@Url.Action("NewRequest", "Messages", new { id = Model})', { request: $("#Request").val() }).done(function (data) {
+            alert("Your request has been sent to the course responsible");
+            $("#Request").val(" ");
+        });;
+        }
+</script>

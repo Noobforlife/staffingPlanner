@@ -1,6 +1,26 @@
-﻿<button id="requestLink" class=" clear-button overlay-button" type="button" data-toggle="collapse" data-target="#requests" aria-expanded="false" aria-controls="requests">requests</button>
+﻿@using StaffingPlanner.Models
+@model List<Message>
+<button id="requestLink" class=" clear-button overlay-button" type="button" data-toggle="collapse" data-target="#requests" aria-expanded="false" aria-controls="requests">requests</button>
 
-<div class="collapse overlay-box flat-border" id="requests">
-   <h6>You have no pending requests</h6>
+<div class="collapse overlay-box flat-border" style="overflow: visible;" id="requests">
+    @if (Model.Count == 0)
+    {
+        <h6>You have no pending requests</h6>
+    }
+    else
+    {
+        foreach (var message in Model)
+        {
+            <div id="requestBody" style="margin-top:0px" class="notifications">
+                <p style="cursor:pointer">
+                    <div>
+                        @message.Body <br>
+                    <small class="text-muted">@message.Datetime.ToString("MM/dd/yyyy") at @message.Datetime.ToString("H:mm tt") </small>
+                </div>
+               </p><hr />
+            </div>
+        }
+     }
+
 </div>
 

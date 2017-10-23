@@ -52,6 +52,14 @@
     max-height: 500px;
 }
 
+#requestBody {
+    padding: 5px;
+    margin: 15px;
+    min-height: 300px;
+    overflow: auto;
+    max-height: 400px;
+}
+
 
 #notificationFooter {
     background-color: #c32d3f;
