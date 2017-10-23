@@ -310,6 +310,7 @@ namespace StaffingPlanner.Controllers
                 db.Workloads.Add(teacherworkload);
                 db.SaveChanges();
                 ApprovalsController.Unapprove(db, teacherworkload);
+                MessagesController.GenerateTeacherMessageAddition(teacherworkload, db);
             }
             return RedirectToAction("CourseDetails", "Course", new { id = Guid.Parse(Id) });
         }

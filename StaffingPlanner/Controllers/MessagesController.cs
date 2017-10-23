@@ -134,7 +134,7 @@ namespace StaffingPlanner.Controllers
             {
                 Id = Guid.NewGuid(),
                 Datetime = DateTime.Now,
-                Body = "The director of studies changed your time allocation for " + workload.Course.Course.Name + workload.Course.TermYear.ToString(),
+                Body = "The director of studies changed your time allocation for " + workload.Course.Course.Name + " " + workload.Course.TermYear.ToString(),
                 Course= workload.Course,
                 Workload = workload,
                 Seen = false,
@@ -150,7 +150,23 @@ namespace StaffingPlanner.Controllers
             {
                 Id = Guid.NewGuid(),
                 Datetime = DateTime.Now,
-                Body = "The director of studies has Removed you from" + workload.Course.Course.Name + workload.Course.TermYear.ToString(),
+                Body = "The director of studies has Removed you from" + workload.Course.Course.Name + " " + workload.Course.TermYear.ToString(),
+                Course = workload.Course,
+                Workload = workload,
+                Seen = false,
+                MessageType = MessageType.Notification
+            };
+            db.Messages.Add(msg);
+            db.SaveChanges();
+        }
+
+        public static void GenerateTeacherMessageAddition(TeacherCourseWorkload workload, StaffingPlanContext db)
+        {
+            var msg = new Message
+            {
+                Id = Guid.NewGuid(),
+                Datetime = DateTime.Now,
+                Body = "The director of studies has Added you to the " + workload.Course.Course.Name +" " +workload.Course.TermYear.ToString() + " course",
                 Course = workload.Course,
                 Workload = workload,
                 Seen = false,
@@ -166,7 +182,7 @@ namespace StaffingPlanner.Controllers
             {
                 Id = Guid.NewGuid(),
                 Datetime = DateTime.Now,
-                Body = "You have a pending approval for " + workload.Course.Course.Name + workload.Course.TermYear.ToString(),
+                Body = "You have a pending approval for " + workload.Course.Course.Name + " " + workload.Course.TermYear.ToString(),
                 Course = workload.Course,
                 Workload = workload,
                 Seen = false
