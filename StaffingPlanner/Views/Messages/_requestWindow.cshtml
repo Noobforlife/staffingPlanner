@@ -1,0 +1,10 @@
+﻿<button id="requestLink" class=" clear-button overlay-button" type="button" data-toggle="collapse" data-target="#requests" aria-expanded="false" aria-controls="requests">make request</button>
+
+<div class="collapse overlay-box flat-border" id="requests">
+    @using (Html.BeginForm("NewRequest", "Messages", FormMethod.Post))
+    {
+        <textarea id="Request" name="Request" placeholder="type out your request" rows="3" cols="32"> </textarea>
+        <input id="send" name="send" value="Submit" class="clear-button pull-right" type="submit">
+    }
+</div>
+

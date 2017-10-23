@@ -14,5 +14,6 @@ namespace StaffingPlanner.Models
         public DateTime Datetime { get; set; }
         public bool DOSonly { get; set; }
         public bool Seen { get; set; }
+        public MessageType MessageType{get; set;}
     }
 }

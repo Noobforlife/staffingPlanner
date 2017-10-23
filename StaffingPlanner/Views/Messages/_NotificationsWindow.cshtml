@@ -24,7 +24,9 @@
                 {
                     if (message.Workload == null)
                     {
-                        <a style="cursor:pointer" onClick="location.href='@Url.Action("RedirectToCourse", "Messages", new { Id = message.Id, CourseId = message.Course.Id })'"><div>@message.Body</div></a><hr />
+                        <a style="cursor:pointer" onClick="location.href='@Url.Action("RedirectToCourse", "Messages", new { Id = message.Id, CourseId = message.Course.Id })'"><div>@message.Body <br>
+                            <small class="text-muted">@message.Datetime.ToString("MM/dd/yyyy") at @message.Datetime.ToString("H:mm tt") </small></div>
+                        </a><hr />
                     }
                     else
                     {
@@ -36,7 +38,7 @@
             <div id="notificationFooter">
                 @if (Globals.UserRole == Role.DirectorOfStudies)
                 {
-                    <a style="color:#ffffff" onClick="location.href='@Url.Action("MessagesDos", "Messages")'">View all Messages</a>
+                    <a style="cursor:pointer;color:#ffffff" onClick="location.href='@Url.Action("MessagesDos", "Messages")'">View all Messages</a>
                 }
                 else
                 {

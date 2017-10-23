@@ -180,6 +180,7 @@
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\CourseEnums.cs" />
     <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\messageEnums.cs" />
     <Compile Include="Models\NonCourseWorkload.cs" />
     <Compile Include="ViewModels\MessagesViewModels.cs" />
     <Compile Include="ViewModels\PeriodBalance.cs" />
@@ -200,12 +201,12 @@
     <Compile Include="ViewModels\TeacherViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="favicon.ico" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\img\uppsala.png" />
     <Content Include="Content\styles-old.min.css" />
     <Content Include="Content\styles.min.css" />
-    <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -271,8 +272,10 @@
     <Content Include="Views\Course\_UseTemplateModal.cshtml" />
     <Content Include="Views\Messages\Messages.cshtml" />
     <Content Include="Views\Messages\_NotificationsWindow.cshtml" />
-    <None Include="Views\Comment\_Comments.cshtml" />
+    <Content Include="Views\Comment\_Comments.cshtml" />
     <Content Include="Views\Comment\_AddComment.cshtml" />
+    <Content Include="Views\Messages\_requestWindow.cshtml" />
+    <Content Include="Views\Messages\_requestList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -294,6 +297,9 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
