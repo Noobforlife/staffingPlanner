@@ -211,7 +211,6 @@ namespace StaffingPlanner.Controllers
                     {
                         db.Workloads.Remove(existingWorkload);
                         db.SaveChanges();
-                        MessagesController.GenerateTeacherMessageRemoval(existingWorkload, db);
                     }
                     else
                     {

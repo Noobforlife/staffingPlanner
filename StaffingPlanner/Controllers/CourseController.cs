@@ -138,7 +138,8 @@ namespace StaffingPlanner.Controllers
         {
             var db = StaffingPlanContext.GetContext();
             var workload = db.Workloads.Where(x => x.Id == workloadId).ToList().FirstOrDefault();
-            db.Workloads.Remove(workload);
+            var course = workload.Course;
+            db.Workloads.Remove(workload);            
             db.SaveChanges();
 
             return RedirectToAction("CourseDetails", "Course", new { id = id });

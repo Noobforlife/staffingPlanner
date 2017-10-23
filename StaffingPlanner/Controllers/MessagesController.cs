@@ -166,15 +166,15 @@ namespace StaffingPlanner.Controllers
             db.SaveChanges();
         }
 
-        public static void GenerateTeacherMessageRemoval(TeacherCourseWorkload workload, StaffingPlanContext db)
+        public static void GenerateTeacherMessageRemoval(TeacherCourseWorkload work, StaffingPlanContext db)
         {
             var msg = new Message
             {
                 Id = Guid.NewGuid(),
                 Datetime = DateTime.Now,
-                Body = "The director of studies has Removed you from" + workload.Course.Course.Name + " " + workload.Course.TermYear.ToString(),
-                Course = workload.Course,
-                Workload = workload,
+                Body = "The director of studies has Removed you from" + work.Course.Course.Name + " " + work.Course.TermYear.ToString(),
+                Course = work.Course,
+                Workload = null,
                 Seen = false,
                 MessageType = MessageType.Notification
             };
