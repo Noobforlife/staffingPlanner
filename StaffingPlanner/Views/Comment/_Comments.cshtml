@@ -1,2 +1,31 @@
 ﻿@using StaffingPlanner.Models;
 @model List<Comment>
+
+<div class="card card-block">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Comments</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count == 0)
+            {
+                <tr>
+                    <td colspan="5" class="text-center">No comments</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var comment in Model)
+                {
+                    <tr>
+                        <td>
+                            <input type="text" id="messageText" name="messageText" value="@comment.Message" />
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

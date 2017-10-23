@@ -26,9 +26,21 @@ namespace StaffingPlanner.Controllers
             }
         }
 
+        [ChildActionOnly]
+        public PartialViewResult RenderAddComment(Guid connectedId)
+        {
+            Comment newComment = new Comment
+            {
+                Id = Guid.NewGuid(),
+                ConnectedTo = connectedId,
+                Message = ""
+            };
+            return PartialView("~/Views/Comment/_AddComment.cshtml", newComment);
+        }
+
         // POST: Comment/Create
         [HttpPost]
-        public void Create(Guid connectedId, string message)
+        public ActionResult Create(Guid connectedId, string message)
         {
             var db = StaffingPlanContext.GetContext();
             var newComment = new Comment
@@ -39,6 +51,7 @@ namespace StaffingPlanner.Controllers
             };
             db.Comments.Add(newComment);
             db.SaveChanges();
+            return RedirectToAction("TeacherDetails", "Teacher", new { id = connectedId });
         }
 
         // Post: Comment/Edit/{commentId, message}

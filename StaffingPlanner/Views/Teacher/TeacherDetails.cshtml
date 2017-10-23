@@ -22,7 +22,19 @@
         <div id="teacherDetails" class="row well background-white">
             @Html.Action("TeacherDetailsTop", "Teacher", new { teacherId = Model.Id })
         </div>
-
+        <div id="comments" class="row well background-white">
+            @if (Globals.UserRole == Role.DirectorOfStudies)
+            {
+                @Html.Action("Comments", "Comment", new { connectedId = Model.Id })
+                <div class="col-md-12">
+                    @Html.Action("Comments", "Comment", new { connectedId = Model.Id })
+                    <button class="btn btn-default pull-right clear-button" data-toggle="modal" data-target="#addCommentModal" type="button">Add Comment<i class="icon-plus" style="margin: 2px; margin-left: 3px;"></i></button>
+                </div>
+                <div id="addCommentModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    @Html.Action("RenderAddComment", "Comment", new { connectedId = Model.Id })
+                </div>
+            }
+        </div>
         <div class="row" id="courseList">
             <!--Table of courses-->
             <div class="col-md-12">

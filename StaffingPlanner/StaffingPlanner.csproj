@@ -271,11 +271,12 @@
     <Content Include="Views\Course\_UseTemplateModal.cshtml" />
     <Content Include="Views\Messages\Messages.cshtml" />
     <Content Include="Views\Messages\_NotificationsWindow.cshtml" />
+    <None Include="Views\Comment\_Comments.cshtml" />
+    <Content Include="Views\Comment\_AddComment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Approvals\" />
-    <Folder Include="Views\Comment\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
