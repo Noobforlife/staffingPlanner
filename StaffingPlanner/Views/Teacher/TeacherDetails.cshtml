@@ -25,7 +25,6 @@
         <div id="comments" class="row well background-white">
             @if (Globals.UserRole == Role.DirectorOfStudies)
             {
-                @Html.Action("Comments", "Comment", new { connectedId = Model.Id })
                 <div class="col-md-12">
                     @Html.Action("Comments", "Comment", new { connectedId = Model.Id })
                     <button class="btn btn-default pull-right clear-button" data-toggle="modal" data-target="#addCommentModal" type="button">Add Comment<i class="icon-plus" style="margin: 2px; margin-left: 3px;"></i></button>
