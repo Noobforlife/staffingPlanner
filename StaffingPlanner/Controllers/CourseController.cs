@@ -91,11 +91,22 @@ namespace StaffingPlanner.Controllers
             return PartialView("~/Views/Course/_UseTemplateModal.cshtml", model);
         }
 
+		[HttpGet]
+		public PartialViewResult RenderCourseDetailsTop(Guid offeringId)
+		{
+			var db = StaffingPlanContext.GetContext();
+			var offering = db.CourseOfferings.First(c => c.Id == offeringId);
+
+			var viewModel = GenerateCourseDetailViewModel(offering);
+
+			return PartialView("~/Views/Course/_CourseDetailsTop.cshtml", viewModel);
+		}
+
         [HttpGet]
         public PartialViewResult EditCourse(Guid course)
         {
             var db = StaffingPlanContext.GetContext();
-            var teachers = db.Teachers.Where(x => x.Id != null).ToList();
+            var teachers = db.Teachers.ToList();
             var c = db.CourseOfferings.Where(x => x.Id == course).ToList().First();
 
             var model = new Tuple<CourseOffering, List<Teacher>>(c, teachers);
@@ -209,6 +220,13 @@ namespace StaffingPlanner.Controllers
 
 			MessagesController.GenerateTeacherMessage(workload, db);
 			return Json(new { message = "Ok - no problems" });
+		}
+
+		[HttpGet]
+		[ChildActionOnly]
+		public PartialViewResult GetComments(Guid offeringId)
+		{
+			return PartialView("~/Views/Course/_CommentSection.cshtml", offeringId);
 		}
 
 		private static int GetRemainingAllocatableHoursForDurationOfCourse(CourseOffering offering,
@@ -474,12 +492,12 @@ namespace StaffingPlanner.Controllers
 
         public static string GetStatus(int TotalHours, int AllocatedHours)
         {
-            float percentage = (AllocatedHours/(float)TotalHours)*100;
+            var percentage = (AllocatedHours/(float)TotalHours)*100;
             if (percentage >= 90)
             {
                 return "allocation-good";
             }
-            else if (percentage >= 55 && percentage < 90)
+            if (percentage >= 55 && percentage < 90)
             {
                 return "allocation-okay";
             }
@@ -490,16 +508,12 @@ namespace StaffingPlanner.Controllers
             switch (state) {
                 case "Ongoing":
                     return CourseState.Ongoing;
-                    break;
                 case "Planned":
                     return CourseState.Planned;
-                    break;
                 case "Completed":
                     return CourseState.Completed;
-                    break;
                 case "Draft":
                     return CourseState.Draft;
-                    break;
             }
             return CourseState.Planned;
         }

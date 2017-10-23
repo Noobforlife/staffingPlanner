@@ -10,12 +10,16 @@
         <table class="table borderless">
             <tbody>
                 <tr>
-                    <th>Name:</th>
-                    <td colspan="2">@Model.Item1.Course.Name</td>
-                </tr>
-                <tr>
                     <th>Code:</th>
                     <td colspan="2">@Model.Item1.Course.Code</td>
+                </tr>
+                <tr>
+                    <th>Term:</th>
+                    <td colspan="2">@Model.Item1.TermYear.ToString()</td>
+                </tr>
+                <tr>
+                    <th>Period:</th>
+                    <td colspan="2">@EnumToString.PeriodToString(Model.Item1.Periods)</td>
                 </tr>
                 <tr>
                     <th>Credits:</th>

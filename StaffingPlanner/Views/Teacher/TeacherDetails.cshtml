@@ -13,8 +13,7 @@
             <button class="btn btn-default clear-button" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("Teachers", "Teacher")'">Back to Teachers List</button>
             @if (Globals.UserRole == Role.DirectorOfStudies)
             {
-                <button class="btn btn-primary solid-button" onclick="EditCourse(this)" type="button" id="EditTeacherButton">Edit</button>
-            }
+                <button class="btn btn-primary solid-button" onclick="EditCourse(this)" type="button" id="EditTeacherButton">Edit</button>}
         </div>
     </div>
     <div class="modal-body">
@@ -22,7 +21,6 @@
         <div id="teacherDetails" class="row well background-white">
             @Html.Action("TeacherDetailsTop", "Teacher", new { teacherId = Model.Id })
         </div>
-
         <div class="row" id="courseList">
             <!--Table of courses-->
             <div class="col-md-12">
@@ -59,12 +57,18 @@
 
         </div>
         <div class="col-md-6">
-            <button class="btn btn-primary pull-left solid-button" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            <button class="btn btn-primary pull-left solid-button" type="button" data-toggle="collapse" data-target="#collapseCourseHistory" aria-expanded="false" aria-controls="collapseCourseHistory" style="margin-right: 10px;">
                 View teaching History
             </button>
+            @if (Globals.UserRole == Role.DirectorOfStudies)
+            {
+                <button class="btn btn-primary pull-left solid-button" type="button" data-toggle="collapse" data-target="#collapseComments" aria-expanded="false" aria-controls="collapseComments">
+                    View comments
+                </button>
+            }
         </div>
         @if (Globals.UserRole == Role.DirectorOfStudies)
-            {
+        {
             <div class="col-md-6">
                 <button class="btn btn-default pull-right clear-button" data-toggle="modal" data-target="#addCourseModal" type="button"> Add Course<i class="icon-plus" style="margin: 2px; margin-left: 3px;"></i></button>
             </div>
@@ -72,10 +76,17 @@
         <div id="addCourseModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
             @Html.Action("RenderAddTeacherCourse", "Teacher", new { teacherId = Model.Id })
         </div>
+        <!--Comments-->
+        @if (Globals.UserRole == Role.DirectorOfStudies)
+        {
+            <div class="row" style="margin-top: 20px;">
+                @Html.Action("GetComments", "Teacher", new {teacherId = Model.Id})
+            </div>
+        }
         <!--Course history table-->
-        <div class="row">
-            <div class="collapse" id="collapseExample">
-                @Html.Action("CourseHistory", "Teacher", new {teacherid = Model.Id})
+        <div class="row" style="margin-top: 20px;">
+            <div class="collapse" id="collapseCourseHistory">
+                @Html.Action("CourseHistory", "Teacher", new { teacherid = Model.Id })
             </div>
         </div>
     </div>
