@@ -18,7 +18,7 @@ namespace StaffingPlanner.Controllers
         // GET: /Course/Courses
         public ActionResult Courses()
         {
-            if (!Globals.SessionUser.ContainsKey(Session["UserID"].ToString()))
+            if (Session["UserID"] == null || !Globals.SessionUser.ContainsKey(Session["UserID"] as string))
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -35,7 +35,7 @@ namespace StaffingPlanner.Controllers
         // GET: /Course/CourseDetails/{id}
         public ActionResult CourseDetails(Guid? id)
         {
-            if (!Globals.SessionUser.ContainsKey(Session["UserID"].ToString()))
+            if (Session["UserID"] == null || !Globals.SessionUser.ContainsKey(Session["UserID"] as string))
             {
                 return RedirectToAction("Login", "Account");
             }

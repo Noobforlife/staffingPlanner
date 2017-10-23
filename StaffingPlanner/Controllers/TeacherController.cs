@@ -14,7 +14,8 @@ namespace StaffingPlanner.Controllers
         // GET: /Teacher/Teachers
         public ActionResult Teachers()
         {
-            if (!Globals.SessionUser.ContainsKey(Session["UserID"].ToString())) {
+            if (Session["UserID"] == null || !Globals.SessionUser.ContainsKey(Session["UserID"] as string))
+            {
                 return RedirectToAction("Login", "Account");
             }
 	        var db = StaffingPlanContext.GetContext();
@@ -32,7 +33,7 @@ namespace StaffingPlanner.Controllers
         // GET: /Teacher/TeacherDetails/{id}
         public ActionResult TeacherDetails(Guid? id)
         {
-            if (!Globals.SessionUser.ContainsKey(Session["UserID"].ToString()))
+            if (Session["UserID"] == null || !Globals.SessionUser.ContainsKey(Session["UserID"] as string))
             {
                 return RedirectToAction("Login", "Account");
             }

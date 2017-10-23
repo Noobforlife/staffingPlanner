@@ -14,6 +14,10 @@ namespace StaffingPlanner.Controllers
         // GET: Message
         public ActionResult MessagesDos()
         {
+            if (Session["UserID"] == null || !Globals.SessionUser.ContainsKey(Session["UserID"] as string))
+            {
+                return RedirectToAction("Login", "Account");
+            }
             if (Globals.SessionUser[Session["UserID"] as string].UserRole != Role.DirectorOfStudies)
             {
                 return RedirectToAction("Index", "Dashboard");
@@ -25,8 +29,16 @@ namespace StaffingPlanner.Controllers
 
             return View("~/Views/Messages/Messages.cshtml", model);
         }
-        public ActionResult MessagesTeacher(Guid Id)
+        public ActionResult MessagesTeacher(Guid? Id)
         {
+            if (Session["UserID"] == null || !Globals.SessionUser.ContainsKey(Session["UserID"] as string))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            if (Id == null)
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
             var db = StaffingPlanContext.GetContext();
             var model = db.Messages.Where(x => x.Workload!= null && x.Workload.Teacher.Id == Id).OrderByDescending(x => x.Datetime).ToList();
             var msgs = db.Messages.Where(x => x.Course != null && x.DOSonly == false).ToList();
