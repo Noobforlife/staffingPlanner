@@ -56,34 +56,34 @@ namespace StaffingPlanner.Controllers
 
         // Post: Comment/Edit/{commentId, message}
         [HttpPost]
-        public void Edit(Guid commentId, string newMessage)
+        public JsonResult Edit(Guid commentId, string newMessage)
         {
-            try
-            {
-                var db = StaffingPlanContext.GetContext();
-                var comment = db.Comments.FirstOrDefault(c => c.Id == commentId);
-                comment.Message = newMessage;
-                db.SaveChanges();
-            }
-            catch
-            {
-            }
+            var db = StaffingPlanContext.GetContext();
+            var comment = db.Comments.FirstOrDefault(c => c.Id == commentId);
+	        if (comment != null)
+	        {
+		        comment.Message = newMessage;
+		        db.SaveChanges();
+		        return Json(new { message = "Success" });
+			}
+
+	        return Json(new {message = "No comment with that Id"});
         }
 
         // POST: Comment/Delete/{commentId}
         [HttpPost]
-        public void Delete(Guid commentId)
+        public JsonResult Delete(Guid commentId)
         {
-            try
-            {
-                var db = StaffingPlanContext.GetContext();
-                var comment = db.Comments.FirstOrDefault(c => c.Id == commentId);
-                db.Comments.Remove(comment);
-                db.SaveChanges();
-            }
-            catch
-            {
-            }
+            var db = StaffingPlanContext.GetContext();
+            var comment = db.Comments.FirstOrDefault(c => c.Id == commentId);
+	        if (comment != null)
+	        {
+		        db.Comments.Remove(comment);
+		        db.SaveChanges();
+		        return Json(new { message = "Success" });
+			}
+
+	        return Json(new {message = "No comment with that Id"});
         }
     }
 }

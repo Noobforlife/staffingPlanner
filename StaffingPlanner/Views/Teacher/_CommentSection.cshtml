@@ -1,0 +1,11 @@
+﻿@model Guid
+
+<div class="collapse"  id="collapseComments">
+    <div class="col-md-12">
+        @Html.Action("Comments", "Comment", new { connectedId = Model })
+        <button class="btn btn-default pull-right clear-button" data-toggle="modal" data-target="#addCommentModal" type="button">Add Comment<i class="icon-plus" style="margin: 2px; margin-left: 3px;"></i></button>
+    </div>
+    <div id="addCommentModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        @Html.Action("RenderAddComment", "Comment", new { connectedId = Model })
+    </div>
+</div>

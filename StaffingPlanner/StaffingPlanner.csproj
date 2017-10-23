@@ -276,6 +276,7 @@
     <Content Include="Views\Comment\_AddComment.cshtml" />
     <Content Include="Views\Messages\_requestWindow.cshtml" />
     <Content Include="Views\Messages\_requestList.cshtml" />
+    <Content Include="Views\Teacher\_CommentSection.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
