@@ -27,7 +27,7 @@ namespace StaffingPlanner.Controllers
         }
 
         [ChildActionOnly]
-        public PartialViewResult RenderAddComment(Guid connectedId)
+        public PartialViewResult RenderAddComment(Guid connectedId, bool teacher)
         {
             Comment newComment = new Comment
             {
@@ -35,24 +35,41 @@ namespace StaffingPlanner.Controllers
                 ConnectedTo = connectedId,
                 Message = ""
             };
-            return PartialView("~/Views/Comment/_AddComment.cshtml", newComment);
+
+	        if (teacher)
+	        {
+		        return PartialView("~/Views/Comment/_AddCommentForTeacher.cshtml", newComment);
+			}
+	        return PartialView("~/Views/Comment/_AddCommentForCourse.cshtml", newComment);
         }
 
         // POST: Comment/Create
         [HttpPost]
-        public ActionResult Create(Guid connectedId, string message)
+        public ActionResult CreateFromTeacherPage(Guid connectedId, string message)
         {
-            var db = StaffingPlanContext.GetContext();
-            var newComment = new Comment
-            {
-                Id = Guid.NewGuid(),
-                ConnectedTo = connectedId,
-                Message = message
-            };
-            db.Comments.Add(newComment);
-            db.SaveChanges();
+            CreateComment(connectedId, message);
             return RedirectToAction("TeacherDetails", "Teacher", new { id = connectedId });
         }
+
+	    [HttpPost]
+	    public ActionResult CreateFromCoursePage(Guid connectedId, string message)
+	    {
+		    CreateComment(connectedId, message);
+		    return RedirectToAction("CourseDetails", "Course", new { id = connectedId });
+	    }
+
+		private static void CreateComment(Guid connectedId, string message)
+	    {
+			var db = StaffingPlanContext.GetContext();
+		    var newComment = new Comment
+		    {
+			    Id = Guid.NewGuid(),
+			    ConnectedTo = connectedId,
+			    Message = message
+		    };
+		    db.Comments.Add(newComment);
+		    db.SaveChanges();
+		}
 
         // Post: Comment/Edit/{commentId, message}
         [HttpPost]

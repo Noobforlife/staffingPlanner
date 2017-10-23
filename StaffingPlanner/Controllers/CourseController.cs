@@ -222,6 +222,13 @@ namespace StaffingPlanner.Controllers
 			return Json(new { message = "Ok - no problems" });
 		}
 
+		[HttpGet]
+		[ChildActionOnly]
+		public PartialViewResult GetComments(Guid offeringId)
+		{
+			return PartialView("~/Views/Course/_CommentSection.cshtml", offeringId);
+		}
+
 		private static int GetRemainingAllocatableHoursForDurationOfCourse(CourseOffering offering,
 			TeacherDetailsTopViewModel allocationInfo)
 		{
