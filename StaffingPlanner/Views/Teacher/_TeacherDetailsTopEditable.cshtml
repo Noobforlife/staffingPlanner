@@ -2,7 +2,7 @@
 @using StaffingPlanner.ViewModels
 @model TeacherDetailsTopViewModel
 
-@using (Html.BeginForm("SaveTeacherChanges", "Teacher", FormMethod.Post))
+@using (Html.BeginForm("SaveTeacherChanges", "Teacher", FormMethod.Post, new {onsubmit = "validateForm(event)"}))
 {
     <div class="col-md-6 col-sm-6">
         <div class="table-responsive">
@@ -46,7 +46,7 @@
                             <td>@Model.FallWorkload.Period3Workload</td>
                             <td>@Model.FallWorkload.Period4Workload</td>
                             <td>
-                                <input type="number" name="fallNonCourseWorkload" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallWorkload.NonCourseWorkload">
+                                <input type="number" required name="fallNonCourseWorkload" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallWorkload.NonCourseWorkload">
                             </td>
                             <td>@Model.FallWorkload.TotalTermWorkload</td>
                         </tr>
@@ -74,7 +74,7 @@
                             <td>@Model.SpringWorkload.Period3Workload</td>
                             <td>@Model.SpringWorkload.Period4Workload</td>
                             <td>
-                                <input type="number" name="springNonCourseWorkload" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.SpringWorkload.NonCourseWorkload">
+                                <input type="number" required name="springNonCourseWorkload" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.SpringWorkload.NonCourseWorkload">
                             </td>
                             <td>@Model.SpringWorkload.TotalTermWorkload</td>
                         </tr>
@@ -131,21 +131,21 @@
                 <div class="row">
                     <div class="col-md-5 col-xs-5 sharebox">
                         <h6>Teaching</h6>
-                        <input type="number" name="teachingShare" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallBudget.TeachingShare">
+                        <input id="teachingShare" type="number" required name="teachingShare" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallBudget.TeachingShare">
                     </div>
                     <div class="col-md-5 col-xs-5 sharebox">
                         <h6>Research</h6>
-                        <input type="number" name="researchShare" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallBudget.ResearchShare">
+                        <input id="researchShare" type="number" required name="researchShare" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallBudget.ResearchShare">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-5 col-xs-5 sharebox">
                         <h6>Admin</h6>
-                        <input type="number" name="adminShare" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallBudget.AdminShare">
+                        <input id="adminShare" type="number" required name="adminShare" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallBudget.AdminShare">
                     </div>
                     <div class="col-md-5 col-xs-5 sharebox">
                         <h6>Other</h6>
-                        <input type="number" name="otherShare" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallBudget.OtherShare">
+                        <input id="otherShare" type="number" required name="otherShare" style="border:1px solid; display:table-cell; height: 100%; width:50px" class="hours" value="@Model.FallBudget.OtherShare">
                     </div>
                 </div>
             </div>
@@ -197,8 +197,23 @@
         <div class="row">
             <div style="margin-top:10px">
                 <input type="hidden" value="@Model.Id" name="teacherId" id="teacherId" />
-                <button class="btn btn-default pull-right" onclick="SaveChanges(this)" type="submit" id="SaveChanges" style="margin-right:10px">Save</button>
+                <button class="btn btn-default pull-right" type="submit" id="SaveChanges" style="margin-right:10px">Save</button>
             </div>
         </div>
     </div>
 }
+<script>
+    function validateForm(event) {
+        var teachingShare = parseInt($("#teachingShare").val());
+        var researchShare = parseInt($("#researchShare").val());
+        var adminShare = parseInt($("#adminShare").val());
+        var otherShare = parseInt($("#otherShare").val());
+
+        var total = teachingShare + researchShare + adminShare + otherShare;
+
+        if (total > 100) {
+            event.preventDefault();
+            alert("Can't allocate more than 100%");
+        }
+    }
+</script>
