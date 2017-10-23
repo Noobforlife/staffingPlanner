@@ -182,6 +182,7 @@
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\messageEnums.cs" />
     <Compile Include="Models\NonCourseWorkload.cs" />
+    <Compile Include="DAL\User.cs" />
     <Compile Include="ViewModels\MessagesViewModels.cs" />
     <Compile Include="ViewModels\PeriodBalance.cs" />
     <Compile Include="ViewModels\TeacherTermAvailability.cs" />

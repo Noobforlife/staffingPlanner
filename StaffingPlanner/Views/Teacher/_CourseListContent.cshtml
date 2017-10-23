@@ -13,13 +13,13 @@
         <td>@course.TotalHours</td>
         <td>@course.AllocatedHours</td>
         <td>@course.TeacherAssignedHours</td>
-        @if (course.TeacherId == Globals.UserId && course.IsApproved)
+        @if (course.TeacherId == Globals.SessionUser[Session["UserID"] as string].TeacherId && course.IsApproved)
         {
             <td>                
                  <button class="btn btn-default alert-success flat disabled" style="height: 40px">Approved<i class="fa fa-check pull-right" style="margin:2px"></i></button>
             </td>
         }
-           else if (course.TeacherId == Globals.UserId && course.IsApproved == false)
+           else if (course.TeacherId == Globals.SessionUser[Session["UserID"] as string].TeacherId && course.IsApproved == false)
         {
             <td>
                     @using (Html.BeginForm("ApproveWorkload", "Approvals", FormMethod.Post))

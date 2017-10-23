@@ -31,7 +31,7 @@
         <tbody>
             @foreach (var teacher in Model)
             {
-                if (Globals.UserRole == Role.DirectorOfStudies && teacher.CourseState != CourseState.Completed)
+                if (Globals.SessionUser[Session["UserID"] as string].UserRole == Role.DirectorOfStudies && teacher.CourseState != CourseState.Completed)
                 {
                     <tr>
                         @Html.Partial("_EditCourseTeacher",teacher)
@@ -52,7 +52,7 @@
                     <td>@teacher.WorkloadFall</td>
                     <td>@teacher.WorkloadSpring</td>
                     <td>@teacher.CourseWorkload
-                        @if (Globals.UserRole == Role.DirectorOfStudies)
+                        @if (Globals.SessionUser[Session["UserID"] as string].UserRole == Role.DirectorOfStudies)
                         {
                             <button value="@teacher.WorkloadId" data-toggle="tooltip" title="Édit Allocation" class="btn btn-default edit-button pull-right" onclick="EditTeacher(this)" style="margin-left: 80px" type="button">
                                 <i class="material-icons">edit</i>

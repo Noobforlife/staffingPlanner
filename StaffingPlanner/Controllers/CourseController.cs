@@ -18,7 +18,7 @@ namespace StaffingPlanner.Controllers
         // GET: /Course/Courses
         public ActionResult Courses()
         {
-            if (Globals.User == null)
+            if (!Globals.SessionUser.ContainsKey(Session["UserID"].ToString()))
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -35,7 +35,7 @@ namespace StaffingPlanner.Controllers
         // GET: /Course/CourseDetails/{id}
         public ActionResult CourseDetails(Guid? id)
         {
-            if (Globals.User == null)
+            if (!Globals.SessionUser.ContainsKey(Session["UserID"].ToString()))
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -338,7 +338,12 @@ namespace StaffingPlanner.Controllers
         {
             var db = StaffingPlanContext.GetContext();
             var draft = db.CourseOfferings.Where(w => w.Id == draftid).ToList().FirstOrDefault();
-            var draftwork = db.Workloads.Where(w => w.Course.Id == draftid).ToList();
+	        var template = db.CourseOfferings.Where(w => w.Id == templateid).ToList().FirstOrDefault();
+	        if (draft != null && template != null)
+	        {
+		        draft.CourseResponsible = template.CourseResponsible;
+	        }
+	        var draftwork = db.Workloads.Where(w => w.Course.Id == draftid).ToList();
             var templateWork = db.Workloads.Where(w => w.Course.Id == templateid).ToList();
             draftwork.ForEach(x => db.Workloads.Remove(x));
             db.SaveChanges();

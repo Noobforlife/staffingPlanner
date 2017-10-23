@@ -35,7 +35,7 @@
                                                 <br>
                                                 <small class="text-muted">@message.Datetime.ToString("MM/dd/yyyy") at @message.Datetime.ToString("H:mm tt") </small>
                                                 @{
-                                                    if (Globals.UserRole != Role.DirectorOfStudies && message.Workload != null)
+                                                    if (Globals.SessionUser[Session["UserID"] as string].UserRole != Role.DirectorOfStudies && message.Workload != null)
                                                     {
                                                         if ( message.Workload.IsApproved)
                                                         {                                                           
@@ -50,7 +50,7 @@
                                                             }
                                                         }
                                                     }
-                                                    if (Globals.UserRole == Role.DirectorOfStudies && message.MessageType == MessageType.CourseApproval)
+                                                    if (Globals.SessionUser[Session["UserID"] as string].UserRole == Role.DirectorOfStudies && message.MessageType == MessageType.CourseApproval)
                                                     {
                                                         <button class="btn btn-default pull-right clear-button"  onclick="location.href='@Url.Action("CourseDetails", "Course", new { id = message.Course.Id})'">Go to Course</button>
                                                     }
