@@ -277,7 +277,7 @@ namespace StaffingPlanner.Controllers
                     return "fa fa-bell-o";
                     break;
                 case (MessageType.Request):
-                    return "fa fa-handshake-o";
+                    return "fa fa-question-circle-o";
                     break;
                 case (MessageType.Comment):
                     return "fa fa-commenting-o";
