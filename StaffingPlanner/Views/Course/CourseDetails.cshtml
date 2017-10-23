@@ -1,57 +1,67 @@
-﻿@using StaffingPlanner.DAL
+﻿@using StaffingPlanner.Models
+@using StaffingPlanner.DAL
 @using StaffingPlanner.ViewModels;
 @model DetailedCourseViewModel
 @{
     ViewBag.Title = "Course details";
 }
-
-<div class="container">
-    <div class="modal-header" style="border-bottom:1px solid #000000">
-        <h3 class="modal-title" style="display:inline-block">@Model.Name</h3>
-        <div style="float: right; display:inline-block">
-            <button class="btn btn-default  clear-button" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("Courses", "Course")'">Back to Course List</button>
-            @if (Globals.UserRole == Role.DirectorOfStudies)
-            {
-                <button class="btn btn-primary solid-button" onclick="EditCourse(this)" type="button" id="EditcourseButton">Edit</button>
-            }
-        </div>        
-    </div>
-    <div class="modal-body">
-        <div id ="courseDetails" class="row well background-white">
-            @Html.Partial("_CourseDetailsTop", Model)
-        </div>        
-        <div class="row">
-            <div class="col-md-12">
-                <h4>Staff assigned</h4>
-                @Html.Action("RenderTeacherList", "Course", new { Courseid = Model.Id })
-            </div>
-            <div class="col-md-6">
-                <button class="btn btn-primary pull-left solid-button" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                    Course History
-                </button>
-            </div>
-            @if (Globals.UserRole == Role.DirectorOfStudies)
-            {
-                <div class="col-md-6">
-                    <button class="btn btn-default clear-button pull-right" data-toggle="modal" data-target="#addstaffModal" type="button">Add staff <i class="icon-plus" style="margin: 2px; margin-left: 3px;"></i></button>
+ 
+       @if (Globals.UserRole == Role.DirectorOfStudies)
+       {
+        @Html.Partial("~/Views/Messages/_requestList.cshtml")
+       }
+       else if (Globals.UserId == Model.CourseResponsible.Id)
+       {
+        @Html.Partial("~/Views/Messages/_requestWindow.cshtml")
+       }
+        
+        <div class="container">
+            <div class="modal-header" style="border-bottom:1px solid #000000">
+                <h3 class="modal-title" style="display:inline-block">@Model.Name</h3>
+                <div style="float: right; display:inline-block">
+                    <button class="btn btn-default  clear-button" type="button" data-dismiss="modal" onclick="location.href='@Url.Action("Courses", "Course")'">Back to Course List</button>
+                    @if (Globals.UserRole == Role.DirectorOfStudies)
+                    {
+                        <button class="btn btn-primary solid-button" onclick="EditCourse(this)" type="button" id="EditcourseButton">Edit</button>
+                    }
                 </div>
-            }
-        </div>
-
-        <!--Course history table-->
-        <div class="row">
-            <div class="collapse" id="collapseExample">
-                @Html.Action("RenderCourseHistory", "Course", new { courseCode = Model.Code, CourseId = Model.Id })
             </div>
-        </div>
-    </div>
-    <div id="addstaffModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-        @Html.Action("RenderAddCourseTeacher", "Course",new { courseId = Model.Id })
-    </div>
-    
-    <script>
+            <div class="modal-body">
+                <div id="courseDetails" class="row well background-white">
+                    @Html.Partial("_CourseDetailsTop", Model)
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>Staff assigned</h4>
+                        @Html.Action("RenderTeacherList", "Course", new { Courseid = Model.Id })
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-primary pull-left solid-button" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            Course History
+                        </button>
+                    </div>
+                    @if (Globals.UserRole == Role.DirectorOfStudies)
+            {
+                        <div class="col-md-6">
+                            <button class="btn btn-default clear-button pull-right" data-toggle="modal" data-target="#addstaffModal" type="button">Add staff <i class="icon-plus" style="margin: 2px; margin-left: 3px;"></i></button>
+                        </div>
+                    }
+                </div>
+
+                <!--Course history table-->
+                <div class="row">
+                    <div class="collapse" id="collapseExample">
+                        @Html.Action("RenderCourseHistory", "Course", new { courseCode = Model.Code, CourseId = Model.Id })
+                    </div>
+                </div>
+            </div>
+            <div id="addstaffModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                @Html.Action("RenderAddCourseTeacher", "Course", new { courseId = Model.Id })
+            </div>
+
+            <script>
         function EditCourse(evt) {
             $('#courseDetails').load('@Url.Action("EditCourse", "Course", new { course = Model.Id})')
-        }       
-    </script>
-</div>
+        }
+            </script>
+        </div>

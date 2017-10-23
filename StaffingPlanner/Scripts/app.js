@@ -42,3 +42,21 @@ $(document).ready(function () {
     });
 
 });
+//javascript or making a request
+$(document).ready(function () {
+    $("#requestLink").click(function () {
+        $(".overlay-box").fadeToggle(200);
+        return false;
+    });
+
+    //Document Click hiding the popup 
+    $(document).click(function () {
+        $(".overlay-box").hide();
+    });
+
+    //Popup on click
+    $(".overlay-box").click(function () {
+        return false;
+    });
+
+});

@@ -8,8 +8,13 @@
         </button>
     </div>
     <div class="modal-body">
-        <div class="table-responsive" style="font-family: Raleway, sans-serif;">
+        <div class="table-responsive" >
             <table class="table">
+                <colgroup>
+                    <col class="period-col">
+                    <col class="period-col" style="background-color: #ffeaeb">
+                    <col class="period-col">
+                </colgroup>
                 <thead>
                     <th></th>
                     <th>Template</th>
@@ -57,7 +62,7 @@
 @using (Html.BeginForm("Applytemplate", "Course", new { templateid = Model.Item1.First().Course.Id, draftid = Model.Item3.Id }, FormMethod.Post, null))
 {
     <div class="modal-footer">
-        <button type="button" class="btn btn-secondary clearfix button" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-secondary clear-button" data-dismiss="modal">Cancel</button>
         <button type="submit" class="btn btn-primary solid-button">Apply Template</button>
     </div>
 }
