@@ -28,7 +28,7 @@
             </div>
             <div class="modal-body">
                 <div id="courseDetails" class="row well background-white">
-                    @Html.Partial("_CourseDetailsTop", Model)
+                    @Html.Action("RenderCourseDetailsTop", "Course", new {offeringId = Model.Id})
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -60,8 +60,16 @@
             </div>
 
             <script>
-        function EditCourse(evt) {
-            $('#courseDetails').load('@Url.Action("EditCourse", "Course", new { course = Model.Id})')
-        }
+                function EditCourse(evt) {
+                    var button = $('#EditcourseButton');
+                    var buttonText = button.text();
+                    if (buttonText === "Edit") {
+                        button.text("Cancel");
+                        $('#courseDetails').load('@Url.Action("EditCourse", "Course", new { course = Model.Id})');
+                    } else {
+                        button.text("Edit");
+                        $('#courseDetails').load('@Url.Action("RenderCourseDetailsTop", "Course", new { offeringId = Model.Id })');
+                    }
+                }
             </script>
         </div>
