@@ -14,7 +14,8 @@ namespace StaffingPlanner.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            if (Globals.User != null)
+            if (Session["UserID"] != null &&
+                Globals.SessionUser.ContainsKey(Session["UserID"] as string))
             {
                 return RedirectToAction("Index", "Dashboard");
             }
@@ -36,11 +37,13 @@ namespace StaffingPlanner.Controllers
             }
 
             //Define variable for whether the authorization was successful or not
-	        var authResult = LoginUser(model.Name);      
+            string newSessionUserId = Guid.NewGuid().ToString();
+	        var authResult = LoginUser(model.Name, newSessionUserId);      
 
             switch (authResult)
             {
                 case true:
+                    Session["UserID"] = newSessionUserId;
                     return RedirectToLocal(returnUrl);
                 default:
                     
@@ -53,9 +56,7 @@ namespace StaffingPlanner.Controllers
         [AllowAnonymous]
         public ActionResult LogOff(string returnUrl)
         {
-            Globals.UserRole = Role.Unauthorized;
-            Globals.User = null;
-            Globals.UserId = Guid.Empty;
+            Globals.SessionUser.Remove(Session["UserID"].ToString());
             return RedirectToAction("Login", "Account");
         }
 
@@ -75,7 +76,7 @@ namespace StaffingPlanner.Controllers
             return year.StartTerm;
         }
 
-	    protected static bool LoginUser(string input)
+	    protected static bool LoginUser(string input, string sessionUserId)
 	    {
 		    var db = StaffingPlanContext.GetContext();
 
@@ -84,22 +85,22 @@ namespace StaffingPlanner.Controllers
 		    var nameParts = lowerName.Split(' ');
 
 		    //Find any teachers with matching names
-		    var matchingTeachers = db.Teachers.Where(t => nameParts.All(np => t.Name.ToLower().Contains(np))).Select(t => new { t.Name, t.Id, Director = t.DirectorOfStudies });
+		    var matchingTeacher = db.Teachers.Where(t => nameParts.All(np => t.Name.ToLower().Contains(np))).Select(t => new { t.Name, t.Id, Director = t.DirectorOfStudies }).FirstOrDefault();
 		    var academicYear = db.AcademicYears.AsNoTracking().Where(y => y.StartTerm.Year == 2017).ToList().FirstOrDefault();
-		    if (matchingTeachers.Any()) //If there are any teachers who match any name we are sufficiently satisfied
+		    if (matchingTeacher != null) //If there are any teachers who match any name we are sufficiently satisfied
 		    {
-			    Globals.User = matchingTeachers.First().Name;
-			    Globals.UserId = matchingTeachers.First().Id;
+                
+                Role userRole = matchingTeacher.Director ? Role.DirectorOfStudies : Role.Teacher;
+                User newUser = new User(matchingTeacher.Name, matchingTeacher.Id, userRole);
+
+                Globals.SessionUser.Add(sessionUserId, newUser);
 			    Globals.CurrentAcademicYear = academicYear;
 			    Globals.CurrentTerm = getCurrentTerm(academicYear);
 
 			    //If the matching teacher (in db) is the director of studies than set the user role to match
-			    Globals.UserRole = matchingTeachers.First().Director ? Role.DirectorOfStudies : Role.Teacher;
-
+                
 				return true;
 		    }
-
-		    Globals.UserRole = Role.Unauthorized;
 			return false;
 	    }
     }

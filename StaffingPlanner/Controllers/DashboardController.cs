@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using StaffingPlanner.DAL;
 using StaffingPlanner.Models;
 using StaffingPlanner.ViewModels;
+using System;
 
 namespace StaffingPlanner.Controllers
 {
@@ -12,7 +13,7 @@ namespace StaffingPlanner.Controllers
         // GET: /Dashboard/Index
         public ActionResult Index(int year = 2017)
         {
-            if (Globals.User == null)
+            if (!Globals.SessionUser.ContainsKey(Session["UserID"].ToString()))
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -39,11 +40,12 @@ namespace StaffingPlanner.Controllers
 				.ToList();
 
             //Bool indicating whethert the user is a director of studies
-	        var directorOfStudies = Globals.UserRole == Role.DirectorOfStudies;
+	        var directorOfStudies = Globals.SessionUser[Session["UserID"].ToString()].UserRole == Role.DirectorOfStudies;
+            Guid teacherId = Globals.SessionUser[Session["UserID"].ToString()].TeacherId;
 
             //Generate viewmodels for both fall and spring courses
-			var fallCourses = GenerateDashViewModelList(fallOfferings, directorOfStudies);
-            var springCourses = GenerateDashViewModelList(springOfferings, directorOfStudies);
+			var fallCourses = GenerateDashViewModelList(fallOfferings, directorOfStudies, teacherId);
+            var springCourses = GenerateDashViewModelList(springOfferings, directorOfStudies, teacherId);
 
             //Create model that contains all necessary information
 	        var model = new DashboardViewModel
@@ -59,7 +61,7 @@ namespace StaffingPlanner.Controllers
         }
                 
         //Method to generate list of course offerings for the dashboard view
-        private static List<DashboardCourseViewModel> GenerateDashViewModelList(IEnumerable<CourseOffering> courses, bool dos)
+        private static List<DashboardCourseViewModel> GenerateDashViewModelList(IEnumerable<CourseOffering> courses, bool dos, Guid teacherId)
         {
             //If the user is director of studies they can see all courses
 	        if (dos)
@@ -80,7 +82,7 @@ namespace StaffingPlanner.Controllers
 
             //If the user is a teacher, get the courses that they are assigned to
 	        var db = StaffingPlanContext.GetContext();
-	        var teacher = db.Teachers.First(t => t.Id == Globals.UserId);
+	        var teacher = db.Teachers.First(t => t.Id == teacherId);
 	        var courseIds = db.Workloads.Where(w => w.Teacher.Id.Equals(teacher.Id)).Select(w => w.Course.Id);
 
 	        var courseList = courses

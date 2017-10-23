@@ -36,13 +36,13 @@
             }            
         </div>
             <div id="notificationFooter">
-                @if (Globals.UserRole == Role.DirectorOfStudies)
+                @if (Globals.SessionUser[Session["UserID"] as string].UserRole == Role.DirectorOfStudies)
                 {
                     <a style="cursor:pointer;color:#ffffff" onClick="location.href='@Url.Action("MessagesDos", "Messages")'">View all Messages</a>
                 }
                 else
                 {
-                    <a style="cursor:pointer;color:#ffffff" onClick="location.href='@Url.Action("MessagesTeacher", "Messages", new { Id = Globals.UserId }, null)'">View all Messages</a>
+                    <a style="cursor:pointer;color:#ffffff" onClick="location.href='@Url.Action("MessagesTeacher", "Messages", new { Id = Globals.SessionUser[Session["UserID"] as string].TeacherId }, null)'">View all Messages</a>
                  }
             </div>
         </div>
